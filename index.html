@@ -507,11 +507,13 @@ function montarProblemas(cfg){
       <div class="card-head"><div><h3>Los 5 principales problemas por perfil</h3><p class="subt" id="${id("mapa-subt")}"></p></div>
         <button class="export-btn" data-chart="${id("ch-mapa")}" data-name="${pre}_perfiles" id="${id("mapa-export")}" hidden>⬇ Descargar el gráfico</button></div>
       <div class="ctrls"><label class="sel-lab">Cruzar por <select id="${id("perfil")}" class="sel"></select></label></div>
-      <div class="chart" id="${id("ch-mapa")}" style="height:330px"></div>
+      <div class="scroll-x"><div class="chart" id="${id("ch-mapa")}" style="height:380px;min-width:580px"></div></div>
       <p class="foot-note" id="${id("mapa-nota")}"></p>
     </div>`;
 
-  const MAXSEL=8, NDEF=6, COLS=SM.catLines.slice(0,MAXSEL);
+  /* Paleta propia del gráfico de evolución (Ainara, 03/11/2026): ocho tonos bien distintos entre sí (distancia de color Lab ≥ 33 entre cualquier par) y legibles como texto
+     sobre blanco; sin negro ni tonos pastel (antes, vivienda y Gobierno —verde azulado oscuro y negro— apenas se distinguían). Los cuatro primeros, los más distintos entre sí. */
+  const MAXSEL=8, NDEF=6, COLS=["#014550","#FF723C","#8739E5","#C69200","#1E73C4","#D6336C","#4FA832","#7C8C8A"];
   const MES3=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
   const xl=f=>`${MES3[+f.slice(5)-1]} ${f.slice(2,4)}`;
   const nf=(v,d=1)=>v==null?"–":v.toLocaleString("es-ES",{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -532,7 +534,7 @@ function montarProblemas(cfg){
       .map(c=>({c,v:s[c][i],ant:a==null?null:s[c][a]})).sort((x,y)=>y.v-x.v);}
   const ultimo=b=>AV[b][AV[b].length-1];
   function porDefecto(b){const s=P.bloques[b].total,u=ultimo(b);
-    return Object.keys(s).filter(c=>!esRes(c)).sort((a,c)=>(s[c][u]??-1)-(s[a][u]??-1)).slice(0,NDEF);}
+    return Object.keys(s).filter(c=>!esRes(c)&&!(cfg.sinDefecto||[]).includes(c)).sort((a,c)=>(s[c][u]??-1)-(s[a][u]??-1)).slice(0,NDEF);}   // cfg.sinDefecto: problemas que no salen por defecto (se añaden a mano)
   function asigna(b){const col=st.col[b]||(st.col[b]={}); Object.keys(col).forEach(c=>{if(!st.sel[b].includes(c))delete col[c]});
     const usados=new Set(Object.values(col));
     st.sel[b].forEach(c=>{if(col[c]==null){const i=COLS.findIndex((_,k)=>!usados.has(k));col[c]=i;usados.add(i);}});}
@@ -611,7 +613,7 @@ function montarProblemas(cfg){
     const k0=ix.indexOf(st.i);
     o.series=sel.map((c,k)=>({name:corta(c),type:"line",data:ix.map(i=>S()[c][i]),connectNulls:false,showSymbol:pocos,symbolSize:pocos?7:8,
       lineStyle:{width:2,color:COLS[col[c]]},itemStyle:{color:COLS[col[c]]},emphasis:{focus:"series",lineStyle:{width:3}},
-      endLabel:{show:!mov,formatter:p=>`${corta(c).length>24?corta(c).slice(0,23)+"…":corta(c)}  ${nf(p.value)}`,color:SM.c.tinta,fontSize:11.5,distance:6},
+      endLabel:{show:!mov,formatter:p=>`${corta(c).length>24?corta(c).slice(0,23)+"…":corta(c)}  ${nf(p.value)}`,color:COLS[col[c]],fontWeight:600,fontSize:11.5,distance:6},
       labelLayout:{moveOverlap:"shiftY"},
       markLine:k===0&&k0!==ix.length-1?{silent:true,symbol:"none",label:{show:false},lineStyle:{color:SM.c.subtle,type:"dashed",width:1},data:[{xAxis:k0}]}:undefined}));
     chE.setOption(o,true);
@@ -620,6 +622,15 @@ function montarProblemas(cfg){
     $("tabla").innerHTML=`<table><thead><tr><th>Problema (%)</th>${idx.map(i=>`<th>${xl(P.fechas[i])}</th>`).join("")}</tr></thead><tbody>${
       sel.map(c=>`<tr><td title="${c}">${corta(c)}</td>${idx.map(i=>{const v=S()[c][i];return `<td class="${v==null?"na":""}">${nf(v)}</td>`}).join("")}</tr>`).join("")}</tbody></table>`;
   }
+  /* Perfil: columnas agrupadas (antes, mapa de calor: el color no deja ver bien las diferencias entre grupos; Ainara, 03/11/2026).
+     Un grupo de columnas por problema, un color por grupo y, en gris, el total de la muestra como referencia. */
+  const RAMPA={edad:["#95F1D8","#4FB5AE","#1E7A82","#014550"],clase:["#95F1D8","#4FB5AE","#1E7A82","#014550","#012D33"]};   // de menor a mayor (edad) o de más a menos acomodada (clase)
+  const colorGrupo=(vid,g,k,n)=>{
+    if(vid==="sexo")return k===0?SM.c.teal:SM.c.naranja;
+    if(vid==="voto")return PARTY_COLORS[g]||({"Abstencionista":"#1A1A1A","Abstencionista":"#1A1A1A","Otros partidos":"#C7B5F3"})[g]||SM.catLines[k%SM.catLines.length];
+    const r=RAMPA[vid]; if(r)return r[Math.round(k*(r.length-1)/Math.max(1,n-1))]; return SM.catLines[k%SM.catLines.length];};
+  const ajusta=(t,n)=>String(t).split(" ").reduce((L,w)=>{const u=L[L.length-1];if(u&&(u+" "+w).length<=n)L[L.length-1]=u+" "+w;else L.push(w);return L;},[]);
+  const GRIS="#C9C5B8";
   function pintaMapa(){
     if(!chM)return;
     const i=st.i, v=PF.vars.find(x=>x.id===st.perfil), mov=esMovil();
@@ -629,32 +640,40 @@ function montarProblemas(cfg){
     $("mapa-subt").textContent=`${cfg.TXT[st.bloque]} · ${MED[st.medida]} en cada grupo · ${labL(P.fechas[i])}`+(elec?` · voto en ${elec}`:"");
     $("mapa-export").dataset.name=`${pre}_perfiles_${v.id}_${st.bloque}_${st.medida}_${P.fechas[i]}`;
     const peq=NG.map(n=>n!=null&&n<100);
-    const data=[]; let mx=0, mn=Infinity;
-    tops.forEach((c,y)=>G.forEach((g,x)=>{const val=D[c]?.[v.id]?.[x+1]; if(val!=null){mx=Math.max(mx,val);mn=Math.min(mn,val);} data.push([x,y,val??"-"]);}));
-    if(!isFinite(mn))mn=0; if(mx-mn<1)mx=mn+1;
+    const val=(c,x)=>{const z=D[c]?.[v.id]?.[x]; return z==null?null:z;};      // x = 0 es el total; 1… son los grupos
+    const todos=tops.flatMap(c=>G.map((_,x)=>val(c,x+1)).concat(val(c,0))).filter(z=>z!=null);
+    const mxr=Math.max(10,Math.max(0,...todos)+4), paso=mxr>40?10:5, mx=Math.ceil(mxr/paso)*paso;   // eje redondeado al paso, con hueco para las cifras
+    const conCifra=true;   // cifras enteras sobre cada columna (los decimales, en el tooltip)
     const o=smBaseOption();
-    o.grid={left:4,right:mov?4:12,top:mov?44:40,bottom:26,containLabel:true};
-    o.tooltip={...tt,formatter:p=>{const [x,y,val]=p.value;return `<div style="font-weight:600;max-width:280px;white-space:normal">${tops[y]}</div>${v.nombre}: <b>${G[x]}</b>${peq[x]?" (menos de 100 entrevistas)":""}<br>${val==="-"?"Sin dato":`<b>${nf(val)} %</b>`}`;}};
-    o.xAxis={type:"category",position:"top",data:G.map((g,k)=>peq[k]?g+"*":g),axisTick:{show:false},axisLine:{show:false},
-      axisLabel:{color:SM.c.tinta,fontSize:mov?9.5:11.5,interval:0,lineHeight:mov?11:14,width:mov?Math.max(28,(window.innerWidth-150)/G.length):undefined,overflow:mov?"break":"none"}};
-    o.yAxis={type:"category",inverse:true,data:tops.map(c=>corta(c)),axisTick:{show:false},axisLine:{show:false},
-      axisLabel:{color:SM.c.tinta,fontSize:12,width:mov?92:220,overflow:"truncate"}};
-    // Escala secuencial S&M (Mikel, 05/10/2026): crema = % más bajo → teal oscuro = % más alto
-    o.visualMap={show:false,min:mn,max:mx,dimension:2,inRange:{color:["#F3EFE4","#B7DCD6","#6FA9AC","#1E7A82","#014550"]}};
-    o.series=[{type:"heatmap",itemStyle:{borderColor:"#fff",borderWidth:2,borderRadius:3},
-      label:{show:true,fontSize:mov?10.5:12.5,fontFamily:SM.sans,fontWeight:500,formatter:p=>p.value[2]==="-"?"–":nf(p.value[2])},
-      emphasis:{itemStyle:{borderColor:SM.c.tinta,borderWidth:1}},
-      data:data.map(d=>({value:d,label:{color:d[2]!=="-"&&(d[2]-mn)/(mx-mn)>=0.6?"#fff":SM.c.tinta}}))}];
+    o.grid={left:8,right:12,top:46,bottom:20,containLabel:true};
+    o.legend={top:0,left:0,itemGap:14,itemWidth:12,itemHeight:8,textStyle:{color:SM.c.tinta,fontSize:mov?10.5:11.5,fontFamily:SM.sans},
+      data:[{name:"Total",icon:"roundRect",itemStyle:{color:GRIS}},...G.map((g,k)=>({name:g+(peq[k]?"*":""),icon:"roundRect",itemStyle:{color:colorGrupo(v.id,g,k,G.length)}}))]};
+    o.tooltip={...tt,trigger:"axis",axisPointer:{type:"shadow",shadowStyle:{color:"rgba(1,69,80,.06)"}},formatter:ps=>{
+      const c=tops[ps[0].dataIndex], tot=val(c,0);
+      return `<div style="font-weight:600;max-width:280px;white-space:normal;margin-bottom:4px">${c}</div>`+
+        [["Total",GRIS,tot,null]].concat(G.map((g,k)=>[g,colorGrupo(v.id,g,k,G.length),val(c,k+1),NG[k]])).map(([g,col,z,n])=>
+          `<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${col};margin-right:6px"></span>${g}${n!=null&&n<100?"*":""}</span><b>${z==null?"Sin dato":nf(z)+" %"}</b></div>`).join("")+
+        `<div style="color:${SM.c.subtle};margin-top:3px">${v.nombre}${peq.some(Boolean)?" · * menos de 100 entrevistas":""}</div>`;}};
+    o.xAxis={type:"category",data:tops.map((_,k)=>String(k)),axisTick:{show:false},axisLine:{lineStyle:{color:SM.c.grid}},
+      axisLabel:{interval:0,margin:10,color:SM.c.tinta,fontSize:mov?10.5:12,lineHeight:15,formatter:k=>ajusta(corta(tops[+k]),mov?16:24).join("\n")}};
+    o.yAxis={type:"value",min:0,max:mx,interval:paso,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:z=>z+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
+    const bw=Math.max(8,Math.min(22,Math.floor(((mov?560:700)/tops.length*0.78)/(G.length+1))));
+    const lab=(col,w)=>({show:conCifra,position:"top",fontSize:mov?9.5:10.5,color:col,fontWeight:w,fontFamily:SM.sans,formatter:p=>p.value==null?"":nf(p.value,0)});
+    o.series=[{name:"Total",type:"bar",barWidth:bw,barGap:"6%",data:tops.map(c=>val(c,0)),itemStyle:{color:GRIS,borderRadius:[3,3,0,0]},label:lab(SM.c.subtle,400)},
+      ...G.map((g,k)=>({name:g+(peq[k]?"*":""),type:"bar",barWidth:bw,data:tops.map(c=>val(c,k+1)),itemStyle:{color:colorGrupo(v.id,g,k,G.length),borderRadius:[3,3,0,0]},label:lab(SM.c.tinta,600)}))];
+    o.animation=false;
     chM.setOption(o,true);
     $("mapa-nota").textContent=(sinDato?cfg.sinDatoPerfil(v.id,i)+" ":"")+
-      `% de cada grupo que cita el problema (lectura por columnas), ${cfg.ponderacion}. Los 5 problemas son los principales del total en ${cfg.g.ese}. Cuanto más oscuro, mayor el % (escala de cada mapa, del mínimo al máximo).`+
-      (peq.some(Boolean)?" * Grupo con menos de 100 entrevistas: tómese con cautela.":"")+(cfg.notaPerfil[v.id]?" "+cfg.notaPerfil[v.id]:"");
+      `% de cada grupo que cita el problema, ${cfg.ponderacion}. Cada grupo de columnas es un problema (los 5 principales del total en ${cfg.g.ese}); cada color, un grupo, y la columna gris, el total de la muestra. `+
+      "Cifras redondeadas; con un decimal, al pasar el ratón. "+(mov?"En el móvil, desliza el gráfico hacia los lados. ":"")+
+      (peq.some(Boolean)?"* Grupo con menos de 100 entrevistas: tómese con cautela.":"")+(cfg.notaPerfil[v.id]?" "+cfg.notaPerfil[v.id]:"");
   }
   function pinta(){if(chB)pintaBarras();pintaTop3();if(chE)pintaEvol();pintaMapa();}
   let rz; window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(pinta,200);});
   pinta();
 }
 montarProblemas({pre:"cp",grid:"grid-cis-problemas",P:DATA.cis_problemas,PF:DATA.cis_perfiles,unidad:"Barómetro",sinPrimero:true,   /* sin «Primer problema» (Mikel, paso 61) */
+  sinDefecto:["Los problemas relacionados con la calidad del empleo"],   /* no sale por defecto en la evolución; se añade a mano (Ainara, 03/11/2026) */
   g:{elegido:"del barómetro elegido",primero:"Primer barómetro de la serie",sel:"barómetro seleccionado arriba",ese:"ese barómetro"},
   bloques:[["espana","Problemas de España"],["personal","Le afectan personalmente"]],
   TXT:{espana:"Principal problema de España",personal:"Problema que más le afecta personalmente"},
@@ -1400,10 +1419,10 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
 
 /* ===================== CIS · Indecisos: evolución de quienes no saben a quién votar ===================== */
 /* Ainara (03/11/2026): apartado nuevo antes de «Transferencia de voto». Los datos ya existían (paso 11, DATA.cis_intencion):
-   «No sabe todavía» en la intención directa y «N.S.» en voto + simpatía, % sobre el total de entrevistados, todo el histórico */
+   «No sabe todavía» en la intención directa, % sobre el total de entrevistados, todo el histórico. Sin la línea de voto + simpatía (Ainara, 03/11) */
 (function(){
   const I=DATA.cis_intencion, grid=document.getElementById("grid-cis-voto"); if(!I||!grid)return;
-  const A=I.medidas.intencion&&I.medidas.intencion.series["No sabe todavía"], B=I.medidas.votosim&&I.medidas.votosim.series["N.S."]; if(!A||!B)return;
+  const A=I.medidas.intencion&&I.medidas.intencion.series["No sabe todavía"]; if(!A)return;
   const card=document.createElement("div"); card.className="card";
   card.innerHTML=`
       <div class="card-head"><div><h3>Evolución de los indecisos</h3><p class="subt" id="ie-subt"></p></div>
@@ -1414,30 +1433,31 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   const nf=(v,d=1)=>v==null?"–":v.toLocaleString("es-ES",{minimumFractionDigits:d,maximumFractionDigits:d});
   const MES3=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"], xl=f=>`${MES3[+f.slice(5)-1]} ${f.slice(2,4)}`;
   const ch=mkChart("ie-ch"), esMovil=()=>window.innerWidth<640, F=I.fechas, u=F.length-1;
-  const SERIES=[{nombre:"Intención directa",corto:"Intención directa",datos:A,color:SM.c.teal},
-                {nombre:"Voto + simpatía",corto:"Voto + simpatía",datos:B,color:SM.c.naranja}];
+  /* Elecciones generales del 23-J de 2023: no hay barómetro de julio, así que la raya va entre el de junio y el de septiembre */
+  const kJ=F.indexOf("2023-06"), k23=kJ>=0&&F.indexOf("2023-09")>kJ?kJ+(F.indexOf("2023-09")-kJ)/2:null;
   const tt={backgroundColor:"#fff",borderColor:SM.c.grid,borderWidth:1,textStyle:{color:SM.c.tinta,fontFamily:SM.sans,fontSize:12},extraCssText:"box-shadow:0 2px 8px rgba(0,0,0,.12);border-radius:3px"};
   function pinta(){
     if(!ch)return; const mov=esMovil();
-    document.getElementById("ie-subt").textContent=`% de entrevistados que responden «No sabe» a la pregunta de voto, sobre el total · ${labL(F[0])} – ${labL(F[u])} · último barómetro (${labL(F[u])}): ${nf(A[u])} % en la intención directa y ${nf(B[u])} % tras preguntar por la simpatía`;
+    document.getElementById("ie-subt").textContent=`% de entrevistados que responden «No sabe» a la pregunta de voto, sobre el total · ${labL(F[0])} – ${labL(F[u])} · último barómetro (${labL(F[u])}): ${nf(A[u])} %`;
     const o=smBaseOption();
-    o.grid={left:8,right:mov?14:150,top:16,bottom:34,containLabel:true};
+    o.grid={left:8,right:mov?14:110,top:16,bottom:34,containLabel:true};
     o.tooltip={...tt,trigger:"axis",axisPointer:{type:"line",lineStyle:{color:SM.c.subtle,width:1}},formatter:ps=>{const k=ps[0].dataIndex;
       return `<div style="font-weight:600;margin-bottom:4px">${labL(F[k])} (estudio ${I.estudios[k]})</div>`+
-        ps.filter(p=>p.value!=null).map(p=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${p.color}">●</span> ${p.seriesName}</span><b>${nf(p.value)} %</b></div>`).join("")+
+        `<div style="display:flex;justify-content:space-between;gap:14px"><span>No sabe</span><b>${nf(A[k])} %</b></div>`+
         `<div style="color:${SM.c.subtle};margin-top:3px">n = ${I.base_n[k].toLocaleString("es-ES")} entrevistas</div>`;}};
     o.xAxis={type:"category",data:F.map(xl),boundaryGap:false,axisLine:{lineStyle:{color:SM.c.grid}},...ejeFechas(F,mov)};
-    const mx=Math.ceil(Math.max(...A.filter(x=>x!=null),...B.filter(x=>x!=null))/5)*5;
+    const mx=Math.ceil(Math.max(...A.filter(x=>x!=null))/5)*5;
     o.yAxis={type:"value",min:0,max:mx,interval:5,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:v=>v+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
-    o.series=SERIES.map(s=>({name:s.nombre,type:"line",data:s.datos,showSymbol:false,symbol:"circle",symbolSize:6,connectNulls:false,
-      lineStyle:{width:mov?2:2.4,color:s.color},itemStyle:{color:s.color},emphasis:{focus:"series"},
-      endLabel:{show:!mov,formatter:p=>`${s.corto}  ${nf(p.value)}`,color:s.color,fontSize:11.5,fontWeight:600,distance:6},labelLayout:{moveOverlap:"shiftY"}}));
-    o.legend={show:mov,top:0,left:0,itemWidth:14,itemHeight:3,icon:"roundRect",textStyle:{color:SM.c.tinta,fontSize:11.5,fontFamily:SM.sans}};
-    if(mov)o.grid.top=30;
+    o.series=[{name:"No sabe",type:"line",data:A,showSymbol:false,symbol:"circle",symbolSize:6,connectNulls:false,
+      lineStyle:{width:mov?2:2.4,color:SM.c.teal},itemStyle:{color:SM.c.teal},areaStyle:{color:SM.c.teal,opacity:.07},emphasis:{focus:"series"},
+      endLabel:{show:!mov,formatter:p=>`No sabe  ${nf(p.value)}`,color:SM.c.teal,fontSize:11.5,fontWeight:600,distance:6},
+      markLine:k23==null?undefined:{silent:true,symbol:"none",animation:false,lineStyle:{color:SM.c.naranja,type:"dashed",width:1.4},
+        label:{show:true,formatter:mov?"23-J":"Elecciones generales 23-J",color:SM.c.naranja,fontSize:mov?10.5:11.5,fontWeight:600,fontFamily:SM.sans,position:"insideEndTop",rotate:0,distance:6,align:"left",offset:[6,0]},
+        data:[{xAxis:k23}]}}];
     o.animation=false;
     ch.setOption(o,true);
-    document.getElementById("ie-nota").textContent="Fuente: Barómetros del CIS (microdatos), ponderados con PESO. Intención directa: % que responde «No sabe todavía» a la intención de voto en unas supuestas elecciones generales (INTENCIONGR), sobre el total de entrevistados. "+
-      "Voto + simpatía: % que sigue sin decir un partido (N.S.) después de preguntarle por el partido por el que siente más simpatía (VOTOSIMG). No se incluyen «No votaría», voto en blanco ni voto nulo, que son decisiones tomadas. "+
+    document.getElementById("ie-nota").textContent="Fuente: Barómetros del CIS (microdatos), ponderados con PESO. % que responde «No sabe todavía» a la intención de voto en unas supuestas elecciones generales (INTENCIONGR), sobre el total de entrevistados. "+
+      "No se incluyen «No votaría», voto en blanco ni voto nulo, que son decisiones tomadas. La raya naranja marca las elecciones generales del 23 de julio de 2023 (no hay barómetro de julio: queda entre los de junio y septiembre). "+
       "Faltan los estudios electorales de 2019 (mar, abr, oct, nov y dic) y los meses sin barómetro (agosto y julio de 2023). Los barómetros de 2019 a 2020 que no traen PESO se calculan sin ponderar. "+
       "Junio de 2023 (estudio 3410, con 7.407 entrevistas) sale en torno al doble que los meses vecinos: dato atípico que conviene leer con cautela. "+
       "Los cambios de metodología y de cuestionario del CIS a lo largo de estos años pueden mover parte de la serie: conviene fijarse en la tendencia más que en los saltos de un mes.";
@@ -1447,7 +1467,8 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
 })();
 
 /* ===================== CIS · Indecisos: perfil en el último barómetro ===================== */
-/* Paso 16b: composición de los indecisos (barra) frente a la del total de entrevistados (marca), y tasa de indecisión de cada grupo */
+/* Paso 16b: por cada variable, composición de los indecisos (verde) frente a la del total de entrevistados (gris) y, bajo cada grupo, su tasa de indecisión.
+   Una variable cada vez (botones), columnas agrupadas: compacto (Ainara, 03/11/2026: la versión con todas las variables en un solo gráfico quedaba demasiado larga) */
 (function(){
   const P=DATA.cis_indecisos, grid=document.getElementById("grid-cis-voto"); if(!P||!grid)return;
   const card=document.createElement("div"); card.className="card";
@@ -1455,58 +1476,63 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       <div class="card-head"><div><h3>Perfil de los indecisos</h3><p class="subt" id="ip-subt"></p></div>
         <button class="export-btn" id="ip-export" data-chart="ip-ch" data-name="cis_indecisos_perfil" hidden>⬇ Descargar el gráfico</button></div>
       <p class="subt" id="ip-claves" style="margin-top:8px"></p>
-      <div class="chart" id="ip-ch"></div>
+      <div class="ctrls"><div class="seg seg-wrap" id="ip-var" role="group" aria-label="Cruzar por"></div></div>
+      <div class="scroll-x"><div class="chart" id="ip-ch" style="height:380px;min-width:600px"></div></div>
       <p class="foot-note" id="ip-nota"></p>`;
   grid.appendChild(card);
   const nf=(v,d=1)=>v==null?"–":v.toLocaleString("es-ES",{minimumFractionDigits:d,maximumFractionDigits:d});
   const ch=mkChart("ip-ch"), esMovil=()=>window.innerWidth<640;
-  /* una fila por grupo, con una fila-título antes de cada variable */
-  const FILAS=[]; P.vars.forEach(v=>{FILAS.push({titulo:v.nombre}); v.grupos.forEach(g=>FILAS.push({var:v.nombre,...g}));});
-  const ALTO=28, N=FILAS.length;
-  const CORTO={"Recuerdo de voto (generales 2023)":"Recuerdo de voto 2023"}, CORTO_MOVIL={"Recuerdo de voto (generales 2023)":"Recuerdo voto 2023","Clase social subjetiva":"Clase social"};
+  const BOTON={"Recuerdo de voto (generales 2023)":"Recuerdo de voto 2023","Clase social subjetiva":"Clase social","Tamaño del municipio":"Municipio"};
+  let v=P.vars[0].id;
   const tt={backgroundColor:"#fff",borderColor:SM.c.grid,borderWidth:1,textStyle:{color:SM.c.tinta,fontFamily:SM.sans,fontSize:12},extraCssText:"box-shadow:0 2px 8px rgba(0,0,0,.12);border-radius:3px"};
+  const bar=document.getElementById("ip-var");
+  bar.innerHTML=P.vars.map(x=>`<button type="button" data-v="${x.id}" aria-pressed="${x.id===v}">${BOTON[x.nombre]||x.nombre}</button>`).join("");
+  bar.addEventListener("click",ev=>{const b=ev.target.closest("button");if(!b)return;v=b.dataset.v;bar.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));pinta();});
+  /* lo más llamativo (todas las variables): grupos con al menos 100 entrevistas y 50 indecisos, con la tasa más alta y más baja */
+  const TODOS=P.vars.flatMap(x=>x.grupos.map(g=>({var:x.nombre,...g})));
+  const VCORTO={"Recuerdo de voto (generales 2023)":"recuerdo de voto 2023"}, txt=f=>`${f.g} (${VCORTO[f.var]||f.var.toLowerCase()}: ${nf(f.tasa)} %)`;
+  const G=TODOS.filter(f=>f.n>=100&&f.ni>=50).sort((a,b)=>b.tasa-a.tasa);
   function pinta(){
-    if(!ch)return; const mov=esMovil();
-    document.getElementById("ip-subt").textContent=`Quién es la persona que no sabe a quién votar · ${labL(P.fecha)} (estudio ${P.estudio}) · ${nf(P.tasa)} % de los entrevistados (n = ${P.n_ind.toLocaleString("es-ES")} de ${P.n.toLocaleString("es-ES")})`;
-    document.getElementById("ip-export").dataset.name=`cis_indecisos_perfil_${P.fecha}`;
-    /* lo más llamativo: grupos (con al menos 100 entrevistas y 50 indecisos) con la tasa de indecisión más alta y más baja */
-    const G=FILAS.filter(f=>!f.titulo&&f.n>=100&&f.ni>=50).sort((a,b)=>b.tasa-a.tasa);
-    const VCORTO={"Recuerdo de voto (generales 2023)":"recuerdo de voto 2023"}, txt=f=>`${f.g} (${VCORTO[f.var]||f.var.toLowerCase()}: ${nf(f.tasa)} %)`;
+    if(!ch)return; const mov=esMovil(), V=P.vars.find(x=>x.id===v), GR=V.grupos;
+    document.getElementById("ip-subt").textContent=`Quién es la persona que no sabe a quién votar · ${labL(P.fecha)} (estudio ${P.estudio}) · ${nf(P.tasa)} % de los entrevistados (n = ${P.n_ind.toLocaleString("es-ES")} de ${P.n.toLocaleString("es-ES")}) · bajo cada grupo, su tasa de indecisión`;
+    document.getElementById("ip-export").dataset.name=`cis_indecisos_perfil_${v}_${P.fecha}`;
     document.getElementById("ip-claves").innerHTML=`<b>Más indecisión dentro del grupo:</b> ${G.slice(0,3).map(txt).join(" · ")}. <b>Menos:</b> ${G.slice(-3).reverse().map(txt).join(" · ")}.`;
     const o=smBaseOption();
-    const mx=Math.ceil((Math.max(...FILAS.filter(f=>!f.titulo).flatMap(f=>[f.pi,f.pm]))+6)/10)*10;   /* +6: hueco para la cifra de la barra más larga antes de la columna de tasas */
-    o.grid={left:8,right:mov?60:84,top:mov?50:34,bottom:34,containLabel:true};
-    o.legend={top:0,left:0,itemGap:18,textStyle:{color:SM.c.tinta,fontSize:11.5,fontFamily:SM.sans},data:[
+    const mx=Math.ceil((Math.max(...GR.flatMap(f=>[f.pi,f.pm]))+5)/10)*10;   /* +5: hueco para la cifra sobre la columna más alta */
+    o.grid={left:8,right:12,top:44,bottom:22,containLabel:true};
+    o.legend={top:0,left:0,itemGap:18,itemWidth:12,itemHeight:8,textStyle:{color:SM.c.tinta,fontSize:11.5,fontFamily:SM.sans},data:[
       {name:"Indecisos",icon:"roundRect",itemStyle:{color:SM.c.teal}},{name:"Total de entrevistados",icon:"roundRect",itemStyle:{color:"#C9C5B8"}}]};
-    o.title={text:"Tasa de indecisión del grupo",right:0,top:mov?22:4,textStyle:{color:SM.c.subtle,fontSize:11,fontWeight:500,fontFamily:SM.sans}};
     o.tooltip={...tt,trigger:"axis",axisPointer:{type:"shadow",shadowStyle:{color:"rgba(1,69,80,.06)"}},formatter:ps=>{
-      const f=FILAS[ps[0].dataIndex]; if(!f||f.titulo)return "";
-      const dif=f.pi-f.pm;
-      return `<div style="font-weight:600;margin-bottom:4px">${f.g} <span style="font-weight:400;color:${SM.c.subtle}">· ${f.var}</span></div>`+
+      const f=GR[ps[0].dataIndex], dif=f.pi-f.pm;
+      return `<div style="font-weight:600;margin-bottom:4px">${f.g} <span style="font-weight:400;color:${SM.c.subtle}">· ${V.nombre}</span></div>`+
         `<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${SM.c.teal}">●</span> Entre los indecisos</span><b>${nf(f.pi)} %</b></div>`+
-        `<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${SM.c.tinta}">▮</span> En el total de entrevistados</span><b>${nf(f.pm)} %</b></div>`+
+        `<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:#C9C5B8">●</span> En el total de entrevistados</span><b>${nf(f.pm)} %</b></div>`+
         `<div style="display:flex;justify-content:space-between;gap:14px"><span>Diferencia</span><b>${dif>0?"+":""}${nf(dif)} pts</b></div>`+
         `<div style="margin-top:4px;padding-top:4px;border-top:1px solid ${SM.c.grid}">De cada 100 personas del grupo, <b>${nf(f.tasa,0)}</b> no saben a quién votar</div>`+
         `<div style="color:${SM.c.subtle}">n = ${f.ni.toLocaleString("es-ES")} indecisos de ${f.n.toLocaleString("es-ES")} del grupo${f.ni<100?" (menos de 100 indecisos: cautela)":""}</div>`;}};
-    o.xAxis={type:"value",min:0,max:mx,interval:mov?20:10,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:v=>v+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
-    o.yAxis={type:"category",inverse:true,data:FILAS.map((f,k)=>String(k)),axisTick:{show:false},axisLine:{lineStyle:{color:SM.c.grid}},
-      axisLabel:{interval:0,margin:8,width:mov?126:170,overflow:"truncate",
-        formatter:v=>{const f=FILAS[+v];return f.titulo?`{h|${((mov?CORTO_MOVIL[f.titulo]:null)||CORTO[f.titulo]||f.titulo).toUpperCase()}}`:`{g|${f.g}}`;},
-        rich:{h:{color:SM.c.teal,fontWeight:700,fontSize:mov?10:11,fontFamily:SM.sans,lineHeight:22},g:{color:SM.c.tinta,fontSize:mov?10.5:12,fontFamily:SM.sans}}}};
-    const lab=(c,w)=>({show:true,position:"right",fontSize:mov?9.5:10.5,color:c,fontWeight:w,fontFamily:SM.sans,formatter:p=>p.value==null?"":nf(p.value)});
+    /* el nombre del grupo se parte en líneas de unos 12-15 caracteres para que no se pisen las etiquetas vecinas */
+    const ajusta=(t,n)=>t.split(" ").reduce((L,w)=>{const u=L[L.length-1];if(u&&(u+" "+w).length<=n)L[L.length-1]=u+" "+w;else L.push(w);return L;},[]);
+    /* etiqueta de cada grupo en dos líneas: nombre y, debajo, su tasa de indecisión (en un círculo de color S&M) */
+    o.xAxis={type:"category",data:GR.map((f,k)=>String(k)),axisTick:{show:false},axisLine:{lineStyle:{color:SM.c.grid}},
+      axisLabel:{interval:0,margin:10,lineHeight:15,
+        formatter:k=>{const f=GR[+k];return `${ajusta(f.g+(f.ni<100?"*":""),mov?12:15).map(l=>`{g|${l}}`).join("\n")}\n{t|${nf(f.tasa,0)} %}`;},
+        rich:{g:{color:SM.c.tinta,fontSize:mov?10.5:12,fontFamily:SM.sans,lineHeight:15,align:"center"},
+              t:{color:"#fff",backgroundColor:SM.c.teal,borderRadius:9,padding:[2,7,2,7],fontSize:mov?10:11,fontWeight:700,fontFamily:SM.sans,lineHeight:16,align:"center"}}}};
+    o.yAxis={type:"value",min:0,max:mx,interval:10,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:x=>x+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
+    const lab=(c,w)=>({show:true,position:"top",fontSize:mov?10:11,color:c,fontWeight:w,fontFamily:SM.sans,formatter:p=>nf(p.value)});
     o.series=[
-      {name:"Indecisos",type:"bar",barWidth:9,barGap:"15%",data:FILAS.map(f=>f.titulo?null:f.pi),itemStyle:{color:SM.c.teal,borderRadius:[0,2,2,0]},label:lab(SM.c.tinta,600)},
-      {name:"Total de entrevistados",type:"bar",barWidth:9,data:FILAS.map(f=>f.titulo?null:f.pm),itemStyle:{color:"#C9C5B8",borderRadius:[0,2,2,0]},label:lab(SM.c.subtle,400)},
-      /* columna de la derecha: tasa de indecisión del grupo (serie invisible en el borde derecho del eje) */
-      {name:"Tasa de indecisión",type:"scatter",symbol:"circle",symbolSize:1,itemStyle:{color:"rgba(0,0,0,0)"},clip:false,silent:true,tooltip:{show:false},data:FILAS.map((f,k)=>f.titulo?null:{value:[mx,k],tasa:f.tasa}),
-       label:{show:true,position:"right",distance:14,fontSize:mov?10.5:12,fontWeight:700,color:SM.c.teal,fontFamily:SM.sans,formatter:p=>nf(p.data.tasa,0)+" %"}}];
+      {name:"Indecisos",type:"bar",barWidth:mov?15:22,barGap:"8%",data:GR.map(f=>f.pi),itemStyle:{color:SM.c.teal,borderRadius:[3,3,0,0]},label:lab(SM.c.tinta,600)},
+      {name:"Total de entrevistados",type:"bar",barWidth:mov?15:22,data:GR.map(f=>f.pm),itemStyle:{color:"#C9C5B8",borderRadius:[3,3,0,0]},label:lab(SM.c.subtle,400)}];
     o.animation=false;
-    document.getElementById("ip-ch").style.height=(N*ALTO+70)+"px"; ch.resize();
     ch.setOption(o,true);
     document.getElementById("ip-nota").textContent="Fuente: Barómetros del CIS (microdatos), ponderados con PESO. Indecisos: quienes responden «No sabe todavía» a la intención directa de voto en unas supuestas elecciones generales (INTENCIONGR); no se incluyen «No votaría», voto en blanco ni voto nulo. "+
-      "Barra verde: % de los indecisos que pertenece al grupo (de cada 100 indecisos, cuántos son de ese grupo). Barra gris: % de ese grupo en el total de entrevistados; si la verde supera a la gris, el grupo está sobrerrepresentado entre los indecisos. "+
-      "Columna de la derecha: tasa de indecisión del grupo, es decir, de cada 100 personas del grupo, cuántas no saben a quién votar. Cada variable suma 100 entre sus grupos, sobre quienes responden a esa pregunta (sin N.S. ni N.C., salvo en ideología, donde «No se ubica» es un grupo más). "+
-      "Recuerdo de voto: en las elecciones generales de julio de 2023; sin quienes no tenían derecho a voto (≈1 %), N.R. ni N.C. Edad: 18-29, 30-44, 45-64 y 65 y más. Ideología: autoubicación en la escala 1-10 en las cinco categorías habituales del CIS. Situación laboral: sin trabajo doméstico no remunerado ni «otra situación». Clase social subjetiva: sin «otras». "+
+      "Columna verde: % de los indecisos que pertenece al grupo (de cada 100 indecisos, cuántos son de ese grupo). Columna gris: % de ese grupo en el total de entrevistados; si la verde supera a la gris, el grupo está sobrerrepresentado entre los indecisos. "+
+      "Círculo bajo cada grupo: su tasa de indecisión, es decir, de cada 100 personas del grupo, cuántas no saben a quién votar. Cada variable suma 100 entre sus grupos, sobre quienes responden a esa pregunta (sin N.S. ni N.C., salvo en ideología, donde «No se ubica» es un grupo más). "+
+      (v==="recuerdo"?"Recuerdo de voto en las elecciones generales de julio de 2023; sin quienes no tenían derecho a voto (≈1 %), N.R. ni N.C. ":"")+
+      (v==="edad"?"Edad: 18-29, 30-44, 45-64 y 65 y más. ":"")+(v==="ideologia"?"Autoubicación en la escala 1-10 (1 = izquierda, 10 = derecha) en las cinco categorías habituales del CIS. ":"")+
+      (v==="estudios"?"Estudios según el nivel detallado del CIS: ESO incluye la FP básica; Bachillerato y FP incluye la FP de grado medio y superior; Universitarios, de diplomatura a doctorado. ":"")+
+      (v==="laboral"?"Sin trabajo doméstico no remunerado ni «otra situación». ":"")+(v==="clase"?"Clase social subjetiva; sin «otras». ":"")+
+      (GR.some(f=>f.ni<100)?"* Grupo con menos de 100 indecisos: tómese con cautela. ":"")+
       "Un solo barómetro: las diferencias de pocos puntos pueden deberse al azar del muestreo, sobre todo en los grupos pequeños.";
   }
   let rz; window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(pinta,200);});
