@@ -511,9 +511,11 @@ function montarProblemas(cfg){
       <p class="foot-note" id="${id("mapa-nota")}"></p>
     </div>`;
 
-  /* Paleta propia del gráfico de evolución (Ainara, 03/11/2026): ocho tonos bien distintos entre sí (distancia de color Lab ≥ 33 entre cualquier par) y legibles como texto
-     sobre blanco; sin negro ni tonos pastel (antes, vivienda y Gobierno —verde azulado oscuro y negro— apenas se distinguían). Los cuatro primeros, los más distintos entre sí. */
-  const MAXSEL=8, NDEF=6, COLS=["#014550","#FF723C","#8739E5","#C69200","#1E73C4","#D6336C","#4FA832","#7C8C8A"];
+  /* Paleta S&M para el gráfico de evolución (Ainara, 03/11/2026): los seis colores corporativos en el orden que más los separa —teal, naranja, púrpura, amarillo, menta, lavanda
+     (distancia de color Lab ≥ 48 entre cualquier par)— y, para la 7.ª y la 8.ª línea, el gris azulado y el naranja quemado de la paleta de gráficos S&M (SM.catLines).
+     El rótulo del final de cada línea usa una versión algo más oscura de su color (COLS_TXT) para que se lea sobre blanco: menta, lavanda y amarillo puros se perderían. */
+  const MAXSEL=8, NDEF=6, COLS=["#014550","#FF723C","#8739E5","#F6BD32","#95F1D8","#C7B5F3","#7C8C8A","#B3541E"],
+        COLS_TXT=["#014550","#E9602B","#8739E5","#B88A00","#2E9E7E","#8E73D6","#5A6B6C","#B3541E"];
   const MES3=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
   const xl=f=>`${MES3[+f.slice(5)-1]} ${f.slice(2,4)}`;
   const nf=(v,d=1)=>v==null?"–":v.toLocaleString("es-ES",{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -612,8 +614,8 @@ function montarProblemas(cfg){
     o.yAxis={type:"value",min:0,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:v=>v+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
     const k0=ix.indexOf(st.i);
     o.series=sel.map((c,k)=>({name:corta(c),type:"line",data:ix.map(i=>S()[c][i]),connectNulls:false,showSymbol:pocos,symbolSize:pocos?7:8,
-      lineStyle:{width:2,color:COLS[col[c]]},itemStyle:{color:COLS[col[c]]},emphasis:{focus:"series",lineStyle:{width:3}},
-      endLabel:{show:!mov,formatter:p=>`${corta(c).length>24?corta(c).slice(0,23)+"…":corta(c)}  ${nf(p.value)}`,color:COLS[col[c]],fontWeight:600,fontSize:11.5,distance:6},
+      lineStyle:{width:2.6,color:COLS[col[c]]},itemStyle:{color:COLS[col[c]]},emphasis:{focus:"series",lineStyle:{width:3.4}},
+      endLabel:{show:!mov,formatter:p=>`${corta(c).length>24?corta(c).slice(0,23)+"…":corta(c)}  ${nf(p.value)}`,color:COLS_TXT[col[c]],fontWeight:600,fontSize:11.5,distance:6},
       labelLayout:{moveOverlap:"shiftY"},
       markLine:k===0&&k0!==ix.length-1?{silent:true,symbol:"none",label:{show:false},lineStyle:{color:SM.c.subtle,type:"dashed",width:1},data:[{xAxis:k0}]}:undefined}));
     chE.setOption(o,true);
