@@ -1668,7 +1668,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   pinta();
 })();
 
-/* ===================== CIS · El viaje de cada perfil (gráfico de «gancho» con tres momentos) =====================
+/* ===================== CIS · Tendencias de voto de los grupos demográficos (el viaje de cada perfil) (gráfico de «gancho» con tres momentos) =====================
    Estilo de los gráficos de «cómo se ha movido cada grupo» del NYT. Por cada perfil: margen izquierda − derecha del voto + simpatía
    en tres barómetros. Punto = primer momento, anillo = segundo, flecha = último. Naranja a la izquierda del eje, teal a la derecha.
    Datos: DATA.cis_viaje (build_dashboard.py → cis_viaje(), sale de datos/cis_votosim_perfiles.csv). */
@@ -1682,7 +1682,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   const NS=V.fechas.length, last=NS-1;
   const card=document.createElement("div"); card.className="card"; card.id="vj-card";
   card.innerHTML=`
-      <div class="card-head"><div><h3>El viaje de cada perfil</h3><p class="subt" id="vj-subt"></p></div>
+      <div class="card-head"><div><h3>Tendencias de voto de los grupos demográficos</h3><p class="subt" id="vj-subt"></p></div>
         <button class="export-btn" id="vj-export" data-card="vj-card" data-name="cis_viaje_perfiles" hidden>⬇ Descargar el gráfico</button></div>
       <div class="ctrls"><label class="sel-lab">Cruzar por <select id="vj-var" class="sel"></select></label>
         <label class="sel-lab">Punto <select id="vj-m0" class="sel vj-m"></select></label>
@@ -1693,7 +1693,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       <div id="vj-svg" class="vj-svg"></div>
       <p class="foot-note" id="vj-nota"></p>
       <details class="tabla"><summary>Ver los datos en tabla</summary><div class="tabla-wrap" id="vj-tabla"></div></details>`;
-  grid.appendChild(card);
+  grid.insertBefore(card,grid.firstChild);  // arriba del todo de «Análisis del voto»
   const st=document.createElement("style");
   st.textContent=`.vj-svg{width:100%;min-width:0}.vj-svg svg{display:block;width:100%;height:auto}.vj-leg{margin:8px 0 2px}.vj-leg svg{display:block;height:auto;max-width:100%}.vj-fila:hover rect.vj-hit{fill:rgba(1,69,80,.05)}`;
   document.head.appendChild(st);
