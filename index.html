@@ -1672,7 +1672,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
    Estilo de los gráficos de «cómo se ha movido cada grupo» del NYT. Por cada perfil: margen izquierda − derecha del voto + simpatía
    en tres barómetros. Punto = primer momento, anillo = segundo, flecha = último. Naranja a la izquierda del eje, teal a la derecha.
    Datos: DATA.cis_viaje (build_dashboard.py → cis_viaje(), sale de datos/cis_votosim_perfiles.csv). */
-(function(){
+(function(){ try{
   const V=DATA.cis_viaje, grid=document.getElementById("grid-cis-voto"); if(!V||!grid)return;
   const NAR="#FF723C", TEAL="#014550", INK="#1A1A1A", MUT="#5A6B6C", GRID="#DCD8CC";
   const MES3=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
@@ -1807,6 +1807,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   else window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(reajusta,200);});
   const _p=pinta; pinta=function(){ult=Math.round(caja.clientWidth)||ult;_p();};
   reajusta();
+}catch(e){ console.error('Tendencias de voto (cis_viaje):',e); /* un fallo aquí no debe romper el resto del dashboard (botones PNG, notas plegables…) */ }
 })();
 
 /* ===================== Sociómetro · Análisis del voto (intención directa) ===================== */
