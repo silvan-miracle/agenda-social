@@ -188,7 +188,7 @@ footer.page{border-top:1px solid var(--grid);padding-block:20px 40px;display:fle
     <div class="hero-txt">
       <h1>Matiz<span class="lema">El monitor de la opinión pública</span></h1>
       <p class="sub">Seguimiento de la opinión pública con el Barómetro del CIS, el Sociómetro Vasco y el promedio de encuestas estatales</p>
-      <p class="actualizado">Actualizado el <time datetime="2026-11-09">9 de noviembre de 2026</time></p>
+      <p class="actualizado">Actualizado el <time datetime="2026-11-10">10 de noviembre de 2026</time></p>
     </div>
     <!-- Logo con su descriptor (Mikel, 06/10/2026); las etiquetas de fuente pasan al pie -->
     <div class="sm-firma">
@@ -1741,7 +1741,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     // eje
     const yax=22;
     T(CX-14,yax-8,"◄ MÁS IZQUIERDA",10.5,600,NAR,"end","letter-spacing=\".05em\""); T(CX+14,yax-8,"MÁS DERECHA ►",10.5,600,TEAL,"start","letter-spacing=\".05em\"");
-    for(let p=-(MAXV-10);p<=MAXV-10;p+=10)T(sx(p),yax+12,p===0?"0":"+"+Math.abs(p),10.5,400,MUT,"middle");
+    for(let p=-(MAXV-10);p<=MAXV-10;p+=10)T(sx(p),yax+12,String(Math.abs(p)),10.5,400,MUT,"middle");
     const top=yax+22; let cy=top;
     F.forEach(rw=>{
       const yc=cy+(mov?34:rowH/2), yU=yc-r, yL=yc+r, have=rw.vals.map((a,j)=>a!=null?j:-1).filter(j=>j>=0), xs=rw.vals.map(a=>a!=null?sx(a):null);
@@ -1758,12 +1758,11 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
         dot(Xa,yc,b===2&&a===1?1:(a===0?0:1)); arrow(Xb,yc,d,side(Xb));
         tip=[Xb,d,rw.vals[b],yc]; ext=[Xa,Xb]; bul=-d;
       }
-      const [X3,d3,m3,ty]=tip, t_=lab(m3);
-      T(X3+d3*10,ty+3.8,t_,11.5,600,INK,d3>0?"start":"end");
+      const [X3,d3]=tip, t_="";   // sin cifra junto a la flecha (se confundía el «+» con la dirección); el valor sale al pasar el ratón y en la tabla
       const star=rw.n.some(n=>n!=null&&n<250), nm=rw.nombre+(star?"*":""), wn=tw(nm,12,rw.total?600:400);
       if(mov){ T(padL,cy+12,nm,12,rw.total?600:400,INK,"start"); }
       else{
-        const tl=X3+d3*(10+tw(t_,11.5,600)), lo=Math.min(...ext,...(d3<0?[tl]:[]))-(r+8), hi=Math.max(...ext,...(d3>0?[tl]:[]))+(r+8);
+        const tl=X3+d3*(10+8), lo=Math.min(...ext,...(d3<0?[tl]:[]))-(r+8), hi=Math.max(...ext,...(d3>0?[tl]:[]))+(r+8);
         let puesto=false;
         for(const s of [bul,-bul]){const x=s>0?hi+4:lo-4; if((s>0&&x+wn<W-10)||(s<0&&x-wn>10)){T(x,yc+4,nm,12,rw.total?600:400,INK,s>0?"start":"end");puesto=true;break;}}
         if(!puesto)T(padL,yc+4,nm,12,400,INK);
