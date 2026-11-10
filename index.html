@@ -2091,7 +2091,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
         const dif=L.aprob-L.aprob_ant, cls=Math.abs(dif)<0.05?"eq":dif>0?"up":"down", fl=cls==="up"?"▲":cls==="down"?"▼":"=";
         const col=COLOR[L.lider];
         return `<div class="aprob" style="border-top-color:${col}">
-          <div class="aprob-cab">${avatarLider(L.lider,col)}<div class="aprob-nom">${L.lider}</div></div>
+          <div class="aprob-nom">${L.lider}</div>
           <div class="aprob-fila"><span class="aprob-v">${nf(L.aprob)}<small> %</small></span>
             <span class="kpi-d ${cls}" title="Frente a ${labL(A.fecha_ant)}">${fl} ${dif>0?"+":""}${nf(dif)} pp</span></div>
           <div class="aprob-barra" role="img" aria-label="${nf(L.aprob)} % de aprobación"><span style="width:${Math.min(100,L.aprob)}%;background:${col}"></span></div>
