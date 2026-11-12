@@ -188,7 +188,7 @@ footer.page{border-top:1px solid var(--grid);padding-block:20px 40px;display:fle
     <div class="hero-txt">
       <h1>Matiz<span class="lema">El monitor de la opinión pública</span></h1>
       <p class="sub">Seguimiento de la opinión pública con el Barómetro del CIS, el Sociómetro Vasco y el promedio de encuestas estatales</p>
-      <p class="actualizado">Actualizado el <time datetime="2026-11-11">11 de noviembre de 2026</time></p>
+      <p class="actualizado">Actualizado el <time datetime="2026-11-12">12 de noviembre de 2026</time></p>
     </div>
     <!-- Logo con su descriptor (Mikel, 06/10/2026); las etiquetas de fuente pasan al pie -->
     <div class="sm-firma">
@@ -2326,6 +2326,8 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
 })();
 
 /* ===================== Autoubicación ideológica (módulo común CIS y Sociómetro) ===================== */
+/* Color fijo por sexo en todos los cruces: hombres verde, mujeres morado (morado de la marca) */
+const IDEO_SEXCOL={"Hombre":"#2FA36B","Mujer":"#8739E5"};
 function montarIdeologia(C){
   const grid=document.getElementById(C.grid); const I=C.data; if(!grid||!I)return;
   const P=C.pre; if(C.limpiar)grid.innerHTML="";
@@ -2340,15 +2342,76 @@ function montarIdeologia(C){
   const card=document.createElement("div"); card.className="card";
   card.innerHTML=`<div class="card-head"><div><h3>${C.titulo||"Autoubicación ideológica"}</h3><p class="subt" id="${P}subt"></p></div>
       <button class="export-btn" id="${P}export" data-chart="${P}ch" data-name="${C.exp}" hidden>⬇ Descargar el gráfico</button></div>
-    <div class="ctrls"><label class="sel-lab">Cruzar por <select id="${P}var" class="sel"></select></label></div>
+    <div class="ctrls"><label class="sel-lab">Cruzar por <select id="${P}var" class="sel"></select></label>${C.trim?`<label class="sel-lab">Agrupar por <select id="${P}modo" class="sel"><option value="trim">Trimestre</option><option value="baro">Barómetro</option></select></label>`:""}${C.zoom?`<label class="sel-lab">Eje <select id="${P}eje" class="sel"><option value="zoom">Ampliado</option><option value="full">Escala completa</option></select></label>`:""}</div>
     <div class="chart" id="${P}ch" style="height:${C.alto}px"></div>
+    <div id="${P}mleg" style="display:none;flex-wrap:wrap;align-items:center;gap:6px 18px;font:500 12px Inter,Arial,sans-serif;color:#1A1A1A;margin:10px 0 2px"></div>
+    <div id="${P}multi" style="display:none;margin-top:6px"></div>
     <p class="foot-note" id="${P}nota"></p>
     <details class="tabla"><summary>Ver los datos en tabla</summary><div class="tabla-wrap" id="${P}tabla"></div></details>`;
-  grid.appendChild(card);
+  card.id=P+"card"; grid.appendChild(card);
   let v="total"; const ch=mkChart(P+"ch"), selV=document.getElementById(P+"var");
   selV.innerHTML=I.vars.map(x=>`<option value="${x.id}">${x.nombre}</option>`).join("");
   selV.addEventListener("change",()=>{v=selV.value;pinta();});
   const TOT=I.datos.total.Total;
+  const elCh=document.getElementById(P+"ch"), elMulti=document.getElementById(P+"multi"), elLeg=document.getElementById(P+"mleg"), btnExp=document.getElementById(P+"export");
+  let modo=C.trim?"trim":"baro", zoom=!!C.zoom;
+  const selM=document.getElementById(P+"modo"); if(selM)selM.addEventListener("change",()=>{modo=selM.value;pinta();});
+  const selE=document.getElementById(P+"eje"); if(selE)selE.addEventListener("change",()=>{zoom=selE.value==="zoom";pinta();});
+  /* Agrupación trimestral (solo si C.trim): media de los barómetros del trimestre ponderada por las personas que se ubican en cada uno (n).
+     El % de N.S./N.C. se pondera por la muestra total de cada barómetro (n / (1 - ns)). El CIS no hace barómetro en agosto: T3 tiene julio y septiembre. */
+  const qDe=f=>f.slice(0,4)+"-T"+(Math.floor((+f.slice(5)-1)/3)+1);
+  const qFechas=[...new Set(I.fechas.map(qDe))], qIdx=I.fechas.map(f=>qFechas.indexOf(qDe(f)));
+  const xlQ=q=>`T${q.slice(-1)} ${q.slice(2,4)}`;
+  const qCache={};
+  function agrupaQ(D){
+    const m=[],n=[],ns=[];
+    qFechas.forEach((q,j)=>{let sm=0,sw=0,sn=0,sns=0,st=0;
+      qIdx.forEach((qi,i)=>{ if(qi!==j||!D.n[i])return;
+        sn+=D.n[i]; if(D.m[i]!=null){sm+=D.m[i]*D.n[i]; sw+=D.n[i];}
+        if(D.ns&&D.ns[i]!=null){const t=D.n[i]/(1-D.ns[i]/100); sns+=D.ns[i]*t; st+=t;}});
+      m.push(sw?sm/sw:null); n.push(sn||null); ns.push(st?sns/st:null);});
+    return {m,n,ns};
+  }
+  const Dg=(vv,g)=>modo==="trim"?(qCache[vv+"|"+g]=qCache[vv+"|"+g]||agrupaQ(I.datos[vv][g])):I.datos[vv][g];
+  const vistaF=()=>modo==="trim"?qFechas.map(xlQ):I.fechas.map(xl);
+  const cabV=(i,vv)=>{ if(modo!=="trim")return C.cab(i,vv);
+    const fs=I.fechas.filter((_,k)=>qIdx[k]===i), q=qFechas[i];
+    return `T${q.slice(-1)} ${q.slice(0,4)} · ${fs.length} barómetro${fs.length>1?"s":""} (${fs.map(x=>MES3[+x.slice(5)-1]).join(", ")})`;};
+  /* «Generación y sexo» (C.multi): una gráfica pequeña por generación, de mayores a jóvenes y con la misma escala.
+     Verde = hombres, morado = mujeres, gris discontinuo = total. Se dibujan con echarts.init propio (no con mkChart) para que
+     el reparto automático de botones PNG no les ponga uno a cada una; el PNG de esta vista es el de la tarjeta entera. */
+  const minis=[];
+  function pintaMulti(gs,FX,TOTv,mov,XL){
+    const gens=[...new Set(gs.map(g=>g.split(" · ")[0]))].reverse(), nc=mov?2:4;
+    const hM=modo==="trim"?Math.min(560,Math.max(380,90+FX.length*14)):C.alto;
+    if(!minis.length){
+      elMulti.innerHTML=gens.map((g,k)=>`<div style="min-width:0"><div id="${P}mt${k}" style="font:600 13px Inter,Arial,sans-serif;margin:0 0 2px 6px"></div><div id="${P}m${k}" style="width:100%"></div></div>`).join("");
+      gens.forEach((g,k)=>minis.push(echarts.init(document.getElementById(P+"m"+k),null,{renderer:"canvas"})));
+    }
+    elMulti.style.gridTemplateColumns=`repeat(${nc},minmax(0,1fr))`; elMulti.style.gap="14px 8px";
+    const tr=`display:inline-flex;align-items:center;gap:6px`;
+    elLeg.innerHTML=`<span style="${tr}"><i style="display:inline-block;width:14px;height:3px;border-radius:2px;background:${IDEO_SEXCOL.Hombre}"></i>Hombres</span>`+
+      `<span style="${tr}"><i style="display:inline-block;width:14px;height:3px;border-radius:2px;background:${IDEO_SEXCOL.Mujer}"></i>Mujeres</span>`+
+      `<span style="${tr}"><i style="display:inline-block;width:14px;border-top:2px dashed #9A968C"></i>${C.totNom}</span>`+
+      `<span style="color:${SM.c.subtle}">← más a la izquierda · más a la derecha →</span>`;
+    gens.forEach((g,k)=>{
+      const etiq=k%nc===0, mk=(sx,col,nom)=>({name:nom,type:"line",data:Dg("gensexo",`${g} · ${sx}`).m.map((m,i)=>[m,i]),connectNulls:false,showSymbol:true,symbol:"circle",symbolSize:mov?4:5,smooth:0.35,
+        lineStyle:{width:2,color:col},itemStyle:{color:col},emphasis:{focus:"series"}});
+      document.getElementById(P+"mt"+k).textContent=g;
+      document.getElementById(P+"m"+k).style.height=hM+"px"; minis[k].resize();
+      minis[k].setOption({backgroundColor:"#fff",animationDuration:300,textStyle:{fontFamily:SM.sans,color:SM.c.tinta},
+        grid:{left:etiq?46:8,right:10,top:6,bottom:28,containLabel:false},
+        tooltip:{...tt,trigger:"axis",axisPointer:{type:"line",axis:"y",lineStyle:{color:SM.c.subtle,width:1}},
+          formatter:ps=>{const i=ps[0].dataIndex, rows=ps.filter(p=>p.value&&p.value[0]!=null).sort((a,b)=>a.value[0]-b.value[0])
+            .map(p=>`<div style="display:flex;gap:10px;align-items:center;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${p.color};margin-right:6px;vertical-align:middle"></span>${p.seriesName}</span><b>${nf(p.value[0],2)}</b></div>`).join("");
+            return `<div style="font-weight:600;margin-bottom:2px">${g}</div><div style="color:${SM.c.subtle};font-size:11px;margin-bottom:4px">${cabV(i,"gensexo")}</div>${rows}`;}},
+        yAxis:{type:"category",data:FX,boundaryGap:true,axisLine:{lineStyle:{color:SM.c.grid}},axisTick:{show:false},axisLabel:{show:etiq,color:SM.c.subtle,fontSize:10.5,interval:0},splitLine:{show:true,lineStyle:{color:"#F3F0E8"}}},
+        xAxis:{type:"value",min:XL[0],max:XL[1],interval:1,axisLabel:{color:SM.c.subtle,fontSize:10.5},splitLine:{lineStyle:{color:"#EEEBE3"}}},
+        series:[{...mk("hombres",IDEO_SEXCOL.Hombre,"Hombres"),markLine:{silent:true,symbol:"none",lineStyle:{color:SM.c.subtle,type:"dotted",width:1},label:{show:false},data:[{xAxis:C.mid}]}},
+          mk("mujeres",IDEO_SEXCOL.Mujer,"Mujeres"),
+          {name:C.totNom,type:"line",data:TOTv.m.map((m,i)=>[m,i]),showSymbol:false,smooth:0.35,z:1,lineStyle:{width:1.4,type:"dashed",color:"#9A968C"},itemStyle:{color:"#9A968C"}}]},true);
+    });
+  }
   /* Suavizado (Mikel, 06/10/2026): con C.suave, cada línea es una curva loess (regresión local lineal, pesos tricúbicos,
      ventana = C.suave × nº de barómetros con dato, eje de tiempo en meses) y los datos de cada barómetro quedan como puntos claros */
   const MESN=I.fechas.map(f=>(+f.slice(0,4))*12+(+f.slice(5))-1);
@@ -2363,10 +2426,23 @@ function montarIdeologia(C){
   }
   function pinta(){
     if(!ch)return;
-    const mov=esMovil(), VV=I.vars.find(x=>x.id===v), gs=VV.grupos;
-    const lineas=gs.map((g,k)=>({nombre:v==="total"?C.totNom:g,color:v==="total"?SM.c.tinta:(v==="voto"?VCOL[g]:(v==="gensexo"?SM.catLines[Math.floor(k/2)]:SM.catLines[k])),dash:v==="gensexo"&&k%2===1,D:I.datos[v][g]}));   /* generación y sexo: un color por generación; mujeres, línea discontinua y rombo */
+    const mov=esMovil(), VV=I.vars.find(x=>x.id===v), gs=VV.grupos, TOTv=Dg("total","Total"), FX=vistaF();
+    const lineas=gs.map((g,k)=>({nombre:v==="total"?C.totNom:g,color:v==="total"?SM.c.tinta:(v==="voto"?VCOL[g]:(v==="sexo"&&IDEO_SEXCOL[g])||(v==="gensexo"?SM.catLines[Math.floor(k/2)]:SM.catLines[k])),dash:v==="gensexo"&&k%2===1,D:Dg(v,g)}));   /* generación y sexo: un color por generación; mujeres, línea discontinua y rombo */
     document.getElementById(P+"subt").textContent=`${C.subt} · ${v==="total"?C.totNom:VV.nombre} · ${labL(I.fechas[0])} – ${labL(I.fechas[I.fechas.length-1])}`;
     document.getElementById(P+"export").dataset.name=`${C.exp}_${v}`;
+    /* Vista «una gráfica por generación»: se oculta el gráfico principal y el PNG es el de la tarjeta */
+    const multi=!!C.multi&&v==="gensexo";
+    elCh.style.display=multi?"none":""; elMulti.style.display=multi?"grid":"none"; elLeg.style.display=multi?"flex":"none";
+    if(multi){btnExp.dataset.card=card.id; delete btnExp.dataset.chart;} else {delete btnExp.dataset.card; btnExp.dataset.chart=P+"ch";}
+    /* En vista trimestral hay pocas filas: se acorta el gráfico para que no quede alargado */
+    elCh.style.height=(modo==="trim"?Math.min(C.alto,Math.max(380,110+FX.length*15)):C.alto)+"px"; ch.resize();
+    /* Eje ampliado: las medias se mueven en pocas décimas, así que se acota el eje a los datos visibles (margen 0,5, ancho mínimo de 4 puntos) */
+    let XL=[C.min,C.max];
+    if(zoom){const vs=[...lineas.map(L=>L.D.m),TOTv.m].flat().filter(x=>x!=null);
+      if(vs.length){let lo=Math.max(C.min,Math.floor(Math.min(...vs)-0.5)), hi=Math.min(C.max,Math.ceil(Math.max(...vs)+0.5));
+        const falta=4-(hi-lo); if(falta>0){lo=Math.max(C.min,lo-Math.floor(falta/2)); hi=Math.min(C.max,hi+Math.ceil(falta/2));}
+        XL=[lo,hi];}}
+    const acotado=XL[0]>C.min||XL[1]<C.max;
     const o=smBaseOption();
     const estrecho=ch.getWidth()<760;   /* tarjeta a media anchura (dos gráficos lado a lado) */
     o.grid={left:8,right:(mov||estrecho)?16:56,top:v==="total"?24:((mov||estrecho)?78:52),bottom:40,containLabel:true};
@@ -2376,14 +2452,14 @@ function montarIdeologia(C){
     o.tooltip={...tt,trigger:"axis",axisPointer:{type:"line",axis:"y",lineStyle:{color:SM.c.subtle,width:1}},
       formatter:C.suave?ps=>{const i=ps[0].dataIndex;
         const ls=[...lineas.map(L=>({n:L.nombre,c:L.color,s:L.S[i],m:L.D.m[i]})),...(v!=="total"?[{n:C.totNom,c:"#9A968C",s:TOTS[i],m:TOT.m[i]}]:[])].filter(x=>x.m!=null).sort((a,b)=>a.s-b.s);
-        return `<div style="font-weight:600;margin-bottom:4px">${C.cab(i,v)}</div>`+ls.map(x=>`<div style="display:flex;gap:10px;align-items:center;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${x.c};margin-right:6px;vertical-align:middle"></span>${x.n}</span><span><b>${nf(x.s,2)}</b> <span style="color:${SM.c.subtle};font-size:11px">(barómetro ${nf(x.m,2)})</span></span></div>`).join("")+
+        return `<div style="font-weight:600;margin-bottom:4px">${cabV(i,v)}</div>`+ls.map(x=>`<div style="display:flex;gap:10px;align-items:center;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${x.c};margin-right:6px;vertical-align:middle"></span>${x.n}</span><span><b>${nf(x.s,2)}</b> <span style="color:${SM.c.subtle};font-size:11px">(barómetro ${nf(x.m,2)})</span></span></div>`).join("")+
           `<div style="color:${SM.c.subtle};margin-top:4px;font-size:11px">En negrita, la tendencia suavizada. ${C.pista||"Más bajo = más a la izquierda"}</div>`;}:
       ps=>{const i=ps[0].dataIndex;const rows=ps.filter(p=>p.value&&p.value[0]!=null).sort((a,c)=>a.value[0]-c.value[0])
         .map(p=>`<div style="display:flex;gap:10px;align-items:center;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${p.color};margin-right:6px;vertical-align:middle"></span>${p.seriesName}</span><b>${nf(p.value[0],2)}</b></div>`).join("");
-        return `<div style="font-weight:600;margin-bottom:4px">${C.cab(i,v)}</div>${rows}<div style="color:${SM.c.subtle};margin-top:4px;font-size:11px">${C.pista||"Más bajo = más a la izquierda"}</div>`;}};
-    o.yAxis={type:"category",data:I.fechas.map(xl),boundaryGap:true,axisLine:{lineStyle:{color:SM.c.grid}},axisTick:{show:false},
+        return `<div style="font-weight:600;margin-bottom:4px">${cabV(i,v)}</div>${rows}<div style="color:${SM.c.subtle};margin-top:4px;font-size:11px">${C.pista||"Más bajo = más a la izquierda"}</div>`;}};
+    o.yAxis={type:"category",data:FX,boundaryGap:true,axisLine:{lineStyle:{color:SM.c.grid}},axisTick:{show:false},
       axisLabel:{color:SM.c.subtle,fontSize:11,interval:0},splitLine:{show:true,lineStyle:{color:"#F3F0E8"}}};
-    o.xAxis={type:"value",min:C.min,max:C.max,interval:1,position:"bottom",axisLabel:{color:SM.c.subtle,fontSize:11,formatter:x=>x===C.min?((mov||estrecho)?x+"\n"+(C.izqC||"Izq."):x+"\n"+C.izq):x===C.max?((mov||estrecho)?x+"\n"+(C.derC||"Der."):x+"\n"+C.der):String(x)},
+    o.xAxis={type:"value",min:XL[0],max:XL[1],interval:1,position:"bottom",axisLabel:{color:SM.c.subtle,fontSize:11,formatter:x=>XL[0]===C.min&&x===C.min?((mov||estrecho)?x+"\n"+(C.izqC||"Izq."):x+"\n"+C.izq):XL[1]===C.max&&x===C.max?((mov||estrecho)?x+"\n"+(C.derC||"Der."):x+"\n"+C.der):String(x)},
       splitLine:{lineStyle:{color:"#EEEBE3"}}};
     const serie=(L,extra)=>({name:L.nombre,type:"line",data:L.D.m.map((m,i)=>[m,i]),connectNulls:false,showSymbol:true,symbol:"circle",symbolSize:mov?5:7,
       lineStyle:{width:2,color:L.color,type:L.dash?"dashed":"solid"},itemStyle:{color:L.color},...(L.dash?{symbol:"diamond",symbolSize:mov?6:8}:{}),emphasis:{focus:"series",lineStyle:{width:3}},...extra});
@@ -2396,21 +2472,22 @@ function montarIdeologia(C){
       if(v!=="total") o.series.push(curva(C.totNom,"#9A968C",TOTS,{lineStyle:{width:1.5,type:"dashed",color:"#9A968C"},z:1}));
     } else {
     o.series=lineas.map(L=>serie(L,{}));
-    if(v!=="total") o.series.push(serie({nombre:C.totNom,color:"#9A968C",D:TOT},{lineStyle:{width:1.5,type:"dashed",color:"#9A968C"},symbolSize:4,z:1}));
+    if(v!=="total") o.series.push(serie({nombre:C.totNom,color:"#9A968C",D:TOTv},{lineStyle:{width:1.5,type:"dashed",color:"#9A968C"},symbolSize:4,z:1}));
     }
     o.series[0].markLine={silent:true,symbol:"none",lineStyle:{color:SM.c.subtle,type:"dotted",width:1},
       label:{formatter:C.midLab,color:SM.c.subtle,fontSize:10.5,position:"end"},data:[{xAxis:C.mid}]};
     ch.setOption(o,true);
-    document.getElementById(P+"nota").textContent=C.nota(v);
-    const idx=I.fechas.map((_,i)=>i).reverse();
-    document.getElementById(P+"tabla").innerHTML=`<table><thead><tr><th>${C.unidad}</th>${lineas.map(L=>`<th>${L.nombre}</th>`).join("")}${v==="total"?"<th>N.S./N.C. (%)</th><th>n que se ubica</th>":""}</tr></thead><tbody>${
-      idx.map(i=>`<tr><td>${xl(I.fechas[i])}</td>${lineas.map(L=>{const x=L.D.m[i];return `<td class="${x==null?"na":""}">${nf(x,2)}</td>`}).join("")}${v==="total"?`<td>${nf(TOT.ns[i])}</td><td>${TOT.n[i]==null?"–":TOT.n[i].toLocaleString("es-ES")}</td>`:""}</tr>`).join("")}</tbody></table>`;
+    if(multi)pintaMulti(gs,FX,TOTv,mov,XL);
+    document.getElementById(P+"nota").textContent=C.nota(v)+(acotado?` Eje ampliado de ${XL[0]} a ${XL[1]} para ver mejor las diferencias; la escala completa va de ${C.min} a ${C.max} (selector «Eje»). `:"")+(modo==="trim"?" Vista trimestral: media de los barómetros de cada trimestre, ponderada por el número de personas que se ubican en cada uno; el tooltip indica qué barómetros entran. ":"");
+    const idx=FX.map((_,i)=>i).reverse();
+    document.getElementById(P+"tabla").innerHTML=`<table><thead><tr><th>${modo==="trim"?"Trimestre":C.unidad}</th>${lineas.map(L=>`<th>${L.nombre}</th>`).join("")}${v==="total"?"<th>N.S./N.C. (%)</th><th>n que se ubica</th>":""}</tr></thead><tbody>${
+      idx.map(i=>`<tr><td>${FX[i]}</td>${lineas.map(L=>{const x=L.D.m[i];return `<td class="${x==null?"na":""}">${nf(x,2)}</td>`}).join("")}${v==="total"?`<td>${nf(TOTv.ns[i])}</td><td>${TOTv.n[i]==null?"–":TOTv.n[i].toLocaleString("es-ES")}</td>`:""}</tr>`).join("")}</tbody></table>`;
   }
   let rz; window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(pinta,200);}); pinta();
 }
 
 /* CIS · Ideología */
-montarIdeologia({grid:"grid-cis-ideologia",limpiar:true,pre:"id-",data:DATA.cis_ideologia,exp:"cis_autoubicacion_ideologica",alto:Math.max(760,DATA.cis_ideologia.fechas.length*18),   /* una fila por barómetro: crece con la serie (80 desde 2019) */   /* sin suavizar: el suavizado del paso 60 se retiró a petición de Mikel (paso 60b); la opción «suave» queda disponible */
+montarIdeologia({grid:"grid-cis-ideologia",limpiar:true,pre:"id-",data:DATA.cis_ideologia,exp:"cis_autoubicacion_ideologica",alto:Math.max(760,DATA.cis_ideologia.fechas.length*18), trim:true, zoom:true, multi:true,   /* una fila por barómetro: crece con la serie (80 desde 2019) */   /* sin suavizar: el suavizado del paso 60 se retiró a petición de Mikel (paso 60b); la opción «suave» queda disponible */
   totNom:"Total España",unidad:"Barómetro",min:1,max:10,mid:5,izq:"Izquierda",der:"Derecha",midLab:"Punto medio de la escala (5)",   /* 5 y no 5,5: decisión de Mikel (06/10/2026) */
   subt:"Media de la escala de autoubicación ideológica, de 1 (izquierda) a 10 (derecha)",
   vcol:{"PP":PARTY_COLORS["PP"],"PSOE":PARTY_COLORS["PSOE"],"VOX":PARTY_COLORS["VOX"],"Sumar":PARTY_COLORS["Sumar"],"Abstencionista":"#014550"},
@@ -2420,7 +2497,7 @@ montarIdeologia({grid:"grid-cis-ideologia",limpiar:true,pre:"id-",data:DATA.cis_
     (v==="voto"?"Recuerdo de voto en las generales de 2023; hasta septiembre de 2023 el CIS pregunta por el voto en elecciones anteriores (2016 o 2019) y esos meses quedan fuera de este cruce. No se muestran los votantes de otros partidos (ERC, Junts, EH Bildu, EAJ-PNV, BNG…): juntos no forman un grupo con sentido ideológico y por separado son muy pocos. ":"")+
     (v==="clase"?"Clase social subjetiva; sin «otras», N.S. ni N.C. ":"")+
     ((v==="generacion"||v==="gensexo")?"Generaciones por año de nacimiento aproximado (año del barómetro menos la edad, con un año de margen): Gen Z, 1997-2012; Millennials, 1981-1996; Gen X, 1965-1980; Boomers y mayores, hasta 1964. "+
-      (v==="gensexo"?"Un color por generación; línea continua con círculo para los hombres y discontinua con rombo para las mujeres. ":"")+
+      (v==="gensexo"?"Una gráfica por generación, con la misma escala: verde, los hombres; morado, las mujeres; en gris discontinuo, el total de España. ":"")+
       "La Gen Z tiene pocos casos en los primeros años (en 2019 solo tenía 18-22 años): por sexo, entre unas 50 y 480 personas que se ubican por barómetro, así que sus saltos de un mes hay que mirarlos con cautela. ":"")+
     (v!=="total"?"En gris discontinuo, el total de España como referencia. Los grupos más pequeños (clase alta y media alta, VOX en recuerdo) tienen unas 220-340 personas que se ubican por barómetro: con ese tamaño la media puede moverse unas décimas por azar. ":"")});
 
