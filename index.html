@@ -2346,6 +2346,7 @@ function montarIdeologia(C){
     <div class="chart" id="${P}ch" style="height:${C.alto}px"></div>
     <div id="${P}mleg" style="display:none;flex-wrap:wrap;align-items:center;gap:6px 18px;font:500 12px Inter,Arial,sans-serif;color:#1A1A1A;margin:10px 0 2px"></div>
     <div id="${P}multi" style="display:none;margin-top:6px"></div>
+    <img id="${P}mlogo" class="card-logo" src="${SM_LOGO_PRINCIPAL_URI}" alt="Silván &amp; Miracle" style="display:none">
     <p class="foot-note" id="${P}nota"></p>
     <details class="tabla"><summary>Ver los datos en tabla</summary><div class="tabla-wrap" id="${P}tabla"></div></details>`;
   card.id=P+"card"; grid.appendChild(card);
@@ -2353,7 +2354,7 @@ function montarIdeologia(C){
   selV.innerHTML=I.vars.map(x=>`<option value="${x.id}">${x.nombre}</option>`).join("");
   selV.addEventListener("change",()=>{v=selV.value;pinta();});
   const TOT=I.datos.total.Total;
-  const elCh=document.getElementById(P+"ch"), elMulti=document.getElementById(P+"multi"), elLeg=document.getElementById(P+"mleg"), btnExp=document.getElementById(P+"export");
+  const elCh=document.getElementById(P+"ch"), elMulti=document.getElementById(P+"multi"), elLeg=document.getElementById(P+"mleg"), elLogo=document.getElementById(P+"mlogo"), btnExp=document.getElementById(P+"export");
   let modo=C.trim?"trim":"baro", zoom=!!C.zoom;
   const selM=document.getElementById(P+"modo"); if(selM)selM.addEventListener("change",()=>{modo=selM.value;pinta();});
   const selE=document.getElementById(P+"eje"); if(selE)selE.addEventListener("change",()=>{zoom=selE.value==="zoom";pinta();});
@@ -2432,7 +2433,7 @@ function montarIdeologia(C){
     document.getElementById(P+"export").dataset.name=`${C.exp}_${v}`;
     /* Vista «una gráfica por generación»: se oculta el gráfico principal y el PNG es el de la tarjeta */
     const multi=!!C.multi&&v==="gensexo";
-    elCh.style.display=multi?"none":""; elMulti.style.display=multi?"grid":"none"; elLeg.style.display=multi?"flex":"none";
+    elCh.style.display=multi?"none":""; elMulti.style.display=multi?"grid":"none"; elLeg.style.display=multi?"flex":"none"; elLogo.style.display=multi?"block":"none";   /* el logo S&M va dentro de los gráficos normales; aquí, bajo la rejilla */
     if(multi){btnExp.dataset.card=card.id; delete btnExp.dataset.chart;} else {delete btnExp.dataset.card; btnExp.dataset.chart=P+"ch";}
     /* En vista trimestral hay pocas filas: se acorta el gráfico para que no quede alargado */
     elCh.style.height=(modo==="trim"?Math.min(C.alto,Math.max(380,110+FX.length*15)):C.alto)+"px"; ch.resize();
