@@ -8,6 +8,7 @@ const SM = {
   c:{teal:"#014550",menta:"#95F1D8",naranja:"#FF723C",amarillo:"#F6BD32",lavanda:"#C7B5F3",purpura:"#8739E5",crema:"#F3EFE4",tinta:"#1A1A1A",blanco:"#FFFFFF",subtle:"#5A6B6C",grid:"#DCD8CC"},
   cat:["#014550","#FF723C","#95F1D8","#F6BD32","#C7B5F3","#8739E5"],
   catLines:["#014550","#FF723C","#8739E5","#F6BD32","#1A1A1A","#4FB5AE","#C7B5F3","#B3541E","#3FAE8E","#8C6D1F"],
+  sexo:{"Hombre":"#2FA36B","Mujer":"#8739E5"},   // Hombre = verde, Mujer = morado, en todos los cruces por sexo
   seq:["#012D33","#014550","#1E7A82","#4FB5AE","#95F1D8"],
   div:["#FF723C","#FBB089","#F3EFE4","#6FA9AC","#014550"],
   sans:'Inter, "Helvetica Neue", Arial, sans-serif', serif:'"Instrument Serif", Georgia, serif',
@@ -827,7 +828,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       if(v==="total"||modo==="lideres"){const D=V.datos[v][v==="total"?"Total":g];
         lineas=V.lideres.map(l=>({nombre:corto(l),color:COLOR[l],m:D[l].m,n:D[l].n}));}
       else {const gs=V.vars.find(x=>x.id===v).grupos;
-        lineas=gs.map((x,k)=>({nombre:x,color:GCOL[k],m:V.datos[v][x][lider].m,n:V.datos[v][x][lider].n}));}
+        lineas=gs.map((x,k)=>({nombre:x,color:(v==="sexo"&&SM.sexo[x])||GCOL[k],m:V.datos[v][x][lider].m,n:V.datos[v][x][lider].n}));}
       const titulo=v==="total"?"Total de quienes conocen a cada líder":(modo==="lideres"?`${nomV}: ${g}`:`${lider} por ${nomV.toLowerCase()}`);
       document.getElementById("vl-subt").textContent=`Nota media de 1 (muy mal) a 10 (muy bien) · ${titulo} · ${labL(V.fechas[0])} – ${labL(V.fechas[last])}`;
       document.getElementById("vl-export").dataset.name=`cis_valoracion_${v}_${modo==="lideres"?g:lider}`.replace(/[^\wáéíóúñ-]+/gi,"_");
@@ -978,7 +979,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       if(v==="total"||modo==="lideres"){const D=S.datos[v][v==="total"?"Total":g];
         lineas=S.lideres.map(l=>({id:l,nombre:l,color:COLOR[l],m:D[l].m,n:D[l].n,dash:!actual(l),etq:actual(l)}));}
       else {const gs=S.vars.find(x=>x.id===v).grupos;
-        lineas=gs.map((x,k)=>({id:lider,nombre:x,color:GCOL[k],m:S.datos[v][x][lider].m,n:S.datos[v][x][lider].n,dash:false,etq:true}));}
+        lineas=gs.map((x,k)=>({id:lider,nombre:x,color:(v==="sexo"&&SM.sexo[x])||GCOL[k],m:S.datos[v][x][lider].m,n:S.datos[v][x][lider].n,dash:false,etq:true}));}
       const titulo=v==="total"?"Total de quienes conocen a cada líder":(modo==="lideres"?`${nomV}: ${g}`:`${lider} por ${nomV.toLowerCase()}`);
       document.getElementById("sl-v-subt").textContent=`Nota media de 0 (muy mal) a 10 (muy bien) · ${titulo} · ${labL(S.fechas[0])} – ${labL(S.fechas[last])}`;
       document.getElementById("sl-v-export").dataset.name=`sociometro_valoracion_${v}_${modo==="lideres"?g:lider}`.replace(/[^\wáéíóúñ-]+/gi,"_");
@@ -1020,7 +1021,7 @@ function montarIdeologia(C){
   const card=document.createElement("div"); card.className="card";
   card.innerHTML=`<div class="card-head"><div><h3>${C.titulo||"Autoubicación ideológica"}</h3><p class="subt" id="${P}subt"></p></div>
       <button class="export-btn" id="${P}export" data-chart="${P}ch" data-name="${C.exp}" hidden>⬇ PNG</button></div>
-    <div class="ctrls"><label class="sel-lab">Cruzar por <select id="${P}var" class="sel"></select></label></div>
+    <div class="ctrls"><label class="sel-lab">Cruzar por <select id="${P}var" class="sel"></select></label>${C.trim?`<label class="sel-lab">Agrupar por <select id="${P}modo" class="sel"><option value="trim">Trimestre</option><option value="baro">Barómetro</option></select></label>`:""}</div>
     <div class="chart" id="${P}ch" style="height:${C.alto}px"></div>
     <p class="foot-note" id="${P}nota"></p>
     <details class="tabla"><summary>Ver los datos en tabla</summary><div class="tabla-wrap" id="${P}tabla"></div></details>`;
@@ -1028,11 +1029,36 @@ function montarIdeologia(C){
   let v="total"; const ch=mkChart(P+"ch"), selV=document.getElementById(P+"var");
   selV.innerHTML=I.vars.map(x=>`<option value="${x.id}">${x.nombre}</option>`).join("");
   selV.addEventListener("change",()=>{v=selV.value;pinta();});
-  const TOT=I.datos.total.Total;
+  let modo=C.trim?"trim":"baro";
+  const selM=document.getElementById(P+"modo"); if(selM)selM.addEventListener("change",()=>{modo=selM.value;pinta();});
+  /* Agrupación trimestral (solo si C.trim): media de los barómetros del trimestre ponderada por las personas que se ubican en cada uno (n).
+     El % de N.S./N.C. se pondera por la muestra total de cada barómetro (n / (1 - ns)). El CIS no hace barómetro en agosto: T3 tiene julio y septiembre. */
+  const qDe=f=>f.slice(0,4)+"-T"+(Math.floor((+f.slice(5)-1)/3)+1);
+  const qFechas=[...new Set(I.fechas.map(qDe))], qIdx=I.fechas.map(f=>qFechas.indexOf(qDe(f)));
+  const xlQ=q=>`T${q.slice(-1)} ${q.slice(2,4)}`;
+  const qCache={};
+  function agrupaQ(D){
+    const m=[],n=[],ns=[];
+    qFechas.forEach((q,j)=>{let sm=0,sw=0,sn=0,sns=0,st=0;
+      qIdx.forEach((qi,i)=>{ if(qi!==j||!D.n[i])return;
+        sn+=D.n[i]; if(D.m[i]!=null){sm+=D.m[i]*D.n[i]; sw+=D.n[i];}
+        if(D.ns&&D.ns[i]!=null){const t=D.n[i]/(1-D.ns[i]/100); sns+=D.ns[i]*t; st+=t;}});
+      m.push(sw?sm/sw:null); n.push(sn||null); ns.push(st?sns/st:null);});
+    return {m,n,ns};
+  }
+  const Dg=(vv,g)=>modo==="trim"?(qCache[vv+"|"+g]=qCache[vv+"|"+g]||agrupaQ(I.datos[vv][g])):I.datos[vv][g];
+  const vistaF=()=>modo==="trim"?qFechas.map(xlQ):I.fechas.map(xl);
+  const cabV=(i,vv)=>{ if(modo!=="trim")return C.cab(i,vv);
+    const fs=I.fechas.filter((_,k)=>qIdx[k]===i), q=qFechas[i];
+    return `T${q.slice(-1)} ${q.slice(0,4)} · ${fs.length} barómetro${fs.length>1?"s":""} (${fs.map(x=>MES3[+x.slice(5)-1]).join(", ")})`;};
   function pinta(){
     if(!ch)return;
     const mov=esMovil(), VV=I.vars.find(x=>x.id===v), gs=VV.grupos;
-    const lineas=gs.map((g,k)=>({nombre:v==="total"?C.totNom:g,color:v==="total"?SM.c.tinta:(v==="voto"?VCOL[g]:SM.catLines[k]),D:I.datos[v][g]}));
+    const TOTv=Dg("total","Total"), FX=vistaF();
+    /* En vista trimestral hay pocas filas: se acorta el gráfico para que no quede alargado */
+    const hCh=modo==="trim"?Math.min(C.alto,Math.max(360,170+FX.length*17)):C.alto;
+    const elCh=document.getElementById(P+"ch"); if(elCh.style.height!==hCh+"px"){elCh.style.height=hCh+"px";ch.resize();}
+    const lineas=gs.map((g,k)=>({nombre:v==="total"?C.totNom:g,color:v==="total"?SM.c.tinta:(v==="voto"?VCOL[g]:(v==="sexo"&&SM.sexo[g])||SM.catLines[k]),D:Dg(v,g)}));
     document.getElementById(P+"subt").textContent=`${C.subt} · ${v==="total"?C.totNom:VV.nombre} · ${labL(I.fechas[0])} – ${labL(I.fechas[I.fechas.length-1])}`;
     document.getElementById(P+"export").dataset.name=`${C.exp}_${v}`;
     const o=smBaseOption();
@@ -1043,28 +1069,28 @@ function montarIdeologia(C){
     o.tooltip={...tt,trigger:"axis",axisPointer:{type:"line",axis:"y",lineStyle:{color:SM.c.subtle,width:1}},
       formatter:ps=>{const i=ps[0].dataIndex;const rows=ps.filter(p=>p.value&&p.value[0]!=null).sort((a,c)=>a.value[0]-c.value[0])
         .map(p=>`<div style="display:flex;gap:10px;align-items:center;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${p.color};margin-right:6px;vertical-align:middle"></span>${p.seriesName}</span><b>${nf(p.value[0],2)}</b></div>`).join("");
-        return `<div style="font-weight:600;margin-bottom:4px">${C.cab(i,v)}</div>${rows}<div style="color:${SM.c.subtle};margin-top:4px;font-size:11px">${C.pista||"Más bajo = más a la izquierda"}</div>`;}};
-    o.yAxis={type:"category",data:I.fechas.map(xl),boundaryGap:true,axisLine:{lineStyle:{color:SM.c.grid}},axisTick:{show:false},
+        return `<div style="font-weight:600;margin-bottom:4px">${cabV(i,v)}</div>${rows}<div style="color:${SM.c.subtle};margin-top:4px;font-size:11px">${C.pista||"Más bajo = más a la izquierda"}</div>`;}};
+    o.yAxis={type:"category",data:FX,boundaryGap:true,axisLine:{lineStyle:{color:SM.c.grid}},axisTick:{show:false},
       axisLabel:{color:SM.c.subtle,fontSize:11,interval:0},splitLine:{show:true,lineStyle:{color:"#F3F0E8"}}};
     o.xAxis={type:"value",min:C.min,max:C.max,interval:1,position:"bottom",axisLabel:{color:SM.c.subtle,fontSize:11,formatter:x=>x===C.min?((mov||estrecho)?x+"\n"+(C.izqC||"Izq."):x+"\n"+C.izq):x===C.max?((mov||estrecho)?x+"\n"+(C.derC||"Der."):x+"\n"+C.der):String(x)},
       splitLine:{lineStyle:{color:"#EEEBE3"}}};
     const serie=(L,extra)=>({name:L.nombre,type:"line",data:L.D.m.map((m,i)=>[m,i]),connectNulls:false,showSymbol:true,symbol:"circle",symbolSize:mov?5:7,
       lineStyle:{width:2,color:L.color},itemStyle:{color:L.color},emphasis:{focus:"series",lineStyle:{width:3}},...extra});
     o.series=lineas.map(L=>serie(L,{}));
-    if(v!=="total") o.series.push(serie({nombre:C.totNom,color:"#9A968C",D:TOT},{lineStyle:{width:1.5,type:"dashed",color:"#9A968C"},symbolSize:4,z:1}));
+    if(v!=="total") o.series.push(serie({nombre:C.totNom,color:"#9A968C",D:TOTv},{lineStyle:{width:1.5,type:"dashed",color:"#9A968C"},symbolSize:4,z:1}));
     o.series[0].markLine={silent:true,symbol:"none",lineStyle:{color:SM.c.subtle,type:"dotted",width:1},
       label:{formatter:C.midLab,color:SM.c.subtle,fontSize:10.5,position:"end"},data:[{xAxis:C.mid}]};
     ch.setOption(o,true);
-    document.getElementById(P+"nota").textContent=C.nota(v);
-    const idx=I.fechas.map((_,i)=>i).reverse();
-    document.getElementById(P+"tabla").innerHTML=`<table><thead><tr><th>${C.unidad}</th>${lineas.map(L=>`<th>${L.nombre}</th>`).join("")}${v==="total"?"<th>N.S./N.C. (%)</th><th>n que se ubica</th>":""}</tr></thead><tbody>${
-      idx.map(i=>`<tr><td>${xl(I.fechas[i])}</td>${lineas.map(L=>{const x=L.D.m[i];return `<td class="${x==null?"na":""}">${nf(x,2)}</td>`}).join("")}${v==="total"?`<td>${nf(TOT.ns[i])}</td><td>${TOT.n[i]==null?"–":TOT.n[i].toLocaleString("es-ES")}</td>`:""}</tr>`).join("")}</tbody></table>`;
+    document.getElementById(P+"nota").textContent=C.nota(v)+(modo==="trim"?" Vista trimestral: media de los barómetros de cada trimestre, ponderada por el número de personas que se ubican en cada uno; el tooltip indica qué barómetros entran. ":"");
+    const idx=FX.map((_,i)=>i).reverse();
+    document.getElementById(P+"tabla").innerHTML=`<table><thead><tr><th>${modo==="trim"?"Trimestre":C.unidad}</th>${lineas.map(L=>`<th>${L.nombre}</th>`).join("")}${v==="total"?"<th>N.S./N.C. (%)</th><th>n que se ubica</th>":""}</tr></thead><tbody>${
+      idx.map(i=>`<tr><td>${FX[i]}</td>${lineas.map(L=>{const x=L.D.m[i];return `<td class="${x==null?"na":""}">${nf(x,2)}</td>`}).join("")}${v==="total"?`<td>${nf(TOTv.ns[i])}</td><td>${TOTv.n[i]==null?"–":TOTv.n[i].toLocaleString("es-ES")}</td>`:""}</tr>`).join("")}</tbody></table>`;
   }
   let rz; window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(pinta,200);}); pinta();
 }
 
 /* CIS · Ideología */
-montarIdeologia({grid:"grid-cis-ideologia",limpiar:true,pre:"id-",data:DATA.cis_ideologia,exp:"cis_autoubicacion_ideologica",alto:760,
+montarIdeologia({grid:"grid-cis-ideologia",limpiar:true,pre:"id-",data:DATA.cis_ideologia,exp:"cis_autoubicacion_ideologica",alto:540,trim:true,
   totNom:"Total España",unidad:"Barómetro",min:1,max:10,mid:5.5,izq:"Izquierda",der:"Derecha",midLab:"Punto medio de la escala (5,5)",
   subt:"Media de la escala de autoubicación ideológica, de 1 (izquierda) a 10 (derecha)",
   vcol:{"PP":PARTY_COLORS["PP"],"PSOE":PARTY_COLORS["PSOE"],"VOX":PARTY_COLORS["VOX"],"Sumar":PARTY_COLORS["Sumar"],"No votó":"#014550"},
