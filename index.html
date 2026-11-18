@@ -681,7 +681,7 @@ function montarProblemas(cfg){
   if(CMP){st.cmpVista="ranking"; st.cmpProb=null;
     document.querySelectorAll(`#${id("cmp-vista")} button`).forEach(b=>b.addEventListener("click",()=>{st.cmpVista=b.dataset.v;
       document.querySelectorAll(`#${id("cmp-vista")} button`).forEach(x=>x.setAttribute("aria-pressed",x===b));pintaCmp();}));
-    $("cmp-prob").addEventListener("change",e=>{st.cmpProb=e.target.value;pintaCmp();});}
+    $("cmp-prob").addEventListener("change",e=>{st.cmpProb=decodeURIComponent(e.target.value);pintaCmp();});}
   function pintaCmp(){
     if(!CMP||!chC)return;
     const [bA,bB]=B, SA=P.bloques[bA][st.medida], SB=P.bloques[bB][st.medida], K=cfg.comparar, mov=esMovil(), i=st.i;
