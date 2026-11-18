@@ -1021,7 +1021,7 @@ function montarIdeologia(C){
   const card=document.createElement("div"); card.className="card";
   card.innerHTML=`<div class="card-head"><div><h3>${C.titulo||"Autoubicación ideológica"}</h3><p class="subt" id="${P}subt"></p></div>
       <button class="export-btn" id="${P}export" data-chart="${P}ch" data-name="${C.exp}" hidden>⬇ PNG</button></div>
-    <div class="ctrls"><label class="sel-lab">Cruzar por <select id="${P}var" class="sel"></select></label>${C.trim?`<label class="sel-lab">Agrupar por <select id="${P}modo" class="sel"><option value="trim">Trimestre</option><option value="baro">Barómetro</option></select></label>`:""}</div>
+    <div class="ctrls"><label class="sel-lab">Cruzar por <select id="${P}var" class="sel"></select></label>${C.trim?`<label class="sel-lab">Agrupar por <select id="${P}modo" class="sel"><option value="trim">Trimestre</option><option value="baro">Barómetro</option></select></label>`:""}${C.zoom?`<label class="sel-lab">Eje <select id="${P}eje" class="sel"><option value="zoom">Ampliado</option><option value="full">Escala completa</option></select></label>`:""}</div>
     <div class="chart" id="${P}ch" style="height:${C.alto}px"></div>
     <p class="foot-note" id="${P}nota"></p>
     <details class="tabla"><summary>Ver los datos en tabla</summary><div class="tabla-wrap" id="${P}tabla"></div></details>`;
@@ -1031,6 +1031,7 @@ function montarIdeologia(C){
   selV.addEventListener("change",()=>{v=selV.value;pinta();});
   let modo=C.trim?"trim":"baro";
   const selM=document.getElementById(P+"modo"); if(selM)selM.addEventListener("change",()=>{modo=selM.value;pinta();});
+  let zoom=!!C.zoom; const selE=document.getElementById(P+"eje"); if(selE)selE.addEventListener("change",()=>{zoom=selE.value==="zoom";pinta();});
   /* Agrupación trimestral (solo si C.trim): media de los barómetros del trimestre ponderada por las personas que se ubican en cada uno (n).
      El % de N.S./N.C. se pondera por la muestra total de cada barómetro (n / (1 - ns)). El CIS no hace barómetro en agosto: T3 tiene julio y septiembre. */
   const qDe=f=>f.slice(0,4)+"-T"+(Math.floor((+f.slice(5)-1)/3)+1);
@@ -1072,7 +1073,14 @@ function montarIdeologia(C){
         return `<div style="font-weight:600;margin-bottom:4px">${cabV(i,v)}</div>${rows}<div style="color:${SM.c.subtle};margin-top:4px;font-size:11px">${C.pista||"Más bajo = más a la izquierda"}</div>`;}};
     o.yAxis={type:"category",data:FX,boundaryGap:true,axisLine:{lineStyle:{color:SM.c.grid}},axisTick:{show:false},
       axisLabel:{color:SM.c.subtle,fontSize:11,interval:0},splitLine:{show:true,lineStyle:{color:"#F3F0E8"}}};
-    o.xAxis={type:"value",min:C.min,max:C.max,interval:1,position:"bottom",axisLabel:{color:SM.c.subtle,fontSize:11,formatter:x=>x===C.min?((mov||estrecho)?x+"\n"+(C.izqC||"Izq."):x+"\n"+C.izq):x===C.max?((mov||estrecho)?x+"\n"+(C.derC||"Der."):x+"\n"+C.der):String(x)},
+    /* Eje ampliado: las medias se mueven en pocas décimas, así que se acota el eje a los datos visibles (margen 0,5, ancho mínimo de 4 puntos) */
+    let XL=[C.min,C.max];
+    if(zoom){const vs=[...lineas.map(L=>L.D.m),TOTv.m].flat().filter(x=>x!=null);
+      if(vs.length){let lo=Math.max(C.min,Math.floor(Math.min(...vs)-0.5)), hi=Math.min(C.max,Math.ceil(Math.max(...vs)+0.5));
+        const falta=4-(hi-lo); if(falta>0){lo=Math.max(C.min,lo-Math.floor(falta/2)); hi=Math.min(C.max,hi+Math.ceil(falta/2));}
+        XL=[lo,hi];}}
+    const acotado=XL[0]>C.min||XL[1]<C.max;
+    o.xAxis={type:"value",min:XL[0],max:XL[1],interval:1,position:"bottom",axisLabel:{color:SM.c.subtle,fontSize:11,formatter:x=>XL[0]===C.min&&x===C.min?((mov||estrecho)?x+"\n"+(C.izqC||"Izq."):x+"\n"+C.izq):XL[1]===C.max&&x===C.max?((mov||estrecho)?x+"\n"+(C.derC||"Der."):x+"\n"+C.der):String(x)},
       splitLine:{lineStyle:{color:"#EEEBE3"}}};
     const serie=(L,extra)=>({name:L.nombre,type:"line",data:L.D.m.map((m,i)=>[m,i]),connectNulls:false,showSymbol:true,symbol:"circle",symbolSize:mov?5:7,
       lineStyle:{width:2,color:L.color},itemStyle:{color:L.color},emphasis:{focus:"series",lineStyle:{width:3}},...extra});
@@ -1081,7 +1089,7 @@ function montarIdeologia(C){
     o.series[0].markLine={silent:true,symbol:"none",lineStyle:{color:SM.c.subtle,type:"dotted",width:1},
       label:{formatter:C.midLab,color:SM.c.subtle,fontSize:10.5,position:"end"},data:[{xAxis:C.mid}]};
     ch.setOption(o,true);
-    document.getElementById(P+"nota").textContent=C.nota(v)+(modo==="trim"?" Vista trimestral: media de los barómetros de cada trimestre, ponderada por el número de personas que se ubican en cada uno; el tooltip indica qué barómetros entran. ":"");
+    document.getElementById(P+"nota").textContent=C.nota(v)+(acotado?` Eje ampliado de ${XL[0]} a ${XL[1]} para ver mejor las diferencias; la escala completa va de ${C.min} a ${C.max} (selector «Eje»). `:"")+(modo==="trim"?" Vista trimestral: media de los barómetros de cada trimestre, ponderada por el número de personas que se ubican en cada uno; el tooltip indica qué barómetros entran. ":"");
     const idx=FX.map((_,i)=>i).reverse();
     document.getElementById(P+"tabla").innerHTML=`<table><thead><tr><th>${modo==="trim"?"Trimestre":C.unidad}</th>${lineas.map(L=>`<th>${L.nombre}</th>`).join("")}${v==="total"?"<th>N.S./N.C. (%)</th><th>n que se ubica</th>":""}</tr></thead><tbody>${
       idx.map(i=>`<tr><td>${FX[i]}</td>${lineas.map(L=>{const x=L.D.m[i];return `<td class="${x==null?"na":""}">${nf(x,2)}</td>`}).join("")}${v==="total"?`<td>${nf(TOTv.ns[i])}</td><td>${TOTv.n[i]==null?"–":TOTv.n[i].toLocaleString("es-ES")}</td>`:""}</tr>`).join("")}</tbody></table>`;
@@ -1090,7 +1098,7 @@ function montarIdeologia(C){
 }
 
 /* CIS · Ideología */
-montarIdeologia({grid:"grid-cis-ideologia",limpiar:true,pre:"id-",data:DATA.cis_ideologia,exp:"cis_autoubicacion_ideologica",alto:540,trim:true,
+montarIdeologia({grid:"grid-cis-ideologia",limpiar:true,pre:"id-",data:DATA.cis_ideologia,exp:"cis_autoubicacion_ideologica",alto:540,trim:true,zoom:true,
   totNom:"Total España",unidad:"Barómetro",min:1,max:10,mid:5.5,izq:"Izquierda",der:"Derecha",midLab:"Punto medio de la escala (5,5)",
   subt:"Media de la escala de autoubicación ideológica, de 1 (izquierda) a 10 (derecha)",
   vcol:{"PP":PARTY_COLORS["PP"],"PSOE":PARTY_COLORS["PSOE"],"VOX":PARTY_COLORS["VOX"],"Sumar":PARTY_COLORS["Sumar"],"No votó":"#014550"},

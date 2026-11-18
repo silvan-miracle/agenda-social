@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <g transform="translate(960,420)">
+    <!-- bocadillo: círculo con cola -->
+    <path d="M 0,-128 A 128,128 0 1 1 -70,107 L -112,128 L -100,82 A 128,128 0 0 1 0,-128 Z"
+          fill="none" stroke="#000" stroke-width="5" stroke-linejoin="miter"/>
+    <!-- barras en matices de azul -->
+    <clipPath id="c"><circle r="104"/></clipPath>
+    <g clip-path="url(#c)">
+      <rect x="-78" y="10"  width="34" height="120" fill="#C9DAF1"/>
+      <rect x="-38" y="-30" width="34" height="160" fill="#86AEE3"/>
+      <rect x="2"   y="-62" width="34" height="200" fill="#3F78C9"/>
+      <rect x="42"  y="-92" width="34" height="230" fill="#173F86"/>
+    </g>
+  </g>
+  <text x="960" y="712" text-anchor="middle" font-family="Inter" font-weight="700" font-size="112" letter-spacing="6">MATIZ</text>
+  <text x="960" y="805" text-anchor="middle" font-family="Inter" font-weight="300" font-size="50" letter-spacing="5">EL MONITOR DE LA</text>
+  <text x="960" y="866" text-anchor="middle" font-family="Inter" font-weight="300" font-size="50" letter-spacing="5">OPINIÓN PÚBLICA</text>
+</svg>

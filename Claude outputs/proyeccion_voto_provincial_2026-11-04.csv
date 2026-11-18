@@ -1,0 +1,781 @@
+﻿cod_provincia,provincia,ccaa,partido,voto_proyectado_pct,voto_bruto_ratio_x_promedio_pct,ratio_historico_prov_vs_espana,promedio_nacional_pct,fecha_promedio,nota
+1,Araba/Álava,País Vasco,PP,24.19,21.97,0.694,31.66,2026-11-01,
+1,Araba/Álava,País Vasco,PSOE,23.06,21.49,0.813,26.43,2026-11-01,
+1,Araba/Álava,País Vasco,Vox,6.05,5.52,0.29,19.03,2026-11-01,
+1,Araba/Álava,País Vasco,Sumar,4.65,4.39,1.183,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+1,Araba/Álava,País Vasco,Podemos,1.97,1.86,1.183,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+1,Araba/Álava,País Vasco,Frente Amplio,7.72,7.29,1.183,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+1,Araba/Álava,País Vasco,SALF,0.63,0.57,0.29,1.97,2026-11-01,sin histórico: patrón de Vox
+1,Araba/Álava,País Vasco,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+1,Araba/Álava,País Vasco,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+1,Araba/Álava,País Vasco,EH Bildu,17.95,19.12,14.163,1.35,2026-11-01,
+1,Araba/Álava,País Vasco,PNV,12.97,13.62,14.967,0.91,2026-11-01,
+1,Araba/Álava,País Vasco,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+1,Araba/Álava,País Vasco,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+1,Araba/Álava,País Vasco,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+1,Araba/Álava,País Vasco,Otros,0.81,0.78,0.409,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+2,Albacete,Castilla-La Mancha,PP,38.16,40.65,1.284,31.66,2026-11-01,
+2,Albacete,Castilla-La Mancha,PSOE,27.17,29.68,1.123,26.43,2026-11-01,
+2,Albacete,Castilla-La Mancha,Vox,24.43,26.17,1.375,19.03,2026-11-01,
+2,Albacete,Castilla-La Mancha,Sumar,2.31,2.56,0.69,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+2,Albacete,Castilla-La Mancha,Podemos,0.98,1.08,0.69,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+2,Albacete,Castilla-La Mancha,Frente Amplio,3.84,4.25,0.69,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+2,Albacete,Castilla-La Mancha,SALF,2.53,2.71,1.375,1.97,2026-11-01,sin histórico: patrón de Vox
+2,Albacete,Castilla-La Mancha,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+2,Albacete,Castilla-La Mancha,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+2,Albacete,Castilla-La Mancha,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+2,Albacete,Castilla-La Mancha,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+2,Albacete,Castilla-La Mancha,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+2,Albacete,Castilla-La Mancha,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+2,Albacete,Castilla-La Mancha,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+2,Albacete,Castilla-La Mancha,Otros,0.58,0.65,0.339,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+3,Alicante/Alacant,Comunitat Valenciana,PP,35.72,36.41,1.15,31.66,2026-11-01,
+3,Alicante/Alacant,Comunitat Valenciana,PSOE,25.31,26.46,1.001,26.43,2026-11-01,
+3,Alicante/Alacant,Comunitat Valenciana,Vox,23.77,24.36,1.28,19.03,2026-11-01,
+3,Alicante/Alacant,Comunitat Valenciana,Sumar,3.5,3.71,1.001,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+3,Alicante/Alacant,Comunitat Valenciana,Podemos,1.49,1.57,1.001,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+3,Alicante/Alacant,Comunitat Valenciana,Frente Amplio,5.82,6.17,1.001,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+3,Alicante/Alacant,Comunitat Valenciana,SALF,2.46,2.52,1.28,1.97,2026-11-01,sin histórico: patrón de Vox
+3,Alicante/Alacant,Comunitat Valenciana,ERC,0.06,0.07,0.029,2.33,2026-11-01,
+3,Alicante/Alacant,Comunitat Valenciana,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+3,Alicante/Alacant,Comunitat Valenciana,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+3,Alicante/Alacant,Comunitat Valenciana,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+3,Alicante/Alacant,Comunitat Valenciana,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+3,Alicante/Alacant,Comunitat Valenciana,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+3,Alicante/Alacant,Comunitat Valenciana,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+3,Alicante/Alacant,Comunitat Valenciana,Otros,1.86,2.01,1.05,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+4,Almería,Andalucía,PP,36.44,40.43,1.277,31.66,2026-11-01,
+4,Almería,Andalucía,PSOE,23.41,26.64,1.008,26.43,2026-11-01,
+4,Almería,Andalucía,Vox,30.43,33.93,1.783,19.03,2026-11-01,
+4,Almería,Andalucía,Sumar,1.91,2.2,0.594,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+4,Almería,Andalucía,Podemos,0.81,0.93,0.594,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+4,Almería,Andalucía,Frente Amplio,3.18,3.66,0.594,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+4,Almería,Andalucía,SALF,3.15,3.51,1.783,1.97,2026-11-01,sin histórico: patrón de Vox
+4,Almería,Andalucía,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+4,Almería,Andalucía,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+4,Almería,Andalucía,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+4,Almería,Andalucía,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+4,Almería,Andalucía,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+4,Almería,Andalucía,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+4,Almería,Andalucía,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+4,Almería,Andalucía,Otros,0.67,0.78,0.409,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+5,Ávila,Castilla y León,PP,46.7,51.29,1.62,31.66,2026-11-01,
+5,Ávila,Castilla y León,PSOE,21.16,23.84,0.902,26.43,2026-11-01,
+5,Ávila,Castilla y León,Vox,22.22,24.53,1.289,19.03,2026-11-01,
+5,Ávila,Castilla y León,Sumar,1.57,1.79,0.482,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+5,Ávila,Castilla y León,Podemos,0.66,0.76,0.482,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+5,Ávila,Castilla y León,Frente Amplio,2.6,2.97,0.482,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+5,Ávila,Castilla y León,SALF,2.3,2.54,1.289,1.97,2026-11-01,sin histórico: patrón de Vox
+5,Ávila,Castilla y León,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+5,Ávila,Castilla y León,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+5,Ávila,Castilla y León,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+5,Ávila,Castilla y León,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+5,Ávila,Castilla y León,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+5,Ávila,Castilla y León,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+5,Ávila,Castilla y León,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+5,Ávila,Castilla y León,Otros,2.78,3.23,1.693,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+6,Badajoz,Extremadura,PP,36.73,37.68,1.19,31.66,2026-11-01,
+6,Badajoz,Extremadura,PSOE,33.1,34.83,1.318,26.43,2026-11-01,
+6,Badajoz,Extremadura,Vox,20.43,21.07,1.107,19.03,2026-11-01,
+6,Badajoz,Extremadura,Sumar,2.22,2.37,0.64,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+6,Badajoz,Extremadura,Podemos,0.94,1.0,0.64,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+6,Badajoz,Extremadura,Frente Amplio,3.7,3.94,0.64,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+6,Badajoz,Extremadura,SALF,2.12,2.18,1.107,1.97,2026-11-01,sin histórico: patrón de Vox
+6,Badajoz,Extremadura,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+6,Badajoz,Extremadura,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+6,Badajoz,Extremadura,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+6,Badajoz,Extremadura,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+6,Badajoz,Extremadura,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+6,Badajoz,Extremadura,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+6,Badajoz,Extremadura,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+6,Badajoz,Extremadura,Otros,0.75,0.81,0.426,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+7,Illes Balears,Illes Balears,PP,33.95,33.62,1.062,31.66,2026-11-01,
+7,Illes Balears,Illes Balears,PSOE,24.12,24.5,0.927,26.43,2026-11-01,
+7,Illes Balears,Illes Balears,Vox,22.06,21.96,1.154,19.03,2026-11-01,
+7,Illes Balears,Illes Balears,Sumar,4.8,4.94,1.331,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+7,Illes Balears,Illes Balears,Podemos,2.04,2.09,1.331,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+7,Illes Balears,Illes Balears,Frente Amplio,7.97,8.2,1.331,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+7,Illes Balears,Illes Balears,SALF,2.28,2.27,1.154,1.97,2026-11-01,sin histórico: patrón de Vox
+7,Illes Balears,Illes Balears,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+7,Illes Balears,Illes Balears,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+7,Illes Balears,Illes Balears,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+7,Illes Balears,Illes Balears,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+7,Illes Balears,Illes Balears,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+7,Illes Balears,Illes Balears,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+7,Illes Balears,Illes Balears,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+7,Illes Balears,Illes Balears,Otros,2.79,2.92,1.528,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+8,Barcelona,Cataluña,PP,14.43,11.46,0.362,31.66,2026-11-01,
+8,Barcelona,Cataluña,PSOE,29.89,24.37,0.922,26.43,2026-11-01,
+8,Barcelona,Cataluña,Vox,10.95,8.75,0.46,19.03,2026-11-01,
+8,Barcelona,Cataluña,Sumar,5.34,4.41,1.19,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+8,Barcelona,Cataluña,Podemos,2.27,1.87,1.19,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+8,Barcelona,Cataluña,Frente Amplio,8.88,7.33,1.19,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+8,Barcelona,Cataluña,SALF,1.13,0.91,0.46,1.97,2026-11-01,sin histórico: patrón de Vox
+8,Barcelona,Cataluña,ERC,15.01,14.15,6.075,2.33,2026-11-01,
+8,Barcelona,Cataluña,Junts,8.58,8.12,5.601,1.45,2026-11-01,
+8,Barcelona,Cataluña,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+8,Barcelona,Cataluña,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+8,Barcelona,Cataluña,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+8,Barcelona,Cataluña,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+8,Barcelona,Cataluña,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+8,Barcelona,Cataluña,Otros,3.52,2.96,1.55,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+9,Burgos,Castilla y León,PP,42.52,44.1,1.393,31.66,2026-11-01,
+9,Burgos,Castilla y León,PSOE,27.0,28.73,1.087,26.43,2026-11-01,
+9,Burgos,Castilla y León,Vox,18.85,19.66,1.033,19.03,2026-11-01,
+9,Burgos,Castilla y León,Sumar,2.79,3.01,0.811,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+9,Burgos,Castilla y León,Podemos,1.18,1.27,0.811,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+9,Burgos,Castilla y León,Frente Amplio,4.63,5.0,0.811,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+9,Burgos,Castilla y León,SALF,1.95,2.04,1.033,1.97,2026-11-01,sin histórico: patrón de Vox
+9,Burgos,Castilla y León,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+9,Burgos,Castilla y León,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+9,Burgos,Castilla y León,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+9,Burgos,Castilla y León,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+9,Burgos,Castilla y León,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+9,Burgos,Castilla y León,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+9,Burgos,Castilla y León,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+9,Burgos,Castilla y León,Otros,1.07,1.17,0.614,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+10,Cáceres,Extremadura,PP,38.99,40.65,1.284,31.66,2026-11-01,
+10,Cáceres,Extremadura,PSOE,32.08,34.31,1.298,26.43,2026-11-01,
+10,Cáceres,Extremadura,Vox,19.23,20.15,1.059,19.03,2026-11-01,
+10,Cáceres,Extremadura,Sumar,2.21,2.4,0.647,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+10,Cáceres,Extremadura,Podemos,0.94,1.02,0.647,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+10,Cáceres,Extremadura,Frente Amplio,3.68,3.99,0.647,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+10,Cáceres,Extremadura,SALF,1.99,2.09,1.059,1.97,2026-11-01,sin histórico: patrón de Vox
+10,Cáceres,Extremadura,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+10,Cáceres,Extremadura,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+10,Cáceres,Extremadura,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+10,Cáceres,Extremadura,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+10,Cáceres,Extremadura,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+10,Cáceres,Extremadura,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+10,Cáceres,Extremadura,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+10,Cáceres,Extremadura,Otros,0.86,0.95,0.499,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+11,Cádiz,Andalucía,PP,30.02,29.67,0.937,31.66,2026-11-01,
+11,Cádiz,Andalucía,PSOE,28.13,28.52,1.079,26.43,2026-11-01,
+11,Cádiz,Andalucía,Vox,25.0,24.83,1.305,19.03,2026-11-01,
+11,Cádiz,Andalucía,Sumar,4.07,4.18,1.127,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+11,Cádiz,Andalucía,Podemos,1.73,1.77,1.127,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+11,Cádiz,Andalucía,Frente Amplio,6.76,6.94,1.127,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+11,Cádiz,Andalucía,SALF,2.59,2.57,1.305,1.97,2026-11-01,sin histórico: patrón de Vox
+11,Cádiz,Andalucía,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+11,Cádiz,Andalucía,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+11,Cádiz,Andalucía,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+11,Cádiz,Andalucía,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+11,Cádiz,Andalucía,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+11,Cádiz,Andalucía,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+11,Cádiz,Andalucía,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+11,Cádiz,Andalucía,Otros,1.72,1.8,0.94,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+12,Castellón/Castelló,Comunitat Valenciana,PP,35.38,36.19,1.143,31.66,2026-11-01,
+12,Castellón/Castelló,Comunitat Valenciana,PSOE,25.86,27.12,1.026,26.43,2026-11-01,
+12,Castellón/Castelló,Comunitat Valenciana,Vox,22.75,23.39,1.229,19.03,2026-11-01,
+12,Castellón/Castelló,Comunitat Valenciana,Sumar,3.68,3.92,1.056,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+12,Castellón/Castelló,Comunitat Valenciana,Podemos,1.56,1.66,1.056,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+12,Castellón/Castelló,Comunitat Valenciana,Frente Amplio,6.12,6.5,1.056,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+12,Castellón/Castelló,Comunitat Valenciana,SALF,2.35,2.42,1.229,1.97,2026-11-01,sin histórico: patrón de Vox
+12,Castellón/Castelló,Comunitat Valenciana,ERC,0.11,0.14,0.058,2.33,2026-11-01,
+12,Castellón/Castelló,Comunitat Valenciana,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+12,Castellón/Castelló,Comunitat Valenciana,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+12,Castellón/Castelló,Comunitat Valenciana,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+12,Castellón/Castelló,Comunitat Valenciana,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+12,Castellón/Castelló,Comunitat Valenciana,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+12,Castellón/Castelló,Comunitat Valenciana,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+12,Castellón/Castelló,Comunitat Valenciana,Otros,2.17,2.35,1.23,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+13,Ciudad Real,Castilla-La Mancha,PP,39.09,42.04,1.328,31.66,2026-11-01,
+13,Ciudad Real,Castilla-La Mancha,PSOE,28.25,31.16,1.179,26.43,2026-11-01,
+13,Ciudad Real,Castilla-La Mancha,Vox,23.68,25.6,1.345,19.03,2026-11-01,
+13,Ciudad Real,Castilla-La Mancha,Sumar,1.97,2.2,0.593,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+13,Ciudad Real,Castilla-La Mancha,Podemos,0.84,0.93,0.593,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+13,Ciudad Real,Castilla-La Mancha,Frente Amplio,3.27,3.65,0.593,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+13,Ciudad Real,Castilla-La Mancha,SALF,2.45,2.65,1.345,1.97,2026-11-01,sin histórico: patrón de Vox
+13,Ciudad Real,Castilla-La Mancha,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+13,Ciudad Real,Castilla-La Mancha,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+13,Ciudad Real,Castilla-La Mancha,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+13,Ciudad Real,Castilla-La Mancha,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+13,Ciudad Real,Castilla-La Mancha,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+13,Ciudad Real,Castilla-La Mancha,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+13,Ciudad Real,Castilla-La Mancha,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+13,Ciudad Real,Castilla-La Mancha,Otros,0.46,0.53,0.276,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+14,Córdoba,Andalucía,PP,34.7,35.43,1.119,31.66,2026-11-01,
+14,Córdoba,Andalucía,PSOE,28.56,29.89,1.131,26.43,2026-11-01,
+14,Córdoba,Andalucía,Vox,21.82,22.38,1.176,19.03,2026-11-01,
+14,Córdoba,Andalucía,Sumar,3.82,4.06,1.093,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+14,Córdoba,Andalucía,Podemos,1.62,1.72,1.093,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+14,Córdoba,Andalucía,Frente Amplio,6.35,6.73,1.093,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+14,Córdoba,Andalucía,SALF,2.26,2.32,1.176,1.97,2026-11-01,sin histórico: patrón de Vox
+14,Córdoba,Andalucía,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+14,Córdoba,Andalucía,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+14,Córdoba,Andalucía,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+14,Córdoba,Andalucía,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+14,Córdoba,Andalucía,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+14,Córdoba,Andalucía,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+14,Córdoba,Andalucía,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+14,Córdoba,Andalucía,Otros,0.86,0.93,0.487,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+15,A Coruña,Galicia,PP,40.86,45.37,1.433,31.66,2026-11-01,
+15,A Coruña,Galicia,PSOE,23.65,26.93,1.019,26.43,2026-11-01,
+15,A Coruña,Galicia,Vox,8.55,9.53,0.501,19.03,2026-11-01,
+15,A Coruña,Galicia,Sumar,3.28,3.79,1.021,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+15,A Coruña,Galicia,Podemos,1.39,1.6,1.021,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+15,A Coruña,Galicia,Frente Amplio,5.45,6.29,1.021,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+15,A Coruña,Galicia,SALF,0.88,0.99,0.501,1.97,2026-11-01,sin histórico: patrón de Vox
+15,A Coruña,Galicia,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+15,A Coruña,Galicia,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+15,A Coruña,Galicia,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+15,A Coruña,Galicia,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+15,A Coruña,Galicia,BNG,15.19,15.89,17.853,0.89,2026-11-01,
+15,A Coruña,Galicia,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+15,A Coruña,Galicia,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+15,A Coruña,Galicia,Otros,0.75,0.88,0.461,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+16,Cuenca,Castilla-La Mancha,PP,41.01,45.31,1.431,31.66,2026-11-01,
+16,Cuenca,Castilla-La Mancha,PSOE,29.21,33.09,1.252,26.43,2026-11-01,
+16,Cuenca,Castilla-La Mancha,Vox,21.96,24.4,1.282,19.03,2026-11-01,
+16,Cuenca,Castilla-La Mancha,Sumar,1.66,1.9,0.513,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+16,Cuenca,Castilla-La Mancha,Podemos,0.7,0.81,0.513,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+16,Cuenca,Castilla-La Mancha,Frente Amplio,2.75,3.16,0.513,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+16,Cuenca,Castilla-La Mancha,SALF,2.27,2.53,1.282,1.97,2026-11-01,sin histórico: patrón de Vox
+16,Cuenca,Castilla-La Mancha,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+16,Cuenca,Castilla-La Mancha,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+16,Cuenca,Castilla-La Mancha,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+16,Cuenca,Castilla-La Mancha,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+16,Cuenca,Castilla-La Mancha,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+16,Cuenca,Castilla-La Mancha,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+16,Cuenca,Castilla-La Mancha,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+16,Cuenca,Castilla-La Mancha,Otros,0.44,0.52,0.27,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+17,Girona,Cataluña,PP,10.23,7.63,0.241,31.66,2026-11-01,
+17,Girona,Cataluña,PSOE,23.47,17.97,0.68,26.43,2026-11-01,
+17,Girona,Cataluña,Vox,10.02,7.52,0.395,19.03,2026-11-01,
+17,Girona,Cataluña,Sumar,3.66,2.84,0.765,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+17,Girona,Cataluña,Podemos,1.55,1.2,0.765,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+17,Girona,Cataluña,Frente Amplio,6.08,4.71,0.765,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+17,Girona,Cataluña,SALF,1.04,0.78,0.395,1.97,2026-11-01,sin histórico: patrón de Vox
+17,Girona,Cataluña,ERC,19.77,17.51,7.514,2.33,2026-11-01,
+17,Girona,Cataluña,Junts,19.02,16.91,11.661,1.45,2026-11-01,
+17,Girona,Cataluña,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+17,Girona,Cataluña,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+17,Girona,Cataluña,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+17,Girona,Cataluña,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+17,Girona,Cataluña,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+17,Girona,Cataluña,Otros,5.15,4.07,2.131,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+18,Granada,Andalucía,PP,33.36,34.51,1.09,31.66,2026-11-01,
+18,Granada,Andalucía,PSOE,28.29,30.02,1.136,26.43,2026-11-01,
+18,Granada,Andalucía,Vox,24.7,25.69,1.35,19.03,2026-11-01,
+18,Granada,Andalucía,Sumar,3.27,3.52,0.949,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+18,Granada,Andalucía,Podemos,1.39,1.49,0.949,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+18,Granada,Andalucía,Frente Amplio,5.44,5.85,0.949,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+18,Granada,Andalucía,SALF,2.56,2.66,1.35,1.97,2026-11-01,sin histórico: patrón de Vox
+18,Granada,Andalucía,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+18,Granada,Andalucía,Junts,0.02,0.02,0.016,1.45,2026-11-01,
+18,Granada,Andalucía,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+18,Granada,Andalucía,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+18,Granada,Andalucía,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+18,Granada,Andalucía,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+18,Granada,Andalucía,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+18,Granada,Andalucía,Otros,0.98,1.07,0.561,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+19,Guadalajara,Castilla-La Mancha,PP,33.79,35.97,1.136,31.66,2026-11-01,
+19,Guadalajara,Castilla-La Mancha,PSOE,25.77,28.12,1.064,26.43,2026-11-01,
+19,Guadalajara,Castilla-La Mancha,Vox,28.16,30.12,1.583,19.03,2026-11-01,
+19,Guadalajara,Castilla-La Mancha,Sumar,2.76,3.06,0.824,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+19,Guadalajara,Castilla-La Mancha,Podemos,1.17,1.29,0.824,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+19,Guadalajara,Castilla-La Mancha,Frente Amplio,4.59,5.08,0.824,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+19,Guadalajara,Castilla-La Mancha,SALF,2.91,3.12,1.583,1.97,2026-11-01,sin histórico: patrón de Vox
+19,Guadalajara,Castilla-La Mancha,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+19,Guadalajara,Castilla-La Mancha,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+19,Guadalajara,Castilla-La Mancha,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+19,Guadalajara,Castilla-La Mancha,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+19,Guadalajara,Castilla-La Mancha,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+19,Guadalajara,Castilla-La Mancha,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+19,Guadalajara,Castilla-La Mancha,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+19,Guadalajara,Castilla-La Mancha,Otros,0.85,0.95,0.499,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+20,Gipuzkoa,País Vasco,PP,10.8,9.09,0.287,31.66,2026-11-01,
+20,Gipuzkoa,País Vasco,PSOE,20.82,17.97,0.68,26.43,2026-11-01,
+20,Gipuzkoa,País Vasco,Vox,3.41,2.89,0.152,19.03,2026-11-01,
+20,Gipuzkoa,País Vasco,Sumar,4.56,4.0,1.077,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+20,Gipuzkoa,País Vasco,Podemos,1.94,1.69,1.077,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+20,Gipuzkoa,País Vasco,Frente Amplio,7.58,6.63,1.077,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+20,Gipuzkoa,País Vasco,SALF,0.35,0.3,0.152,1.97,2026-11-01,sin histórico: patrón de Vox
+20,Gipuzkoa,País Vasco,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+20,Gipuzkoa,País Vasco,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+20,Gipuzkoa,País Vasco,EH Bildu,31.51,31.11,23.042,1.35,2026-11-01,
+20,Gipuzkoa,País Vasco,PNV,18.33,17.85,19.612,0.91,2026-11-01,
+20,Gipuzkoa,País Vasco,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+20,Gipuzkoa,País Vasco,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+20,Gipuzkoa,País Vasco,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+20,Gipuzkoa,País Vasco,Otros,0.68,0.61,0.319,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+21,Huelva,Andalucía,PP,31.78,32.36,1.022,31.66,2026-11-01,
+21,Huelva,Andalucía,PSOE,31.45,32.85,1.243,26.43,2026-11-01,
+21,Huelva,Andalucía,Vox,23.66,24.23,1.273,19.03,2026-11-01,
+21,Huelva,Andalucía,Sumar,3.14,3.33,0.897,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+21,Huelva,Andalucía,Podemos,1.33,1.41,0.897,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+21,Huelva,Andalucía,Frente Amplio,5.22,5.53,0.897,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+21,Huelva,Andalucía,SALF,2.45,2.51,1.273,1.97,2026-11-01,sin histórico: patrón de Vox
+21,Huelva,Andalucía,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+21,Huelva,Andalucía,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+21,Huelva,Andalucía,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+21,Huelva,Andalucía,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+21,Huelva,Andalucía,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+21,Huelva,Andalucía,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+21,Huelva,Andalucía,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+21,Huelva,Andalucía,Otros,0.97,1.04,0.547,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+22,Huesca,Aragón,PP,37.9,38.18,1.206,31.66,2026-11-01,
+22,Huesca,Aragón,PSOE,29.08,30.05,1.137,26.43,2026-11-01,
+22,Huesca,Aragón,Vox,19.22,19.47,1.023,19.03,2026-11-01,
+22,Huesca,Aragón,Sumar,3.36,3.52,0.948,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+22,Huesca,Aragón,Podemos,1.42,1.49,0.948,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+22,Huesca,Aragón,Frente Amplio,5.58,5.84,0.948,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+22,Huesca,Aragón,SALF,1.99,2.02,1.023,1.97,2026-11-01,sin histórico: patrón de Vox
+22,Huesca,Aragón,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+22,Huesca,Aragón,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+22,Huesca,Aragón,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+22,Huesca,Aragón,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+22,Huesca,Aragón,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+22,Huesca,Aragón,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+22,Huesca,Aragón,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+22,Huesca,Aragón,Otros,1.45,1.55,0.809,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+23,Jaén,Andalucía,PP,34.35,35.71,1.128,31.66,2026-11-01,
+23,Jaén,Andalucía,PSOE,32.31,34.44,1.303,26.43,2026-11-01,
+23,Jaén,Andalucía,Vox,22.34,23.35,1.227,19.03,2026-11-01,
+23,Jaén,Andalucía,Sumar,2.46,2.66,0.716,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+23,Jaén,Andalucía,Podemos,1.04,1.12,0.716,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+23,Jaén,Andalucía,Frente Amplio,4.08,4.41,0.716,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+23,Jaén,Andalucía,SALF,2.31,2.42,1.227,1.97,2026-11-01,sin histórico: patrón de Vox
+23,Jaén,Andalucía,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+23,Jaén,Andalucía,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+23,Jaén,Andalucía,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+23,Jaén,Andalucía,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+23,Jaén,Andalucía,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+23,Jaén,Andalucía,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+23,Jaén,Andalucía,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+23,Jaén,Andalucía,Otros,1.1,1.21,0.631,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+24,León,Castilla y León,PP,39.57,41.06,1.297,31.66,2026-11-01,
+24,León,Castilla y León,PSOE,28.15,29.95,1.133,26.43,2026-11-01,
+24,León,Castilla y León,Vox,19.44,20.29,1.066,19.03,2026-11-01,
+24,León,Castilla y León,Sumar,2.52,2.72,0.733,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+24,León,Castilla y León,Podemos,1.07,1.15,0.733,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+24,León,Castilla y León,Frente Amplio,4.19,4.52,0.733,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+24,León,Castilla y León,SALF,2.01,2.1,1.066,1.97,2026-11-01,sin histórico: patrón de Vox
+24,León,Castilla y León,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+24,León,Castilla y León,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+24,León,Castilla y León,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+24,León,Castilla y León,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+24,León,Castilla y León,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+24,León,Castilla y León,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+24,León,Castilla y León,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+24,León,Castilla y León,Otros,3.05,3.35,1.753,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+25,Lleida,Cataluña,PP,14.23,10.83,0.342,31.66,2026-11-01,
+25,Lleida,Cataluña,PSOE,22.92,17.87,0.676,26.43,2026-11-01,
+25,Lleida,Cataluña,Vox,9.18,7.02,0.369,19.03,2026-11-01,
+25,Lleida,Cataluña,Sumar,2.86,2.26,0.61,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+25,Lleida,Cataluña,Podemos,1.21,0.96,0.61,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+25,Lleida,Cataluña,Frente Amplio,4.75,3.76,0.61,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+25,Lleida,Cataluña,SALF,0.95,0.73,0.369,1.97,2026-11-01,sin histórico: patrón de Vox
+25,Lleida,Cataluña,ERC,23.34,21.05,9.035,2.33,2026-11-01,
+25,Lleida,Cataluña,Junts,17.16,15.53,10.713,1.45,2026-11-01,
+25,Lleida,Cataluña,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+25,Lleida,Cataluña,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+25,Lleida,Cataluña,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+25,Lleida,Cataluña,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+25,Lleida,Cataluña,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+25,Lleida,Cataluña,Otros,3.39,2.73,1.429,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+26,La Rioja,La Rioja,PP,46.76,48.69,1.538,31.66,2026-11-01,
+26,La Rioja,La Rioja,PSOE,28.68,30.63,1.159,26.43,2026-11-01,
+26,La Rioja,La Rioja,Vox,14.69,15.38,0.808,19.03,2026-11-01,
+26,La Rioja,La Rioja,Sumar,2.42,2.62,0.707,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+26,La Rioja,La Rioja,Podemos,1.03,1.11,0.707,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+26,La Rioja,La Rioja,Frente Amplio,4.02,4.36,0.707,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+26,La Rioja,La Rioja,SALF,1.52,1.59,0.808,1.97,2026-11-01,sin histórico: patrón de Vox
+26,La Rioja,La Rioja,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+26,La Rioja,La Rioja,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+26,La Rioja,La Rioja,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+26,La Rioja,La Rioja,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+26,La Rioja,La Rioja,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+26,La Rioja,La Rioja,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+26,La Rioja,La Rioja,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+26,La Rioja,La Rioja,Otros,0.88,0.96,0.505,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+27,Lugo,Galicia,PP,49.07,56.58,1.787,31.66,2026-11-01,
+27,Lugo,Galicia,PSOE,24.26,28.68,1.085,26.43,2026-11-01,
+27,Lugo,Galicia,Vox,7.93,9.19,0.483,19.03,2026-11-01,
+27,Lugo,Galicia,Sumar,1.97,2.37,0.638,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+27,Lugo,Galicia,Podemos,0.84,1.0,0.638,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+27,Lugo,Galicia,Frente Amplio,3.28,3.93,0.638,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+27,Lugo,Galicia,SALF,0.82,0.95,0.483,1.97,2026-11-01,sin histórico: patrón de Vox
+27,Lugo,Galicia,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+27,Lugo,Galicia,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+27,Lugo,Galicia,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+27,Lugo,Galicia,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+27,Lugo,Galicia,BNG,11.4,12.39,13.916,0.89,2026-11-01,
+27,Lugo,Galicia,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+27,Lugo,Galicia,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+27,Lugo,Galicia,Otros,0.43,0.53,0.277,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+28,Madrid,Madrid,PP,36.99,37.36,1.18,31.66,2026-11-01,
+28,Madrid,Madrid,PSOE,23.72,24.58,0.93,26.43,2026-11-01,
+28,Madrid,Madrid,Vox,23.11,23.46,1.233,19.03,2026-11-01,
+28,Madrid,Madrid,Sumar,3.99,4.2,1.131,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+28,Madrid,Madrid,Podemos,1.7,1.78,1.131,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+28,Madrid,Madrid,Frente Amplio,6.64,6.97,1.131,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+28,Madrid,Madrid,SALF,2.39,2.43,1.233,1.97,2026-11-01,sin histórico: patrón de Vox
+28,Madrid,Madrid,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+28,Madrid,Madrid,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+28,Madrid,Madrid,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+28,Madrid,Madrid,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+28,Madrid,Madrid,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+28,Madrid,Madrid,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+28,Madrid,Madrid,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+28,Madrid,Madrid,Otros,1.46,1.56,0.819,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+29,Málaga,Andalucía,PP,33.68,34.35,1.085,31.66,2026-11-01,
+29,Málaga,Andalucía,PSOE,26.14,27.36,1.035,26.43,2026-11-01,
+29,Málaga,Andalucía,Vox,25.45,26.09,1.371,19.03,2026-11-01,
+29,Málaga,Andalucía,Sumar,3.51,3.72,1.003,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+29,Málaga,Andalucía,Podemos,1.49,1.57,1.003,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+29,Málaga,Andalucía,Frente Amplio,5.83,6.18,1.003,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+29,Málaga,Andalucía,SALF,2.63,2.7,1.371,1.97,2026-11-01,sin histórico: patrón de Vox
+29,Málaga,Andalucía,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+29,Málaga,Andalucía,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+29,Málaga,Andalucía,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+29,Málaga,Andalucía,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+29,Málaga,Andalucía,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+29,Málaga,Andalucía,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+29,Málaga,Andalucía,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+29,Málaga,Andalucía,Otros,1.27,1.37,0.716,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+30,Murcia,Murcia,PP,37.53,41.41,1.308,31.66,2026-11-01,
+30,Murcia,Murcia,PSOE,19.84,22.44,0.849,26.43,2026-11-01,
+30,Murcia,Murcia,Vox,31.06,34.44,1.81,19.03,2026-11-01,
+30,Murcia,Murcia,Sumar,2.36,2.71,0.73,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+30,Murcia,Murcia,Podemos,1.0,1.15,0.73,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+30,Murcia,Murcia,Frente Amplio,3.92,4.5,0.73,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+30,Murcia,Murcia,SALF,3.22,3.57,1.81,1.97,2026-11-01,sin histórico: patrón de Vox
+30,Murcia,Murcia,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+30,Murcia,Murcia,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+30,Murcia,Murcia,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+30,Murcia,Murcia,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+30,Murcia,Murcia,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+30,Murcia,Murcia,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+30,Murcia,Murcia,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+30,Murcia,Murcia,Otros,1.08,1.26,0.661,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+31,Navarra,Navarra,PP,6.68,5.35,0.169,31.66,2026-11-01,
+31,Navarra,Navarra,PSOE,28.56,23.39,0.885,26.43,2026-11-01,
+31,Navarra,Navarra,Vox,10.41,8.35,0.439,19.03,2026-11-01,
+31,Navarra,Navarra,Sumar,5.4,4.49,1.209,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+31,Navarra,Navarra,Podemos,2.29,1.9,1.209,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+31,Navarra,Navarra,Frente Amplio,8.97,7.45,1.209,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+31,Navarra,Navarra,SALF,1.08,0.86,0.439,1.97,2026-11-01,sin histórico: patrón de Vox
+31,Navarra,Navarra,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+31,Navarra,Navarra,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+31,Navarra,Navarra,EH Bildu,19.36,18.14,13.438,1.35,2026-11-01,
+31,Navarra,Navarra,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+31,Navarra,Navarra,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+31,Navarra,Navarra,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+31,Navarra,Navarra,UPN,13.72,13.68,72.01,0.19,2026-11-01,
+31,Navarra,Navarra,Otros,3.53,2.99,1.563,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+32,Ourense,Galicia,PP,50.69,57.97,1.831,31.66,2026-11-01,
+32,Ourense,Galicia,PSOE,24.65,28.91,1.094,26.43,2026-11-01,
+32,Ourense,Galicia,Vox,7.8,8.96,0.471,19.03,2026-11-01,
+32,Ourense,Galicia,Sumar,1.83,2.18,0.587,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+32,Ourense,Galicia,Podemos,0.78,0.92,0.587,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+32,Ourense,Galicia,Frente Amplio,3.04,3.62,0.587,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+32,Ourense,Galicia,SALF,0.81,0.93,0.471,1.97,2026-11-01,sin histórico: patrón de Vox
+32,Ourense,Galicia,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+32,Ourense,Galicia,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+32,Ourense,Galicia,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+32,Ourense,Galicia,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+32,Ourense,Galicia,BNG,9.94,10.71,12.035,0.89,2026-11-01,
+32,Ourense,Galicia,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+32,Ourense,Galicia,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+32,Ourense,Galicia,Otros,0.46,0.56,0.294,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+33,Asturias,Asturias,PP,34.25,34.48,1.089,31.66,2026-11-01,
+33,Asturias,Asturias,PSOE,29.25,30.18,1.142,26.43,2026-11-01,
+33,Asturias,Asturias,Vox,19.94,20.17,1.06,19.03,2026-11-01,
+33,Asturias,Asturias,Sumar,4.3,4.5,1.212,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+33,Asturias,Asturias,Podemos,1.82,1.9,1.212,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+33,Asturias,Asturias,Frente Amplio,7.14,7.47,1.212,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+33,Asturias,Asturias,SALF,2.06,2.09,1.06,1.97,2026-11-01,sin histórico: patrón de Vox
+33,Asturias,Asturias,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+33,Asturias,Asturias,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+33,Asturias,Asturias,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+33,Asturias,Asturias,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+33,Asturias,Asturias,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+33,Asturias,Asturias,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+33,Asturias,Asturias,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+33,Asturias,Asturias,Otros,1.23,1.31,0.687,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+34,Palencia,Castilla y León,PP,46.15,50.18,1.585,31.66,2026-11-01,
+34,Palencia,Castilla y León,PSOE,26.65,29.73,1.125,26.43,2026-11-01,
+34,Palencia,Castilla y León,Vox,18.21,19.91,1.046,19.03,2026-11-01,
+34,Palencia,Castilla y León,Sumar,1.93,2.18,0.587,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+34,Palencia,Castilla y León,Podemos,0.82,0.92,0.587,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+34,Palencia,Castilla y León,Frente Amplio,3.2,3.62,0.587,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+34,Palencia,Castilla y León,SALF,1.88,2.06,1.046,1.97,2026-11-01,sin histórico: patrón de Vox
+34,Palencia,Castilla y León,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+34,Palencia,Castilla y León,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+34,Palencia,Castilla y León,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+34,Palencia,Castilla y León,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+34,Palencia,Castilla y León,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+34,Palencia,Castilla y León,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+34,Palencia,Castilla y León,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+34,Palencia,Castilla y León,Otros,1.17,1.35,0.705,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+35,Las Palmas,Canarias,PP,30.25,29.35,0.927,31.66,2026-11-01,
+35,Las Palmas,Canarias,PSOE,27.25,27.09,1.025,26.43,2026-11-01,
+35,Las Palmas,Canarias,Vox,17.88,17.43,0.916,19.03,2026-11-01,
+35,Las Palmas,Canarias,Sumar,3.92,3.95,1.065,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+35,Las Palmas,Canarias,Podemos,1.66,1.67,1.065,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+35,Las Palmas,Canarias,Frente Amplio,6.51,6.56,1.065,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+35,Las Palmas,Canarias,SALF,1.85,1.8,0.916,1.97,2026-11-01,sin histórico: patrón de Vox
+35,Las Palmas,Canarias,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+35,Las Palmas,Canarias,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+35,Las Palmas,Canarias,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+35,Las Palmas,Canarias,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+35,Las Palmas,Canarias,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+35,Las Palmas,Canarias,CCa,6.25,6.6,14.997,0.44,2026-11-01,
+35,Las Palmas,Canarias,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+35,Las Palmas,Canarias,Otros,4.42,4.54,2.375,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+36,Pontevedra,Galicia,PP,39.76,43.25,1.366,31.66,2026-11-01,
+36,Pontevedra,Galicia,PSOE,25.67,28.65,1.084,26.43,2026-11-01,
+36,Pontevedra,Galicia,Vox,7.75,8.47,0.445,19.03,2026-11-01,
+36,Pontevedra,Galicia,Sumar,3.9,4.41,1.19,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+36,Pontevedra,Galicia,Podemos,1.66,1.87,1.19,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+36,Pontevedra,Galicia,Frente Amplio,6.48,7.33,1.19,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+36,Pontevedra,Galicia,SALF,0.8,0.88,0.445,1.97,2026-11-01,sin histórico: patrón de Vox
+36,Pontevedra,Galicia,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+36,Pontevedra,Galicia,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+36,Pontevedra,Galicia,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+36,Pontevedra,Galicia,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+36,Pontevedra,Galicia,BNG,13.2,13.53,15.199,0.89,2026-11-01,
+36,Pontevedra,Galicia,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+36,Pontevedra,Galicia,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+36,Pontevedra,Galicia,Otros,0.79,0.91,0.475,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+37,Salamanca,Castilla y León,PP,46.93,50.62,1.599,31.66,2026-11-01,
+37,Salamanca,Castilla y León,PSOE,23.87,26.4,0.999,26.43,2026-11-01,
+37,Salamanca,Castilla y León,Vox,21.08,22.86,1.201,19.03,2026-11-01,
+37,Salamanca,Castilla y León,Sumar,1.7,1.9,0.513,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+37,Salamanca,Castilla y León,Podemos,0.72,0.81,0.513,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+37,Salamanca,Castilla y León,Frente Amplio,2.82,3.16,0.513,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+37,Salamanca,Castilla y León,SALF,2.18,2.37,1.201,1.97,2026-11-01,sin histórico: patrón de Vox
+37,Salamanca,Castilla y León,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+37,Salamanca,Castilla y León,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+37,Salamanca,Castilla y León,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+37,Salamanca,Castilla y León,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+37,Salamanca,Castilla y León,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+37,Salamanca,Castilla y León,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+37,Salamanca,Castilla y León,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+37,Salamanca,Castilla y León,Otros,0.7,0.8,0.417,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+38,Santa Cruz de Tenerife,Canarias,PP,33.2,30.87,0.975,31.66,2026-11-01,
+38,Santa Cruz de Tenerife,Canarias,PSOE,28.0,26.69,1.01,26.43,2026-11-01,
+38,Santa Cruz de Tenerife,Canarias,Vox,9.21,8.62,0.453,19.03,2026-11-01,
+38,Santa Cruz de Tenerife,Canarias,Sumar,3.81,3.69,0.994,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+38,Santa Cruz de Tenerife,Canarias,Podemos,1.62,1.56,0.994,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+38,Santa Cruz de Tenerife,Canarias,Frente Amplio,6.34,6.12,0.994,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+38,Santa Cruz de Tenerife,Canarias,SALF,0.95,0.89,0.453,1.97,2026-11-01,sin histórico: patrón de Vox
+38,Santa Cruz de Tenerife,Canarias,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+38,Santa Cruz de Tenerife,Canarias,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+38,Santa Cruz de Tenerife,Canarias,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+38,Santa Cruz de Tenerife,Canarias,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+38,Santa Cruz de Tenerife,Canarias,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+38,Santa Cruz de Tenerife,Canarias,CCa,15.28,15.48,35.177,0.44,2026-11-01,
+38,Santa Cruz de Tenerife,Canarias,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+38,Santa Cruz de Tenerife,Canarias,Otros,1.59,1.56,0.819,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+39,Cantabria,Cantabria,PP,40.59,40.27,1.272,31.66,2026-11-01,
+39,Cantabria,Cantabria,PSOE,23.91,24.32,0.92,26.43,2026-11-01,
+39,Cantabria,Cantabria,Vox,20.45,20.4,1.072,19.03,2026-11-01,
+39,Cantabria,Cantabria,Sumar,2.49,2.57,0.692,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+39,Cantabria,Cantabria,Podemos,1.06,1.09,0.692,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+39,Cantabria,Cantabria,Frente Amplio,4.13,4.26,0.692,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+39,Cantabria,Cantabria,SALF,2.12,2.11,1.072,1.97,2026-11-01,sin histórico: patrón de Vox
+39,Cantabria,Cantabria,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+39,Cantabria,Cantabria,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+39,Cantabria,Cantabria,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+39,Cantabria,Cantabria,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+39,Cantabria,Cantabria,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+39,Cantabria,Cantabria,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+39,Cantabria,Cantabria,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+39,Cantabria,Cantabria,Otros,5.25,5.51,2.886,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+40,Segovia,Castilla y León,PP,45.14,48.09,1.519,31.66,2026-11-01,
+40,Segovia,Castilla y León,PSOE,24.26,26.51,1.003,26.43,2026-11-01,
+40,Segovia,Castilla y León,Vox,20.64,22.11,1.162,19.03,2026-11-01,
+40,Segovia,Castilla y León,Sumar,2.28,2.53,0.682,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+40,Segovia,Castilla y León,Podemos,0.97,1.07,0.682,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+40,Segovia,Castilla y León,Frente Amplio,3.8,4.2,0.682,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+40,Segovia,Castilla y León,SALF,2.14,2.29,1.162,1.97,2026-11-01,sin histórico: patrón de Vox
+40,Segovia,Castilla y León,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+40,Segovia,Castilla y León,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+40,Segovia,Castilla y León,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+40,Segovia,Castilla y León,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+40,Segovia,Castilla y León,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+40,Segovia,Castilla y León,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+40,Segovia,Castilla y León,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+40,Segovia,Castilla y León,Otros,0.78,0.88,0.46,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+41,Sevilla,Andalucía,PP,29.26,28.91,0.913,31.66,2026-11-01,
+41,Sevilla,Andalucía,PSOE,32.53,32.93,1.246,26.43,2026-11-01,
+41,Sevilla,Andalucía,Vox,22.06,21.9,1.151,19.03,2026-11-01,
+41,Sevilla,Andalucía,Sumar,4.07,4.18,1.128,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+41,Sevilla,Andalucía,Podemos,1.73,1.77,1.128,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+41,Sevilla,Andalucía,Frente Amplio,6.77,6.95,1.128,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+41,Sevilla,Andalucía,SALF,2.28,2.27,1.151,1.97,2026-11-01,sin histórico: patrón de Vox
+41,Sevilla,Andalucía,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+41,Sevilla,Andalucía,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+41,Sevilla,Andalucía,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+41,Sevilla,Andalucía,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+41,Sevilla,Andalucía,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+41,Sevilla,Andalucía,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+41,Sevilla,Andalucía,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+41,Sevilla,Andalucía,Otros,1.3,1.36,0.71,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+42,Soria,Castilla y León,PP,43.89,45.4,1.434,31.66,2026-11-01,
+42,Soria,Castilla y León,PSOE,27.16,28.81,1.09,26.43,2026-11-01,
+42,Soria,Castilla y León,Vox,15.84,16.48,0.866,19.03,2026-11-01,
+42,Soria,Castilla y León,Sumar,1.68,1.81,0.487,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+42,Soria,Castilla y León,Podemos,0.71,0.76,0.487,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+42,Soria,Castilla y León,Frente Amplio,2.79,3.0,0.487,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+42,Soria,Castilla y León,SALF,1.64,1.71,0.866,1.97,2026-11-01,sin histórico: patrón de Vox
+42,Soria,Castilla y León,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+42,Soria,Castilla y León,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+42,Soria,Castilla y León,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+42,Soria,Castilla y León,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+42,Soria,Castilla y León,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+42,Soria,Castilla y León,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+42,Soria,Castilla y León,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+42,Soria,Castilla y León,Otros,6.28,6.87,3.597,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+43,Tarragona,Cataluña,PP,14.46,11.59,0.366,31.66,2026-11-01,
+43,Tarragona,Cataluña,PSOE,26.44,21.75,0.823,26.43,2026-11-01,
+43,Tarragona,Cataluña,Vox,14.47,11.67,0.613,19.03,2026-11-01,
+43,Tarragona,Cataluña,Sumar,4.01,3.35,0.903,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+43,Tarragona,Cataluña,Podemos,1.7,1.42,0.903,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+43,Tarragona,Cataluña,Frente Amplio,6.67,5.56,0.903,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+43,Tarragona,Cataluña,SALF,1.5,1.21,0.613,1.97,2026-11-01,sin histórico: patrón de Vox
+43,Tarragona,Cataluña,ERC,17.96,17.09,7.336,2.33,2026-11-01,
+43,Tarragona,Cataluña,Junts,9.76,9.32,6.426,1.45,2026-11-01,
+43,Tarragona,Cataluña,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+43,Tarragona,Cataluña,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+43,Tarragona,Cataluña,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+43,Tarragona,Cataluña,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+43,Tarragona,Cataluña,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+43,Tarragona,Cataluña,Otros,3.02,2.57,1.343,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+44,Teruel,Aragón,PP,39.17,38.21,1.207,31.66,2026-11-01,
+44,Teruel,Aragón,PSOE,26.26,26.27,0.994,26.43,2026-11-01,
+44,Teruel,Aragón,Vox,18.98,18.61,0.978,19.03,2026-11-01,
+44,Teruel,Aragón,Sumar,1.94,1.97,0.53,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+44,Teruel,Aragón,Podemos,0.82,0.83,0.53,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+44,Teruel,Aragón,Frente Amplio,3.22,3.26,0.53,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+44,Teruel,Aragón,SALF,1.96,1.93,0.978,1.97,2026-11-01,sin histórico: patrón de Vox
+44,Teruel,Aragón,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+44,Teruel,Aragón,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+44,Teruel,Aragón,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+44,Teruel,Aragón,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+44,Teruel,Aragón,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+44,Teruel,Aragón,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+44,Teruel,Aragón,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+44,Teruel,Aragón,Otros,7.65,7.89,4.132,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+45,Toledo,Castilla-La Mancha,PP,35.9,39.13,1.236,31.66,2026-11-01,
+45,Toledo,Castilla-La Mancha,PSOE,25.66,28.68,1.085,26.43,2026-11-01,
+45,Toledo,Castilla-La Mancha,Vox,27.78,30.45,1.6,19.03,2026-11-01,
+45,Toledo,Castilla-La Mancha,Sumar,2.34,2.66,0.716,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+45,Toledo,Castilla-La Mancha,Podemos,0.99,1.12,0.716,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+45,Toledo,Castilla-La Mancha,Frente Amplio,3.89,4.41,0.716,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+45,Toledo,Castilla-La Mancha,SALF,2.88,3.15,1.6,1.97,2026-11-01,sin histórico: patrón de Vox
+45,Toledo,Castilla-La Mancha,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+45,Toledo,Castilla-La Mancha,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+45,Toledo,Castilla-La Mancha,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+45,Toledo,Castilla-La Mancha,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+45,Toledo,Castilla-La Mancha,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+45,Toledo,Castilla-La Mancha,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+45,Toledo,Castilla-La Mancha,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+45,Toledo,Castilla-La Mancha,Otros,0.56,0.65,0.339,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+46,Valencia/València,Comunitat Valenciana,PP,33.44,33.05,1.044,31.66,2026-11-01,
+46,Valencia/València,Comunitat Valenciana,PSOE,25.42,25.77,0.975,26.43,2026-11-01,
+46,Valencia/València,Comunitat Valenciana,Vox,22.6,22.46,1.18,19.03,2026-11-01,
+46,Valencia/València,Comunitat Valenciana,Sumar,4.15,4.27,1.151,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+46,Valencia/València,Comunitat Valenciana,Podemos,1.76,1.81,1.151,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+46,Valencia/València,Comunitat Valenciana,Frente Amplio,6.9,7.09,1.151,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+46,Valencia/València,Comunitat Valenciana,SALF,2.34,2.32,1.18,1.97,2026-11-01,sin histórico: patrón de Vox
+46,Valencia/València,Comunitat Valenciana,ERC,0.07,0.08,0.033,2.33,2026-11-01,
+46,Valencia/València,Comunitat Valenciana,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+46,Valencia/València,Comunitat Valenciana,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+46,Valencia/València,Comunitat Valenciana,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+46,Valencia/València,Comunitat Valenciana,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+46,Valencia/València,Comunitat Valenciana,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+46,Valencia/València,Comunitat Valenciana,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+46,Valencia/València,Comunitat Valenciana,Otros,3.3,3.45,1.806,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+47,Valladolid,Castilla y León,PP,40.58,42.74,1.35,31.66,2026-11-01,
+47,Valladolid,Castilla y León,PSOE,25.49,27.51,1.041,26.43,2026-11-01,
+47,Valladolid,Castilla y León,Vox,22.51,23.83,1.252,19.03,2026-11-01,
+47,Valladolid,Castilla y León,Sumar,2.7,2.95,0.796,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+47,Valladolid,Castilla y León,Podemos,1.14,1.25,0.796,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+47,Valladolid,Castilla y León,Frente Amplio,4.48,4.9,0.796,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+47,Valladolid,Castilla y León,SALF,2.33,2.47,1.252,1.97,2026-11-01,sin histórico: patrón de Vox
+47,Valladolid,Castilla y León,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+47,Valladolid,Castilla y León,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+47,Valladolid,Castilla y León,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+47,Valladolid,Castilla y León,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+47,Valladolid,Castilla y León,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+47,Valladolid,Castilla y León,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+47,Valladolid,Castilla y León,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+47,Valladolid,Castilla y León,Otros,0.77,0.86,0.45,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+48,Bizkaia,País Vasco,PP,15.4,12.76,0.403,31.66,2026-11-01,
+48,Bizkaia,País Vasco,PSOE,22.73,19.29,0.73,26.43,2026-11-01,
+48,Bizkaia,País Vasco,Vox,4.56,3.79,0.199,19.03,2026-11-01,
+48,Bizkaia,País Vasco,Sumar,4.76,4.1,1.105,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+48,Bizkaia,País Vasco,Podemos,2.02,1.73,1.105,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+48,Bizkaia,País Vasco,Frente Amplio,7.91,6.81,1.105,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+48,Bizkaia,País Vasco,SALF,0.47,0.39,0.199,1.97,2026-11-01,sin histórico: patrón de Vox
+48,Bizkaia,País Vasco,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+48,Bizkaia,País Vasco,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+48,Bizkaia,País Vasco,EH Bildu,19.37,18.82,13.938,1.35,2026-11-01,
+48,Bizkaia,País Vasco,PNV,21.93,21.0,23.082,0.91,2026-11-01,
+48,Bizkaia,País Vasco,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+48,Bizkaia,País Vasco,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+48,Bizkaia,País Vasco,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+48,Bizkaia,País Vasco,Otros,0.85,0.74,0.388,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+49,Zamora,Castilla y León,PP,46.11,49.99,1.579,31.66,2026-11-01,
+49,Zamora,Castilla y León,PSOE,26.06,28.97,1.096,26.43,2026-11-01,
+49,Zamora,Castilla y León,Vox,19.4,21.14,1.111,19.03,2026-11-01,
+49,Zamora,Castilla y León,Sumar,1.73,1.96,0.527,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+49,Zamora,Castilla y León,Podemos,0.74,0.83,0.527,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+49,Zamora,Castilla y León,Frente Amplio,2.88,3.25,0.527,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+49,Zamora,Castilla y León,SALF,2.01,2.19,1.111,1.97,2026-11-01,sin histórico: patrón de Vox
+49,Zamora,Castilla y León,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+49,Zamora,Castilla y León,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+49,Zamora,Castilla y León,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+49,Zamora,Castilla y León,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+49,Zamora,Castilla y León,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+49,Zamora,Castilla y León,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+49,Zamora,Castilla y León,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+49,Zamora,Castilla y León,Otros,1.07,1.23,0.643,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+50,Zaragoza,Aragón,PP,34.62,34.7,1.096,31.66,2026-11-01,
+50,Zaragoza,Aragón,PSOE,27.14,27.88,1.055,26.43,2026-11-01,
+50,Zaragoza,Aragón,Vox,23.12,23.29,1.224,19.03,2026-11-01,
+50,Zaragoza,Aragón,Sumar,3.49,3.64,0.981,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+50,Zaragoza,Aragón,Podemos,1.48,1.54,0.981,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+50,Zaragoza,Aragón,Frente Amplio,5.8,6.04,0.981,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+50,Zaragoza,Aragón,SALF,2.39,2.41,1.224,1.97,2026-11-01,sin histórico: patrón de Vox
+50,Zaragoza,Aragón,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+50,Zaragoza,Aragón,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+50,Zaragoza,Aragón,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+50,Zaragoza,Aragón,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+50,Zaragoza,Aragón,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+50,Zaragoza,Aragón,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+50,Zaragoza,Aragón,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+50,Zaragoza,Aragón,Otros,1.95,2.06,1.081,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+51,Ceuta,Ceuta,PP,32.06,37.23,1.176,31.66,2026-11-01,
+51,Ceuta,Ceuta,PSOE,25.58,30.47,1.153,26.43,2026-11-01,
+51,Ceuta,Ceuta,Vox,35.56,41.52,2.182,19.03,2026-11-01,
+51,Ceuta,Ceuta,Sumar,0.86,1.04,0.28,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+51,Ceuta,Ceuta,Podemos,0.36,0.44,0.28,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+51,Ceuta,Ceuta,Frente Amplio,1.43,1.72,0.28,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+51,Ceuta,Ceuta,SALF,3.68,4.3,2.182,1.97,2026-11-01,sin histórico: patrón de Vox
+51,Ceuta,Ceuta,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+51,Ceuta,Ceuta,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+51,Ceuta,Ceuta,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+51,Ceuta,Ceuta,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+51,Ceuta,Ceuta,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+51,Ceuta,Ceuta,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+51,Ceuta,Ceuta,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+51,Ceuta,Ceuta,Otros,0.48,0.58,0.306,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"
+52,Melilla,Melilla,PP,44.21,45.81,1.447,31.66,2026-11-01,
+52,Melilla,Melilla,PSOE,17.5,18.61,0.704,26.43,2026-11-01,
+52,Melilla,Melilla,Vox,25.47,26.55,1.395,19.03,2026-11-01,
+52,Melilla,Melilla,Sumar,0.82,0.88,0.238,3.71,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+52,Melilla,Melilla,Podemos,0.35,0.37,0.238,1.57,2026-11-01,patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+52,Melilla,Melilla,Frente Amplio,1.36,1.47,0.238,6.16,2026-11-01,sin histórico: patrón de Podemos/UP/Sumar; reescalado x0.583 por solape Sumar/Podemos/Frente Amplio
+52,Melilla,Melilla,SALF,2.64,2.75,1.395,1.97,2026-11-01,sin histórico: patrón de Vox
+52,Melilla,Melilla,ERC,0.0,0.0,0.0,2.33,2026-11-01,
+52,Melilla,Melilla,Junts,0.0,0.0,0.0,1.45,2026-11-01,
+52,Melilla,Melilla,EH Bildu,0.0,0.0,0.0,1.35,2026-11-01,
+52,Melilla,Melilla,PNV,0.0,0.0,0.0,0.91,2026-11-01,
+52,Melilla,Melilla,BNG,0.0,0.0,0.0,0.89,2026-11-01,
+52,Melilla,Melilla,CCa,0.0,0.0,0.0,0.44,2026-11-01,
+52,Melilla,Melilla,UPN,0.0,0.0,0.0,0.19,2026-11-01,
+52,Melilla,Melilla,Otros,7.65,8.38,4.389,1.91,2026-11-01,"residuo hasta 100 (incluye Adelante Andalucía, Aliança Catalana, blancos y resto)"

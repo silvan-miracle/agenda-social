@@ -33,7 +33,7 @@ SALIDA       <- "promedio.json"
 PAGINA <- "Opinion_polling_for_the_2026_Spanish_general_election"
 URL_PAG <- paste0("https://en.wikipedia.org/wiki/", PAGINA)
 URL_API <- paste0("https://en.wikipedia.org/w/api.php?action=parse&prop=text&formatversion=2&format=json&redirects=1&page=", PAGINA)
-UA <- "agenda-social-sm/1.0 (Silvan & Miracle; https://github.com/AinaraVU/agenda-social)"
+UA <- "agenda-social-sm/1.0 (Silvan & Miracle; https://github.com/silvan-miracle/agenda-social)"
 
 PARTIDOS_GRAFICO <- list(
   list(id = "PP",      nombre = "PP",      color = "#1E73C4"),
