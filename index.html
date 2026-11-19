@@ -45,7 +45,7 @@ button:focus-visible,select:focus-visible{outline:2px solid var(--sm-naranja);ou
 
 /* Pestañas de fuente: barra fija y baja (una línea) */
 .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--sm-blanco);border-top:1px solid var(--grid);border-bottom:1px solid var(--grid)}
-nav.main-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+nav.main-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0}
 nav.main-tabs button{display:block;text-align:left;background:transparent;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;padding:13px 4px 11px;cursor:pointer;color:var(--subtle);font-family:var(--font-sans)}
 nav.main-tabs button .t{font-size:16px;font-weight:600;letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
 nav.main-tabs button:hover{color:var(--sm-teal)}
@@ -202,6 +202,7 @@ footer.page{border-top:1px solid var(--grid);padding-block:20px 40px;display:fle
       <button type="button" role="tab" id="tb-gen" data-tab="gen" aria-selected="false" aria-controls="tab-gen" title="España, 1977-2023"><span class="t">Elecciones generales</span></button>
       <button type="button" role="tab" id="tb-cis" data-tab="cis" aria-selected="false" aria-controls="tab-cis" title="España, mensual"><span class="t">Barómetro del CIS</span></button>
       <button type="button" role="tab" id="tb-soc" data-tab="soc" aria-selected="false" aria-controls="tab-soc" title="Euskadi, Gobierno Vasco"><span class="t">Sociómetro Vasco</span></button>
+      <button type="button" role="tab" id="tb-nar" data-tab="nar" aria-selected="false" aria-controls="tab-nar" title="Euskadi, elecciones generales 2016-2023"><span class="t">Narrativas visuales</span></button>
     </nav>
   </div>
 
@@ -288,6 +289,11 @@ footer.page{border-top:1px solid var(--grid);padding-block:20px 40px;display:fle
       <div class="facts" id="facts-gen"></div>
     </div>
     <div class="grid" id="grid-gen"></div>
+  </section>
+
+  <!-- ===================== PESTAÑA NARRATIVAS VISUALES (Euskadi) ===================== -->
+  <section class="tabpanel" id="tab-nar" role="tabpanel" aria-labelledby="tb-nar" hidden>
+    <div id="nar-raiz"></div>
   </section>
 
   <footer class="page">
@@ -423,7 +429,7 @@ function showTab(t){
 }
 document.querySelectorAll("nav.main-tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 let t0="enc";   /* siempre se abre en el Promedio de encuestas (no se recuerda la última pestaña); los enlaces con #cis o #sociometro siguen funcionando */
-if(location.hash.startsWith("#sociometro"))t0="soc"; else if(location.hash.startsWith("#cis"))t0="cis"; else if(location.hash.startsWith("#encuestas"))t0="enc"; else if(location.hash.startsWith("#generales"))t0="gen";
+if(location.hash.startsWith("#sociometro"))t0="soc"; else if(location.hash.startsWith("#cis"))t0="cis"; else if(location.hash.startsWith("#encuestas"))t0="enc"; else if(location.hash.startsWith("#generales"))t0="gen"; else if(location.hash.startsWith("#narrativas"))t0="nar";
 
 /* Subpestañas de cada fuente (CIS y Sociómetro) */
 function showSub(src,k){
@@ -3284,6 +3290,253 @@ function histPartidos(C){
     }
     let rz; window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(pinta,200);}); pinta();
   })();
+})();
+
+/* ===================== Narrativas visuales · pestaña «Narrativas visuales» (Euskadi) =====================
+   Relato con scroll: un mapa fijo (MapLibre GL, el mismo que el mapa por sección de «Elecciones generales») y tarjetas de texto que,
+   al llegar al centro de la pantalla, mueven el mapa a un municipio y cambian lo que se pinta.
+   Datos: secciones/2023/narrativas_euskadi.json (herramientas/preparar_narrativas_euskadi.py): los 251 municipios vascos con sus
+   resultados en las generales de 2016, abril y noviembre de 2019 y 2023 (suma de sus mesas, sin el voto exterior), y las secciones
+   de 2023 de los municipios protagonistas. Las cifras del conjunto de Euskadi del texto son las oficiales (con voto exterior).
+   Textos: borrador de Claude (19/11/2026) para público general, con cifras comprobadas contra los datos; revisar antes de publicar. */
+(function(){
+  const raiz=document.getElementById("nar-raiz"); if(!raiz)return;
+  const BASE="secciones/2023/", ML_VER="4.7.1";
+  const nf=(v,d=1)=>v==null?"–":v.toLocaleString("es-ES",{minimumFractionDigits:d,maximumFractionDigits:d});
+  const ni=v=>v==null?"–":v.toLocaleString("es-ES");
+  const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const COLG=Object.fromEntries(((DATA.generales&&DATA.generales.lineas)||[]).map(x=>[x.id,x.color]));
+  const COL=l=>COLG[l]||"#C9C5B8";
+  /* Nombres para el público: marcas vascas y el espacio de Podemos según la elección */
+  const NOM=(l,i)=>({"PSOE":"PSE-EE","HB / Amaiur / EH Bildu":"EH Bildu","Podemos / UP / Sumar":i!=null&&i<3?"Unidas Podemos":"Sumar","CiU / Junts":"Junts"})[l]||l;
+  const ANIOS=["2016","abr. 2019","nov. 2019","2023"];
+  const PRINC=["PNV","PSOE","HB / Amaiur / EH Bildu","Podemos / UP / Sumar","PP"];
+
+  /* ------------------------------------------------------------------------------------------------------------------------
+     El relato. Cada paso: texto (HTML) y qué hace el mapa:
+       capa: "mun" (municipios) o "sec" (secciones de los municipios de «foco»)
+       pinta: "gan:i" (más votado en la elección i: 0 = 2016 … 3 = 2023) o "pct:LÍNEA:i" (% de esa línea)
+       foco: municipios a encuadrar y resaltar (vacío = toda Euskadi)
+       graf: municipio cuyo minigráfico de evolución acompaña al texto
+     ------------------------------------------------------------------------------------------------------------------------ */
+  const MI=["48013","48084","48078","48082","48080","48083","48002","48071"];   // margen izquierda
+  const PASOS=[
+    {capa:"mun",pinta:"gan:0",foco:[],
+     h:"2016: el año de Unidas Podemos",
+     t:`<p>En las elecciones generales de junio de 2016, <b>Unidas Podemos</b> fue la fuerza más votada en Euskadi, con el <b>29,1 %</b> de los votos, por delante del PNV (24,9 %).</p>
+        <p>Ganó en 59 municipios, sobre todo en las ciudades grandes y en la margen izquierda del Nervión. Pero el mapa seguía siendo del <b>PNV</b>, primero en 118 de los 251 municipios vascos.</p>`},
+    {capa:"mun",pinta:"gan:3",foco:[],
+     h:"2023: tres partidos en un pañuelo",
+     t:`<p>Siete años después, el mapa es otro. En julio de 2023, el <b>PSE-EE</b> fue el más votado en Euskadi (<b>25,3 %</b>), seguido muy de cerca por el <b>PNV</b> (24,0 %) y <b>EH Bildu</b> (23,9 %). Los tres sacaron cinco diputados.</p>
+        <p>En el mapa municipal, en cambio, manda <b>EH Bildu</b>: gana en 140 municipios, frente a 76 del PNV, 29 del PSE-EE y 6 del PP. Sumar, que recoge el espacio de Unidas Podemos, no gana en ninguno.</p>`,
+     marcador:true},
+    {capa:"mun",pinta:"gan:3",foco:["48020"],graf:"48020",k:"Bilbao",
+     h:"El bastión que cambió de color",
+     t:`<p>Bilbao era la gran plaza del PNV. Ganó allí en 2016, aunque por solo tres décimas sobre Unidas Podemos (27,6 % frente a 27,3 %), y en las dos elecciones de 2019, cuando llegó al 34,5 %.</p>
+        <p>En 2023, el <b>PSE-EE</b> le adelantó: <b>26,5 %</b> frente a 25,6 %. Menos de un punto.</p>`},
+    {capa:"sec",pinta:"gan:3",foco:["48020"],k:"Bilbao, barrio a barrio",
+     h:"Una ciudad repartida",
+     t:`<p>Por secciones censales, el <b>PSE-EE</b> fue el más votado en 147 de las 273 de la ciudad, y el <b>PNV</b> en 93.</p>
+        <p>El <b>PP</b> ganó en 18, casi todas en el centro (distrito 6, Abando), y <b>EH Bildu</b> en 15, todas en el distrito 5 (Ibaiondo, con el Casco Viejo y San Francisco).</p>`},
+    {capa:"mun",pinta:"pct:PSOE:3",foco:MI,k:"La margen izquierda",
+     h:"De Podemos al PSE-EE",
+     t:`<p>En la margen izquierda del Nervión, el antiguo corazón industrial de Bizkaia, Unidas Podemos arrasó en 2016: fue el más votado en Barakaldo (35,6 %), Sestao, Portugalete, Santurtzi y el resto de municipios de la zona.</p>
+        <p>En 2023, ese voto se concentró en el <b>PSE-EE</b>, que supera el 38 % en Barakaldo, Portugalete, Trapagaran y Sestao, donde llega al <b>40,0 %</b>.</p>`},
+    {capa:"sec",pinta:"pct:PSOE:3",foco:["48013"],graf:"48013",k:"Barakaldo",
+     h:"Sin una sola excepción",
+     t:`<p>En Barakaldo, el PSE-EE pasó del 21,1 % de 2016 al <b>38,2 %</b> de 2023 y fue el más votado en las <b>86 secciones</b> de la ciudad, en todos sus barrios: entre el 29,5 % y el 50,0 % de los votos.</p>`},
+    {capa:"mun",pinta:"gan:3",foco:["48027"],zoomOut:true,graf:"48027",k:"Durango",
+     h:"La ola de EH Bildu",
+     t:`<p>Durango era terreno del PNV: ganó allí en 2016 y en las dos elecciones de 2019, siempre por encima del 30 %. En 2023, <b>EH Bildu</b> le superó: <b>29,9 %</b> frente a 28,1 %.</p>
+        <p>No es un caso aislado. Entre 2016 y 2023, EH Bildu pasó de ser el más votado en 63 municipios a serlo en 140, sobre todo en el interior de Gipuzkoa y de Bizkaia: Arrasate/Mondragón (36,6 %), Tolosa o Zarautz son algunos de ellos.</p>`},
+    {capa:"sec",pinta:"gan:3",foco:["48027"],k:"Durango, barrio a barrio",
+     h:"Once de veinte",
+     t:`<p>Dentro de Durango, EH Bildu fue el primero en 11 de las 20 secciones censales; el PNV, en 8, y el PSE-EE, en una.</p>`},
+    {capa:"sec",pinta:"gan:3",foco:["20030"],graf:"20030",k:"Eibar",
+     h:"El termómetro",
+     t:`<p>Si un municipio resume estos siete años, es Eibar. En cada elección cambió de ganador: <b>Unidas Podemos</b> en 2016 (28,4 %); el <b>PSE-EE</b> en abril de 2019 (27,5 %, frente al 26,7 % del PNV); el <b>PNV</b> en noviembre (28,8 %, frente al 27,1 % del PSE-EE), y de nuevo el <b>PSE-EE</b> en 2023, esta vez con holgura: <b>34,6 %</b>.</p>`},
+    {capa:"sec",pinta:"gan:3",foco:["01059"],graf:"01059",k:"Vitoria-Gasteiz",
+     h:"La excepción alavesa",
+     t:`<p>Araba vota distinto. En Vitoria-Gasteiz, el <b>PP</b> es la segunda fuerza (<b>19,9 %</b>), muy por encima de lo que logra en el conjunto de Euskadi (11,5 %), y solo por detrás del PSE-EE (29,8 %).</p>
+        <p>El PSE-EE ganó en 128 de las 166 secciones de la capital; el PP, en 26, y EH Bildu, en 12.</p>`},
+    {capa:"mun",pinta:"pct:PP:3",foco:["01031","01011","01060","01047","01902","01006"],k:"El sur de Araba",
+     h:"La esquina azul",
+     t:`<p>Los seis municipios de Euskadi donde el <b>PP</b> fue el más votado en 2023 están en el sur de Araba, cerca del Ebro: Laguardia (33,7 %), Baños de Ebro, Yécora y, más al oeste, Lantarón, Erriberabeitia y Armiñón.</p>
+        <p>Son pueblos pequeños: entre los seis suman unos 3.600 electores.</p>`},
+    {capa:"mun",pinta:"gan:3",foco:[],
+     h:"Un mapa sin dueño",
+     t:`<p>En siete años, Euskadi ha pasado de los ganadores claros a un empate a tres. El <b>PSE-EE</b> gana en las tres capitales y en la mayoría de las grandes ciudades; <b>EH Bildu</b>, en buena parte de los pueblos, sobre todo en Gipuzkoa (77 de sus 88 municipios), y el <b>PNV</b> resiste en Bizkaia, donde sigue siendo el primero en 55 municipios.</p>
+        <p>¿Y en tu barrio? <a href="#generales" class="nar-ir">Busca tu sección en el mapa de Elecciones generales</a>.</p>`}
+  ];
+
+  /* ------------------------------------------------------------------------------------------------------------------------ */
+  const st=document.createElement("style");
+  st.textContent=`
+  #nar-raiz{--nv-top:0px}
+  .nar-portada{max-width:760px;margin:10px auto 0;padding:40px 20px 30px;text-align:center}
+  .nar-portada .k{font:600 12px var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--sm-teal)}
+  .nar-portada h2{font:400 clamp(34px,6vw,60px)/1.05 var(--font-serif);margin:12px 0 14px;color:var(--sm-tinta)}
+  .nar-portada .dek{font:400 clamp(17px,2.2vw,21px)/1.45 var(--font-serif);color:var(--sm-tinta);margin:0 auto 14px;max-width:620px}
+  .nar-portada .firma{font:12.5px var(--font-sans);color:var(--subtle)}
+  .nar-portada .baja{margin-top:26px;font:500 12.5px var(--font-sans);color:var(--subtle);animation:narBaja 1.6s ease-in-out infinite}
+  @keyframes narBaja{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+  .nar-relato{position:relative}
+  .nar-mapa{position:sticky;top:var(--nv-top);height:calc(100vh - var(--nv-top));z-index:1;background:#fff}
+  .nar-mapa #nar-mapa{position:absolute;top:0;left:0;width:100%;height:100%}
+  .nar-ley{position:absolute;right:14px;bottom:28px;z-index:2;background:rgba(255,255,255,.94);border:1px solid var(--grid);border-radius:4px;padding:8px 10px;font:12px var(--font-sans);color:var(--sm-tinta);max-width:300px}
+  .nar-ley .t{font-weight:600;margin-bottom:4px}.nar-ley .it{display:flex;align-items:center;gap:6px;margin:2px 0}
+  .nar-ley i{display:inline-block;width:11px;height:11px;border-radius:2px}
+  .nar-ley .grad{height:9px;border-radius:2px;margin:4px 0 2px}.nar-ley .ext{display:flex;justify-content:space-between;color:var(--subtle);font-size:11px}
+  .nar-pasos{position:relative;z-index:2;margin-top:calc(-1 * (100vh - var(--nv-top)));pointer-events:none}
+  .nar-paso{min-height:100vh;display:flex;align-items:center;padding:0 0 0 max(24px,5vw)}
+  .nar-paso:first-child{padding-top:30vh}.nar-paso:last-child{min-height:120vh}
+  .nar-card{pointer-events:auto;max-width:420px;background:rgba(255,255,255,.97);border:1px solid var(--grid);border-radius:6px;box-shadow:0 6px 24px rgba(0,0,0,.10);padding:20px 22px 18px;transition:opacity .35s,transform .35s;opacity:.35;transform:translateY(8px)}
+  .nar-paso.activo .nar-card{opacity:1;transform:none}
+  .nar-card .k{font:600 11.5px var(--font-sans);letter-spacing:.07em;text-transform:uppercase;color:var(--sm-teal);margin-bottom:4px}
+  .nar-card h3{font:400 26px/1.15 var(--font-serif);margin:0 0 10px;color:var(--sm-tinta)}
+  .nar-card p{font:15.5px/1.55 var(--font-sans);color:var(--sm-tinta);margin:0 0 10px}
+  .nar-card p:last-child{margin-bottom:0}
+  .nar-card a.nar-ir{color:var(--sm-teal);font-weight:600}
+  .nar-graf{margin-top:12px;border-top:1px solid #EEEBE3;padding-top:10px}
+  .nar-graf .t{font:600 11.5px var(--font-sans);color:var(--subtle);margin-bottom:2px}
+  .nar-marc{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+  .nar-marc div{border-top:4px solid;padding-top:6px;font:12px var(--font-sans);color:var(--subtle)}.nar-marc b{display:block;font:600 22px var(--font-sans);color:var(--sm-tinta)}
+  .nar-tip{position:absolute;z-index:3;pointer-events:none;background:#fff;border:1px solid var(--grid);border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,.12);padding:7px 10px;font:12px var(--font-sans);color:var(--sm-tinta);max-width:260px}
+  .nar-nota{max-width:760px;margin:0 auto;padding:28px 20px 40px;font:12.5px/1.55 var(--font-sans);color:var(--subtle)}
+  .nar-msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--subtle);font:13px var(--font-sans);text-align:center;padding:0 20px;z-index:2;background:#fff}
+  .nar-msg:empty{display:none}
+  @media (max-width:760px){.nar-paso{padding:0 4vw;justify-content:center}.nar-card{max-width:none;width:100%}.nar-card h3{font-size:23px}.nar-card p{font-size:15px}
+    .nar-ley{left:8px;right:8px;bottom:10px;max-width:none;font-size:11.5px}}`;
+  document.head.appendChild(st);
+
+  raiz.innerHTML=`
+    <header class="nar-portada">
+      <div class="k">Narrativas visuales. Elecciones generales en Euskadi, 2016-2023</div>
+      <h2>Euskadi, en tres tercios</h2>
+      <p class="dek">Cuatro elecciones generales, tres ganadores distintos y un empate a cinco diputados. Así ha cambiado el voto en los municipios vascos entre 2016 y 2023.</p>
+      <div class="firma">Silván &amp; Miracle. Datos: Ministerio del Interior (resultados por mesa electoral) e INE (secciones censales).</div>
+      <div class="baja">Desliza hacia abajo ↓</div>
+    </header>
+    <div class="nar-relato">
+      <div class="nar-mapa"><div id="nar-mapa"></div><div class="nar-ley" id="nar-ley" hidden></div><div class="nar-tip" id="nar-tip" hidden></div><div class="nar-msg" id="nar-msg">Cargando el mapa…</div></div>
+      <div class="nar-pasos">${PASOS.map((p,i)=>`<section class="nar-paso" data-i="${i}"><div class="nar-card">${p.k?`<div class="k">${p.k}</div>`:""}<h3>${p.h}</h3>${p.t}${p.marcador?marcador():""}<div class="nar-graf" data-m="${p.graf||""}" ${p.graf?"":"hidden"}></div></div></section>`).join("")}</div>
+    </div>
+    <div class="nar-nota"><b>Cómo lo hemos hecho.</b> Resultados de las elecciones generales del 26 de junio de 2016, el 28 de abril y el 10 de noviembre de 2019 y el 23 de julio de 2023, mesa a mesa, del Ministerio del Interior. Los resultados de cada municipio y de cada sección censal son la suma de sus mesas y no incluyen el voto de los residentes en el extranjero, que no se asigna a ningún municipio; las cifras del conjunto de Euskadi sí lo incluyen (son las oficiales). % sobre votos válidos. Secciones censales de 2023 del INE. «Unidas Podemos» y «Sumar» son el mismo espacio en distintas elecciones; Más País (2019) no se suma. «Más votado» es el partido con más votos en cada municipio o sección.</div>`;
+  function marcador(){return `<div class="nar-marc">${[["PSE-EE","PSOE",25.3],["PNV","PNV",24.0],["EH Bildu","HB / Amaiur / EH Bildu",23.9]].map(([n,l,v])=>`<div style="border-color:${COL(l)}">${n}<b>${nf(v)} %</b>5 diputados</div>`).join("")}</div>`;}
+
+  const elMapa=document.getElementById("nar-mapa"), ley=document.getElementById("nar-ley"), tip=document.getElementById("nar-tip"), msgEl=document.getElementById("nar-msg");
+  let D=null, map=null, actual=-1, listo=false;
+
+  /* Altura de la barra de pestañas fija, para que el mapa quede justo debajo */
+  const ajustaTop=()=>{const b=document.querySelector(".bar"); const fija=b&&getComputedStyle(b).position.match(/fixed|sticky/); raiz.style.setProperty("--nv-top",(fija?b.offsetHeight:0)+"px"); if(map)map.resize();};
+  window.addEventListener("resize",ajustaTop);
+
+  /* TopoJSON → GeoJSON */
+  function aGeo(t,obj){
+    const sc=t.transform.scale, tr=t.transform.translate;
+    const arcs=t.arcs.map(a=>{let x=0,y=0;return a.map(p=>{x+=p[0];y+=p[1];return [x*sc[0]+tr[0],y*sc[1]+tr[1]];});});
+    const arco=i=>i>=0?arcs[i]:arcs[~i].slice().reverse();
+    const anillo=ix=>{const r=[];ix.forEach((i,k)=>{const a=arco(i);r.push(...(k?a.slice(1):a));});return r;};
+    return t.objects[obj].geometries.filter(g=>g.arcs).map(g=>({type:"Feature",properties:{c:g.properties.c,m:g.properties.c.slice(0,5)},
+      geometry:g.type==="Polygon"?{type:"Polygon",coordinates:g.arcs.map(anillo)}:{type:"MultiPolygon",coordinates:g.arcs.map(p=>p.map(anillo))}}));
+  }
+  const caja=feats=>{let x0=180,y0=90,x1=-180,y1=-90; feats.forEach(ft=>{const g=ft.geometry;(g.type==="Polygon"?[g.coordinates]:g.coordinates).forEach(p=>p[0].forEach(c=>{if(c[0]<x0)x0=c[0];if(c[0]>x1)x1=c[0];if(c[1]<y0)y0=c[1];if(c[1]>y1)y1=c[1];}));}); return [[x0,y0],[x1,y1]];};
+  const cargaML=()=>new Promise((ok,ko)=>{if(window.maplibregl)return ok();
+    const l=document.createElement("link");l.rel="stylesheet";l.href=`https://cdn.jsdelivr.net/npm/maplibre-gl@${ML_VER}/dist/maplibre-gl.css`;document.head.appendChild(l);
+    const s=document.createElement("script");s.src=`https://cdn.jsdelivr.net/npm/maplibre-gl@${ML_VER}/dist/maplibre-gl.js`;s.onload=()=>ok();s.onerror=ko;document.head.appendChild(s);});
+
+  /* Valores de un resultado */
+  const pct=(r,l)=>{if(!r||!r[2])return null; const k=D.lineas.indexOf(l); return k<0?0:100*r[3+k]/r[2];};
+  const gan=r=>{if(!r||!r[2])return null; let b=null,v=-1; D.lineas.forEach((l,k)=>{if(l!=="Otros"&&r[3+k]>v){v=r[3+k];b=l;}}); return b;};
+  const mezcla=(hex,t)=>{const c=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));return "#"+c.map(v=>Math.round(255-(255-v)*t).toString(16).padStart(2,"0")).join("");};
+  const oscuro=(hex,t)=>"#"+[1,3,5].map(i=>Math.round(parseInt(hex.slice(i,i+2),16)*(1-t)).toString(16).padStart(2,"0")).join("");
+  const rampa=(hex,x)=>x<.6?mezcla(hex,.12+.88*x/.6):oscuro(hex,.45*(x-.6)/.4);
+
+  /* Mini gráfico de evolución de un municipio: los cinco grandes, cuatro elecciones */
+  function grafico(m){
+    const v=D.m[m]; if(!v)return "";
+    const W=372,H=150,PL=8,PR=86,PT=8,PB=20, X=i=>PL+(W-PL-PR)*i/3;
+    const series=PRINC.map(l=>({l,s:v.r.map(r=>r?pct(r,l):null)})).filter(z=>z.s.some(x=>x>=3));
+    const mx=Math.max(10,...series.flatMap(z=>z.s.filter(x=>x!=null)))*1.08, Y=x=>PT+(H-PT-PB)*(1-x/mx);
+    const ult=series.map(z=>({...z,y:Y(z.s[3]??0)})).sort((a,b)=>a.y-b.y); for(let i=1;i<ult.length;i++)if(ult[i].y-ult[i-1].y<12)ult[i].y=ult[i-1].y+12;
+    const lineas=series.map(z=>{let d="";z.s.forEach((x,i)=>{if(x!=null)d+=(d?"L":"M")+X(i).toFixed(1)+" "+Y(x).toFixed(1);});
+      return `<path d="${d}" fill="none" stroke="${COL(z.l)}" stroke-width="2.2" stroke-linejoin="round"/>`+z.s.map((x,i)=>x==null?"":`<circle cx="${X(i).toFixed(1)}" cy="${Y(x).toFixed(1)}" r="${i===3?3.4:2.4}" fill="${i===3?COL(z.l):"#fff"}" stroke="${COL(z.l)}" stroke-width="1.6"><title>${NOM(z.l,i)}, ${ANIOS[i]}: ${nf(x)} %</title></circle>`).join("");}).join("");
+    const etq=ult.map(z=>`<text x="${X(3)+8}" y="${(z.y+4).toFixed(1)}" font-size="11" font-weight="600" fill="${oscuro(COL(z.l),.15)}">${NOM(z.l,3)} ${nf(z.s[3])}</text>`).join("");
+    const eje=ANIOS.map((a,i)=>`<text x="${X(i).toFixed(1)}" y="${H-4}" font-size="10" fill="${SM.c.subtle}" text-anchor="${i===0?"start":i===3?"end":"middle"}">${a}</text>`).join("");
+    return `<div class="t">${esc(v.n)}: % de voto en cada elección general</div><svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W}px;display:block">${[0,.5,1].map(f=>`<line x1="${PL}" x2="${X(3)}" y1="${Y(mx/1.08*f).toFixed(1)}" y2="${Y(mx/1.08*f).toFixed(1)}" stroke="#F0EDE6"/>`).join("")}${lineas}${etq}${eje}</svg>`;
+  }
+
+  /* Pinta un paso */
+  function aplica(i){
+    if(!listo||i===actual)return; actual=i; const p=PASOS[i];
+    document.querySelectorAll(".nar-paso").forEach(s=>s.classList.toggle("activo",+s.dataset.i===i));
+    const [tipo,a,b]=p.pinta.split(":"), e=tipo==="gan"?+a:+b, linea=tipo==="pct"?a:null;
+    const sec=p.capa==="sec", src=sec?"sec":"mun", feats=sec?D.sfeats.filter(f=>p.foco.includes(f.properties.m)):D.mfeats;
+    const fila=c=>sec?D.s[c]:(D.m[c]&&D.m[c].r[e]);
+    const vals=linea?feats.map(f=>pct(fila(f.properties.c),linea)).filter(x=>x!=null).sort((x,y)=>x-y):[];
+    const mx=linea?Math.max(5,vals[Math.floor(.97*(vals.length-1))]||5):0, cuenta={};
+    feats.forEach(f=>{const c=f.properties.c, r=fila(c); let col="#EEEBE3";
+      if(r&&r[2]){ if(linea){col=rampa(COL(linea),Math.min(1,pct(r,linea)/mx));}
+        else{const g=gan(r); cuenta[g]=(cuenta[g]||0)+1; col=mezcla(COL(g),Math.min(1,Math.max(.38,(pct(r,g)-12)/38)));} }
+      map.setFeatureState({source:src,id:c},{col});});
+    /* municipios de fondo (en las vistas de secciones) y foco */
+    D.mfeats.forEach(f=>map.setFeatureState({source:"mun",id:f.properties.c},{foco:p.foco.includes(f.properties.c)}));
+    map.setPaintProperty("mun-f","fill-opacity",sec?.25:1);
+    map.setLayoutProperty("sec-f","visibility",sec?"visible":"none"); map.setLayoutProperty("sec-l","visibility",sec?"visible":"none");
+    map.setFilter("sec-f",sec?["in",["get","m"],["literal",p.foco]]:null); map.setFilter("sec-l",sec?["in",["get","m"],["literal",p.foco]]:null);
+    /* encuadre */
+    const fc=p.foco.length?D.mfeats.filter(f=>p.foco.includes(f.properties.c)):D.mfeats, bb=caja(fc), movil=innerWidth<=760;
+    const pad=movil?{top:30,bottom:Math.round(innerHeight*.45),left:20,right:20}:{top:40,bottom:60,left:Math.min(520,innerWidth*.42),right:60};
+    map.fitBounds(bb,{padding:pad,duration:i===0&&!map._yaMovido?0:2200,maxZoom:sec?13.5:(p.zoomOut?9.6:11.5),essential:true}); map._yaMovido=true;
+    /* leyenda */
+    ley.hidden=false;
+    if(linea)ley.innerHTML=`<div class="t">% de ${NOM(linea,e)}, ${ANIOS[e]}</div><div class="grad" style="background:linear-gradient(90deg,${mezcla(COL(linea),.12)},${COL(linea)} 60%,${oscuro(COL(linea),.45)})"></div><div class="ext"><span>0 %</span><span>${nf(mx,0)} % o más</span></div><div class="ext" style="margin-top:3px">${sec?"Por sección censal":"Por municipio"}</div>`;
+    else ley.innerHTML=`<div class="t">Más votado, ${ANIOS[e]}</div>`+Object.entries(cuenta).sort((x,y)=>y[1]-x[1]).map(([l,n])=>`<div class="it"><i style="background:${COL(l)}"></i>${esc(NOM(l,e))}<span style="color:${SM.c.subtle};margin-left:auto">${ni(n)} ${sec?(n>1?"secciones":"sección"):(n>1?"municipios":"municipio")}</span></div>`).join("")+`<div class="ext" style="margin-top:3px">Color más intenso = más ventaja</div>`;
+    tip.hidden=true; D.pasoTip={sec,e};
+  }
+
+  /* Ventana al pasar el ratón */
+  function muestraTip(c,pt,sec){
+    const e=D.pasoTip?D.pasoTip.e:3, r=sec?D.s[c]:(D.m[c]&&D.m[c].r[e]); if(!r||!r[2]){tip.hidden=true;return;}
+    const nombre=sec?`${esc(D.m[c.slice(0,5)].n)}, distrito ${+c.slice(5,7)}, sección ${+c.slice(7)}`:esc(D.m[c].n);
+    const ls=PRINC.concat(["Vox"]).map(l=>({l,p:pct(r,l)})).filter(z=>z.p>0).sort((x,y)=>y.p-x.p).slice(0,4);
+    tip.innerHTML=`<b>${nombre}</b><div style="color:${SM.c.subtle};font-size:11px;margin-bottom:3px">${ANIOS[sec?3:e]}</div>`+ls.map(z=>`<div style="display:flex;justify-content:space-between;gap:12px"><span><span style="color:${COL(z.l)}">●</span> ${esc(NOM(z.l,sec?3:e))}</span><b>${nf(z.p)} %</b></div>`).join("");
+    tip.hidden=false; const W=elMapa.clientWidth,H=elMapa.clientHeight;
+    tip.style.left=Math.max(4,Math.min(W-tip.offsetWidth-4,pt.x+14))+"px"; tip.style.top=Math.max(4,Math.min(H-tip.offsetHeight-4,pt.y+14))+"px";
+  }
+
+  /* Arranque perezoso: al abrir la pestaña (cuando el contenedor tiene tamaño) */
+  let empezado=false;
+  function empieza(){
+    if(empezado)return; empezado=true; ajustaTop();
+    Promise.all([cargaML(),fetch(BASE+"narrativas_euskadi.json").then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})]).then(([,d])=>{
+      D=d; D.mfeats=aGeo(d.mtopo,"municipios"); D.sfeats=aGeo(d.stopo,"secciones");
+      map=new maplibregl.Map({container:elMapa,style:{version:8,sources:{},layers:[{id:"fondo",type:"background",paint:{"background-color":"#fff"}}]},
+        bounds:caja(D.mfeats),fitBoundsOptions:{padding:40},attributionControl:false,dragRotate:false,pitchWithRotate:false,
+        scrollZoom:false,dragPan:false,touchZoomRotate:false,doubleClickZoom:false,keyboard:false,boxZoom:false,renderWorldCopies:false});
+      map.addControl(new maplibregl.AttributionControl({compact:true,customAttribution:"Ministerio del Interior, INE"}),"bottom-left");
+      map.on("load",()=>{
+        map.addSource("mun",{type:"geojson",data:{type:"FeatureCollection",features:D.mfeats},promoteId:"c",tolerance:.1});
+        map.addSource("sec",{type:"geojson",data:{type:"FeatureCollection",features:D.sfeats},promoteId:"c",tolerance:.05});
+        const col=["coalesce",["feature-state","col"],"#EEEBE3"];
+        map.addLayer({id:"mun-f",type:"fill",source:"mun",paint:{"fill-color":col,"fill-outline-color":col,"fill-opacity-transition":{duration:600}}});
+        map.addLayer({id:"mun-l",type:"line",source:"mun",paint:{"line-color":"#fff","line-width":["interpolate",["linear"],["zoom"],7,.4,11,1.2]}});
+        map.addLayer({id:"sec-f",type:"fill",source:"sec",layout:{visibility:"none"},paint:{"fill-color":col,"fill-outline-color":col}});
+        map.addLayer({id:"sec-l",type:"line",source:"sec",layout:{visibility:"none"},paint:{"line-color":"#fff","line-width":.7}});
+        map.addLayer({id:"mun-foco",type:"line",source:"mun",paint:{"line-color":SM.c.tinta,"line-width":2.2,"line-opacity":["case",["boolean",["feature-state","foco"],false],1,0]}});
+        [["mun-f",false],["sec-f",true]].forEach(([lay,sec])=>{
+          map.on("mousemove",lay,ev=>{const f=ev.features&&ev.features[0]; if(!f)return; if(!sec&&D.pasoTip&&D.pasoTip.sec)return; muestraTip(f.properties.c,ev.point,sec);});
+          map.on("mouseleave",lay,()=>{tip.hidden=true;});});
+        listo=true; msgEl.textContent=""; aplica(0);
+        const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting)aplica(+en.target.dataset.i);});},{rootMargin:"-45% 0px -45% 0px"});
+        document.querySelectorAll(".nar-paso").forEach(s=>io.observe(s));
+        document.querySelectorAll(".nar-graf[data-m]").forEach(g=>{if(g.dataset.m)g.innerHTML=grafico(g.dataset.m);});
+      });
+    }).catch(()=>{msgEl.textContent="No se ha podido cargar el mapa. (Si abres la web desde un archivo local, esta pestaña solo funciona en la versión publicada.)";});
+  }
+  const vis=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){vis.disconnect();empieza();}}); vis.observe(raiz);
+  /* Enlace del cierre: ir a la pestaña de Elecciones generales */
+  raiz.addEventListener("click",ev=>{const a=ev.target.closest("a.nar-ir"); if(!a)return; ev.preventDefault(); const b=document.getElementById("tb-gen"); if(b){b.click(); scrollTo({top:0});} });
 })();
 
 /* Notas metodológicas plegadas en «Cómo lo calculamos» (revisión de 09/11/2026). Se pliegan las largas y las que el gráfico reescribe al cambiar un control
