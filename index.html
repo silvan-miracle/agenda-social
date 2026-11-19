@@ -1323,10 +1323,11 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
          <label class="sel-lab">Provincia <select id="gen-sc-prov" class="sel"></select></label>
          <label class="sel-lab">Municipio <select id="gen-sc-mun" class="sel" disabled></select></label>
        </div>
-       <div class="pchips" id="gen-sc-modo" role="group" aria-label="Qué mostrar"></div>
+       <div class="ctrls"><div class="seg seg-wrap" id="gen-sc-vista" role="group" aria-label="Qué mostrar"></div></div>
+       <div class="pchips" id="gen-sc-modo" role="group" aria-label="Opción"></div>
        <div class="gen-sc-caja"><div class="gen-sc-mapa" id="gen-sc-mapa"></div><div class="gen-sc-msg" id="gen-sc-msg"></div><div class="gen-sc-tip" id="gen-sc-tip" hidden></div></div>
        <div class="gen-leyenda" id="gen-sc-ley"></div>`,
-      "Fuente: Ministerio del Interior (resultados por mesa de las elecciones generales del 23 de julio de 2023, sumados por sección censal) e INE (cartografía de secciones censales a 1 de enero de 2023; en los municipios que cambiaron sus secciones durante 2023, la de 1 de enero de 2024). % sobre votos válidos. No incluye el voto de los residentes en el extranjero (CERA), que no se asigna a ninguna sección; por eso los totales son algo menores que los oficiales (y en Toledo y Cantabria los ficheros de mesas difieren en unas decenas de votos del resultado final). En las vistas de España y de comunidad el mapa está simplificado (unos 100 m) y Canarias aparece en el recuadro; al elegir una provincia se carga su mapa detallado. "+nota);
+      "Fuente: Ministerio del Interior (resultados por mesa de las elecciones generales del 23 de julio de 2023 y del 10 de noviembre de 2019, sumados por sección censal) e INE (cartografía de secciones censales a 1 de enero de 2023; en los municipios que cambiaron sus secciones durante 2023, la de 1 de enero de 2024). % sobre votos válidos. No incluye el voto de los residentes en el extranjero (CERA), que no se asigna a ninguna sección; por eso los totales son algo menores que los oficiales (y en Toledo y Cantabria los ficheros de mesas difieren en unas decenas de votos del resultado final). En las vistas de España y de comunidad el mapa está simplificado (unos 100 m) y Canarias aparece en el recuadro; al elegir una provincia se carga su mapa detallado. Comparación con 2019: solo en las secciones que tenían el mismo código y prácticamente el mismo territorio en las dos elecciones (el 96 %); el resto aparece en blanco. Abstención = % del censo que no votó. Bloques, con los mismos partidos que el gráfico de encuestas: izquierda, PSOE, Sumar (en 2019, Unidas Podemos y sus confluencias), ERC, EH Bildu y BNG; derecha, PP, Vox y UPN; partidos bisagra, Junts, PNV y Coalición Canaria. Ciudadanos, Más País y el resto no entran en ningún bloque, lo que pesa sobre todo en la comparación con 2019 (Ciudadanos tuvo el 6,8 % de los votos). Más País va en «Otros», así que al comparar Sumar (2023) con Unidas Podemos (2019) el cambio incluye su incorporación. "+nota);
     const st=document.createElement("style");
     st.textContent=`.gen-sc-ctrls{display:flex;flex-wrap:wrap;gap:8px 18px}.gen-sc-ctrls .sel{max-width:230px}.gen-sc-ctrls .sel:disabled{opacity:.5}
       .gen-sc-caja{position:relative;height:640px;margin-top:6px}.gen-sc-caja .gen-sc-mapa{position:absolute;top:0;left:0;width:100%;height:100%}
@@ -1336,12 +1337,12 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       .gen-sc-caja .maplibregl-ctrl-attrib{font-size:10.5px}
       @media (max-width:640px){.gen-sc-caja{height:460px}}`;
     document.head.appendChild(st);
-    subt("gen-sc","Partido más votado (o % de un partido) en cada sección censal. Rueda del ratón o pellizco para acercar; arrastra para moverte. Filtra por comunidad, provincia o municipio para verlo de cerca");
+    subt("gen-sc","Partido más votado en cada sección. Rueda del ratón o pellizco para acercar; arrastra para moverte");
     const el=document.getElementById("gen-sc-mapa"), msgEl=document.getElementById("gen-sc-msg"), tipEl=document.getElementById("gen-sc-tip");
     const selC=document.getElementById("gen-sc-ccaa"), selP=document.getElementById("gen-sc-prov"), selM=document.getElementById("gen-sc-mun");
     const nombreProv=k=>P[String(+k)]?P[String(+k)].n:k, pad=k=>String(+k).padStart(2,"0");
     const tactil=window.matchMedia&&matchMedia("(pointer: coarse)").matches;
-    const cache={}; let f={ccaa:"",prov:"",mun:""}, D=null, modo="ganador", map=null, visto=false, pide=0, enProv=null, hover=null;
+    const cache={}; let f={ccaa:"",prov:"",mun:""}, D=null, modo=null, map=null, visto=false, pide=0, enProv=null, hover=null;
     const msg=t=>{msgEl.innerHTML=t||"";};
 
     /* MapLibre GL, solo cuando hace falta */
@@ -1449,36 +1450,108 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     }
     const mezcla=(hex,t)=>{const c=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));return "#"+c.map(v=>Math.round(255-(255-v)*t).toString(16).padStart(2,"0")).join("");};
     const oscuro=(hex,t)=>"#"+[1,3,5].map(i=>Math.round(parseInt(hex.slice(i,i+2),16)*(1-t)).toString(16).padStart(2,"0")).join("");
-    const rampa=(hex,x)=>x<.6?mezcla(hex,.12+.88*x/.6):oscuro(hex,.45*(x-.6)/.4);   // claro → color del partido → más oscuro
-    const pct=(r,k)=>r[2]?100*r[3+k]/r[2]:null;
+    const rampa=(hex,x)=>x<.6?mezcla(hex,.12+.88*x/.6):oscuro(hex,.45*(x-.6)/.4);   // claro → color → más oscuro
+    const CENTRO="#EDEAE2", SINCOMP="#FFFFFF", SINDATO="#EDEAE2", PIERDE="#5F5B52";
+    const diverge=(neg,pos,x)=>x==null?SINCOMP:Math.abs(x)<.02?CENTRO:x>0?rampa(pos,Math.min(1,x)*.85):rampa(neg,Math.min(1,-x)*.85);   // x en [-1, 1]
+    /* Bloques: los mismos partidos que el gráfico de encuestas (Sumar = línea «Podemos / UP / Sumar»; Junts = «CiU / Junts»; SALF no se presentó en 2019 ni en 2023).
+       Ciudadanos, IU (cuando fue sola), Más País y el resto («Otros») no entran en ningún bloque. */
+    const BLOQ={"Izquierda":["PSOE","Podemos / UP / Sumar","ERC","HB / Amaiur / EH Bildu","BNG"],"Derecha":["PP","Vox","UPN"],"Partidos bisagra":["CiU / Junts","PNV","Coalición Canaria"]};
+    const COLB={"Izquierda":SM.c.naranja,"Derecha":SM.c.teal,"Partidos bisagra":"#8739E5"};
+    const VISTAS=[["resultado","Resultado 2023"],["cambio","Cambio desde 2019"],["bloques","Bloques"],["abstencion","Abstención"]];
+    let vistaSc="resultado";
+    const pct=(r,k)=>r&&r[2]?100*r[3+k]/r[2]:null;
     const ganador=r=>{let b=-1;D.lineas.forEach((l,j)=>{if(l!=="Otros"&&(b<0||r[3+j]>r[3+b]))b=j;});return b;};
-    function chipsModo(feats){
-      const tot=D.lineas.map((l,k)=>({l,v:feats.reduce((a,ft)=>{const r=D.s[ft.properties.c];return a+(r?r[3+k]:0);},0)})).filter(x=>x.l!=="Otros"&&x.v>0).sort((a,b)=>b.v-a.v).slice(0,9);
-      if(modo!=="ganador"&&!tot.some(x=>x.l===modo))modo="ganador";
-      document.getElementById("gen-sc-modo").innerHTML=`<button type="button" class="pchip" data-m="ganador" aria-pressed="${modo==="ganador"}"><span class="sw" style="background:linear-gradient(90deg,${COL.PSOE} 0 50%,${COL.PP} 50% 100%)"></span>Más votado</button>`+
-        tot.map(x=>`<button type="button" class="pchip" data-m="${esc(x.l)}" aria-pressed="${modo===x.l}"><span class="sw" style="background:${COL[x.l]}"></span>${esc(x.l)}</button>`).join("");
+    const bloque=(r,b)=>r&&r[2]?BLOQ[b].reduce((t,l)=>{const k=D.lineas.indexOf(l);return t+(k<0?0:100*r[3+k]/r[2]);},0):null;
+    const bloqueGan=r=>Object.keys(BLOQ).map(b=>[b,bloque(r,b)]).sort((a,c)=>c[1]-a[1])[0];
+    const abst=r=>r&&r[0]?100*(1-r[1]/r[0]):null;
+    const q19=c=>D.s19?D.s19[c]:null;
+    const hayComp=()=>!!(D&&D.s19);
+    function opciones(feats){
+      const suma=(tabla,k)=>feats.reduce((a,ft)=>{const r=tabla&&tabla[ft.properties.c];return a+(r?r[3+k]:0);},0);
+      const tot=D.lineas.map((l,k)=>({l,k,v:suma(D.s,k)+(vistaSc==="cambio"?suma(D.s19,k):0)})).filter(x=>x.l!=="Otros"&&x.v>0).sort((a,b)=>b.v-a.v).slice(0,vistaSc==="cambio"?10:9);   // en «Cambio» también los partidos que solo tenían votos en 2019 (Cs)
+      const sw=c=>`<span class="sw" style="background:${c}"></span>`, mix=`<span class="sw" style="background:linear-gradient(90deg,${COL.PSOE} 0 50%,${COL.PP} 50% 100%)"></span>`;
+      if(vistaSc==="resultado")return [["ganador",mix+"Más votado"]].concat(tot.map(x=>["p:"+x.l,sw(COL[x.l])+esc(x.l)]));
+      if(vistaSc==="cambio")return [["cg",mix+"Dónde cambió el más votado"]].concat(tot.map(x=>["d:"+x.l,sw(COL[x.l])+esc(x.l)]));
+      if(vistaSc==="bloques")return [["bg",`<span class="sw" style="background:linear-gradient(90deg,${COLB.Izquierda} 0 50%,${COLB.Derecha} 50% 100%)"></span>Bloque más votado`]]
+        .concat(Object.keys(BLOQ).map(b=>["b:"+b,sw(COLB[b])+b]))
+        .concat([["bm",`<span class="sw" style="background:linear-gradient(90deg,${COLB.Derecha} 0 50%,${COLB.Izquierda} 50% 100%)"></span>Izquierda menos derecha`],["bmc",sw(SM.c.subtle)+"Cambio desde 2019"]]);
+      return [["ab",sw(SM.c.tinta)+"Abstención 2023"],["abc",sw(SM.c.subtle)+"Cambio desde 2019"]];
     }
+    function botonera(feats){
+      document.getElementById("gen-sc-vista").innerHTML=VISTAS.map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${vistaSc===v}">${t}</button>`).join("");
+      const ops=opciones(feats);
+      if(!ops.some(o=>o[0]===modo))modo=ops[0][0];
+      document.getElementById("gen-sc-modo").innerHTML=ops.map(([m,h])=>`<button type="button" class="pchip" data-m="${esc(m)}" aria-pressed="${modo===m}">${h}</button>`).join("");
+    }
+    document.getElementById("gen-sc-vista").addEventListener("click",ev=>{const b=ev.target.closest("button");if(!b||!D)return;vistaSc=b.dataset.v;modo=null;pinta(visibles());});
     document.getElementById("gen-sc-modo").addEventListener("click",ev=>{const b=ev.target.closest(".pchip");if(!b||!D)return;modo=b.dataset.m;pinta(visibles());});
-    function pinta(feats){
-      chipsModo(feats);
-      const src=D.clave==="es"?"nac":"prv", k=modo==="ganador"?-1:D.lineas.indexOf(modo), cuenta={}, vals=[];
-      let mx=1;
-      if(k>=0){feats.forEach(ft=>{const r=D.s[ft.properties.c]; if(r&&r[2])vals.push(pct(r,k));}); vals.sort((a,b)=>a-b); mx=Math.max(1,vals[Math.floor(.97*(vals.length-1))]||1);}
-      feats.forEach(ft=>{const c=ft.properties.c, r=D.s[c]; let col="#EEEBE3";
-        if(r&&r[2]){ if(k<0){const b=ganador(r), l=D.lineas[b]; cuenta[l]=(cuenta[l]||0)+1; col=mezcla(COL[l],Math.min(1,Math.max(.35,(pct(r,b)-15)/40)));}
-                     else{const p=pct(r,k); col=p>0?rampa(COL[modo],Math.min(1,p/mx)):"#EEEBE3";} }
-        map.setFeatureState({source:src,id:c},{col});});
-      const ley=document.getElementById("gen-sc-ley"), n=feats.length;
-      if(k<0)ley.innerHTML=Object.entries(cuenta).sort((a,b)=>b[1]-a[1]).map(([l,c])=>`<span><i style="background:${COL[l]}"></i>${esc(l)} <b>${ni(c)}</b></span>`).join("")+`<span class="gen-nota">${esc(sitio())}, ${ni(n)} secciones, color más intenso = mayor % del ganador</span>`;
-      else ley.innerHTML=`<span>0 %</span><i class="gen-grad" style="background:linear-gradient(90deg,${mezcla(COL[modo],.12)},${COL[modo]} 60%,${oscuro(COL[modo],.45)})"></i><span>${nf(mx,0)} % o más</span><span class="gen-nota">% de ${esc(modo)} sobre votos válidos, ${esc(sitio())}, ${ni(n)} secciones</span>`;
+    /* Color de cada sección según la opción elegida. Devuelve también lo que hace falta para la leyenda */
+    function colores(feats){
+      const out=new Map(), cuenta={}, vals=[]; let tipo="cat", esc_=null, sinComp=0;
+      const pc97=(a,f=.97)=>{if(!a.length)return 1;a.sort((x,y)=>x-y);return a[Math.floor(f*(a.length-1))]||1;};
+      const cs=feats.map(ft=>ft.properties.c);
+      if(modo==="ganador"||modo==="cg"){
+        cs.forEach(c=>{const r=D.s[c]; if(!r||!r[2]){out.set(c,SINDATO);return;} const b=ganador(r), l=D.lineas[b];
+          if(modo==="ganador"){cuenta[l]=(cuenta[l]||0)+1; out.set(c,mezcla(COL[l],Math.min(1,Math.max(.35,(pct(r,b)-15)/40))));return;}
+          const q=q19(c); if(!q||!q[2]){out.set(c,SINCOMP);sinComp++;return;} const l0=D.lineas[ganador(q)];
+          if(l0===l){out.set(c,CENTRO);cuenta["Sin cambio"]=(cuenta["Sin cambio"]||0)+1;}
+          else{out.set(c,COL[l]);const k=`${l0} → ${l}`;cuenta[k]=(cuenta[k]||0)+1;}});
+        return {out,tipo:modo==="ganador"?"cat":"cambio",cuenta,sinComp};
+      }
+      if(modo==="bg"){cs.forEach(c=>{const r=D.s[c]; if(!r||!r[2]){out.set(c,SINDATO);return;} const [b,v]=bloqueGan(r);
+          cuenta[b]=(cuenta[b]||0)+1; out.set(c,mezcla(COLB[b],Math.min(1,Math.max(.3,(v-30)/40))));}); return {out,tipo:"bloq",cuenta};}
+      /* Variables continuas: valor de cada sección */
+      let f, div=false, colP=SM.c.tinta, colN=PIERDE;
+      if(modo.startsWith("p:")){const k=D.lineas.indexOf(modo.slice(2)); f=c=>pct(D.s[c],k); colP=COL[modo.slice(2)];}
+      else if(modo.startsWith("d:")){const k=D.lineas.indexOf(modo.slice(2)); f=c=>{const q=q19(c),r=D.s[c];return q&&q[2]&&r&&r[2]?pct(r,k)-pct(q,k):undefined;}; div=true; colP=COL[modo.slice(2)];}
+      else if(modo.startsWith("b:")){const b=modo.slice(2); f=c=>bloque(D.s[c],b); colP=COLB[b];}
+      else if(modo==="bm"){f=c=>{const r=D.s[c];return r&&r[2]?bloque(r,"Izquierda")-bloque(r,"Derecha"):null;}; div=true; colP=COLB.Izquierda; colN=COLB.Derecha;}
+      else if(modo==="bmc"){f=c=>{const r=D.s[c],q=q19(c);return q&&q[2]&&r&&r[2]?(bloque(r,"Izquierda")-bloque(r,"Derecha"))-(bloque(q,"Izquierda")-bloque(q,"Derecha")):undefined;}; div=true; colP=COLB.Izquierda; colN=COLB.Derecha;}
+      else if(modo==="ab"){f=c=>abst(D.s[c]); colP=SM.c.tinta;}
+      else if(modo==="abc"){f=c=>{const r=D.s[c],q=q19(c);return q&&q[0]&&r&&r[0]?abst(r)-abst(q):undefined;}; div=true; colP=SM.c.tinta; colN=SM.c.teal;}
+      const v=cs.map(c=>{const x=f(c); if(x!=null&&x!==undefined&&isFinite(x))vals.push(div?Math.abs(x):x); return x;});
+      const mx=Math.max(1,pc97(vals));
+      cs.forEach((c,j)=>{const x=v[j];
+        if(x===undefined){out.set(c,SINCOMP);sinComp++;return;}
+        if(x==null||!isFinite(x)){out.set(c,SINDATO);return;}
+        out.set(c,div?diverge(colN,colP,x/mx):(x>0?rampa(colP,Math.min(1,x/mx)):SINDATO));});
+      return {out,tipo:div?"div":"seq",mx,colP,colN,sinComp};
     }
-    /* Ventana con los resultados de la sección */
+    const TXT_MODO=m=>m==="ganador"?"Partido más votado en cada sección":m==="cg"?"Secciones donde el partido más votado no es el mismo que en noviembre de 2019":
+      m.startsWith("p:")?`% de ${m.slice(2)} sobre votos válidos`:m.startsWith("d:")?`Cambio del % de ${m.slice(2)} entre noviembre de 2019 y julio de 2023, en puntos`:
+      m==="bg"?"Bloque más votado en cada sección":m.startsWith("b:")?`% del bloque ${m.slice(2)==="Partidos bisagra"?"de partidos bisagra":m.slice(2).toLowerCase()} sobre votos válidos`:
+      m==="bm"?"Ventaja de la izquierda sobre la derecha, en puntos (naranja: gana la izquierda; verde azulado: la derecha)":m==="bmc"?"Cambio de la ventaja de la izquierda sobre la derecha desde noviembre de 2019, en puntos":
+      m==="ab"?"Abstención: % del censo que no votó":"Cambio de la abstención desde noviembre de 2019, en puntos";
+    function pinta(feats){
+      botonera(feats);
+      const src=D.clave==="es"?"nac":"prv", R=colores(feats);
+      R.out.forEach((col,c)=>map.setFeatureState({source:src,id:c},{col}));
+      subt("gen-sc",`${TXT_MODO(modo)}. Rueda del ratón o pellizco para acercar; arrastra para moverte`);
+      const ley=document.getElementById("gen-sc-ley"), n=feats.length, base=`${esc(sitio())}, ${ni(n)} secciones`;
+      const sc=R.sinComp?`<span><i style="background:${SINCOMP};border:1px solid var(--grid)"></i>Sin comparación (la sección cambió desde 2019) <b>${ni(R.sinComp)}</b></span>`:"";
+      const f1=x=>(x>0?"+":"")+nf(x,0);
+      if(R.tipo==="cat"||R.tipo==="bloq"||R.tipo==="cambio"){
+        const colDe=k=>R.tipo==="bloq"?COLB[k]:k==="Sin cambio"?CENTRO:COL[k.split(" → ").pop()];
+        const ent=Object.entries(R.cuenta).sort((a,b)=>b[1]-a[1]), max=R.tipo==="cambio"?10:99;
+        ley.innerHTML=ent.slice(0,max).map(([k,c])=>`<span><i style="background:${colDe(k)}${k==="Sin cambio"?";border:1px solid var(--grid)":""}"></i>${esc(k)} <b>${ni(c)}</b></span>`).join("")+sc+
+          `<span class="gen-nota">${base}${R.tipo==="cambio"?"":", color más intenso = mayor %"}</span>`;
+      }else if(R.tipo==="seq") ley.innerHTML=`<span>0 %</span><i class="gen-grad" style="background:linear-gradient(90deg,${mezcla(R.colP,.12)},${R.colP} 60%,${oscuro(R.colP,.45)})"></i><span>${nf(R.mx,0)} % o más</span><span class="gen-nota">${base}</span>`;
+      else{const E={bm:["Derecha +","Izquierda +",""],bmc:["Hacia la derecha ","Hacia la izquierda ",""],abc:["","","(menos abstención)","(más abstención)"]}[modo]||["","","(pierde)","(gana)"];
+        const izq=modo==="bm"||modo==="bmc"?`${E[0]}${nf(R.mx,0)} pp`:`${f1(-R.mx)} pp ${E[2]}`, der=modo==="bm"||modo==="bmc"?`${E[1]}${nf(R.mx,0)} pp`:`${f1(R.mx)} pp ${E[3]||""}`;
+        ley.innerHTML=`<span>${izq}</span><i class="gen-grad" style="background:linear-gradient(90deg,${oscuro(R.colN,.3)},${R.colN} 25%,${CENTRO} 50%,${R.colP} 75%,${oscuro(R.colP,.3)})"></i><span>${der}</span>${sc}<span class="gen-nota">${base}</span>`;}
+    }
+    /* Ventana con los resultados de la sección (2023 y, si es comparable, cambio desde 2019) */
     const nombreSec=c=>`${esc(D.munis[c.slice(0,5)]||"")}, distrito ${+c.slice(5,7)}, sección ${+c.slice(7)}`;
+    const dif=x=>x==null||!isFinite(x)?"":`<span style="color:${SM.c.subtle};font-weight:400"> (${x>=0?"+":""}${nf(x)})</span>`;
     function muestraTip(c,pt){
       const r=D&&D.s[c]; if(!r){tipEl.hidden=true;return;}
-      const ls=D.lineas.map((l,k)=>({l,v:r[3+k],p:pct(r,k)})).filter(z=>z.v>0).sort((a,b)=>b.v-a.v).slice(0,6);
-      tipEl.innerHTML=`<b>${nombreSec(c)}</b><div style="color:${SM.c.subtle};font-size:11.5px">${esc(nombreProv(c.slice(0,2)))}, censo ${ni(r[0])}, participación ${nf(r[0]?100*r[1]/r[0]:null)} %</div>`+
-        ls.map(z=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${COL[z.l]}">●</span> ${esc(z.l)}</span><span><b>${nf(z.p)} %</b> (${ni(z.v)} votos)</span></div>`).join("");
+      const q=q19(c), qq=q&&q[2]?q:null;
+      const ls=D.lineas.map((l,k)=>({l,v:r[3+k],p:pct(r,k),d:qq?pct(r,k)-pct(qq,k):null})).filter(z=>z.v>0||(z.d!=null&&pct(qq,D.lineas.indexOf(z.l))>0)).sort((a,b)=>b.v-a.v).slice(0,6);
+      const bl=Object.keys(BLOQ).filter(b=>bloque(r,b)>0||(qq&&bloque(qq,b)>0)).map(b=>`${b==="Partidos bisagra"?"bisagra":b.toLowerCase()} ${nf(bloque(r,b))} %${qq?dif(bloque(r,b)-bloque(qq,b)):""}`).join(", ");
+      tipEl.innerHTML=`<b>${nombreSec(c)}</b><div style="color:${SM.c.subtle};font-size:11.5px">${esc(nombreProv(c.slice(0,2)))}, censo ${ni(r[0])}, abstención ${nf(abst(r))} %${qq?dif(abst(r)-abst(qq)):""}</div>`+
+        ls.map(z=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${COL[z.l]}">●</span> ${esc(z.l)}</span><span><b>${nf(z.p)} %</b>${dif(z.d)}</span></div>`).join("")+
+        `<div style="margin-top:3px;font-size:11.5px">Bloques: ${bl}</div>`+
+        `<div style="margin-top:3px;font-size:11px;color:${SM.c.subtle}">${qq?"Entre paréntesis, cambio desde noviembre de 2019 en puntos":"Sin comparación con 2019: la sección cambió de territorio o de código"}</div>`;
       tipEl.hidden=false;
       const W=el.clientWidth, H=el.clientHeight, w=tipEl.offsetWidth, h=tipEl.offsetHeight;
       tipEl.style.left=Math.max(4,Math.min(W-w-4,pt.x+14))+"px"; tipEl.style.top=Math.max(4,Math.min(H-h-4,pt.y+14))+"px";
