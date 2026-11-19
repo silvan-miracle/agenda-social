@@ -1309,14 +1309,14 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   /* 6 · Mapa por sección censal (generales de 2023) ---------------------------------------------------------------
      Datos: dashboard/secciones/2023/ (herramientas/preparar_mapa_secciones.py, a partir de los ficheros de mesas del Ministerio
      del Interior y del seccionado del INE). La web pública los sirve en secciones/2023/ y se cargan solo cuando la tarjeta se ve:
-     - es.json: todas las secciones, geometría simplificada (~100 m) y proyectada como el mapa de provincias (Canarias en recuadro).
-       Para «Toda España» y para una comunidad autónoma (~9 MB; ~2,7 MB comprimido).
-     - <prov>.json: una provincia con la geometría detallada (~10 m). Para una provincia y sus municipios.
-     El mapa viene en TopoJSON y se pasa a GeoJSON en el navegador. Filtros propios (comunidad, provincia, municipio) que además
-     siguen al filtro de territorio de la pestaña. */
+     - es.json: todas las secciones, geometría simplificada (~100 m), con Canarias en un recuadro. Para «Toda España» y comunidad.
+     - <prov>.json: una provincia con la geometría detallada (~10 m) y coordenadas reales. Para una provincia y sus municipios.
+     Se dibuja con MapLibre GL (WebGL, cargado desde jsDelivr al llegar a la tarjeta): con ECharts (lienzo 2D) mover o acercar
+     36.000 polígonos era lento. Sin mapa de calles de fondo. Los colores van en el «feature-state» de cada sección (clave = CUSEC),
+     así cambiar de partido no obliga a recargar la geometría. Filtros propios (comunidad, provincia, municipio) que además siguen
+     al filtro de territorio de la pestaña. */
   (function(){
-    if(typeof echarts==="undefined")return;
-    const BASE="secciones/2023/";
+    const BASE="secciones/2023/", ML_VER="4.7.1";
     tarjeta("gen-sc","Resultados por sección censal en las generales de 2023",
       `<div class="ctrls gen-sc-ctrls">
          <label class="sel-lab">Comunidad <select id="gen-sc-ccaa" class="sel"></select></label>
@@ -1324,21 +1324,34 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
          <label class="sel-lab">Municipio <select id="gen-sc-mun" class="sel" disabled></select></label>
        </div>
        <div class="pchips" id="gen-sc-modo" role="group" aria-label="Qué mostrar"></div>
-       <div class="chart gen-sc-mapa" id="gen-sc-mapa"></div>
+       <div class="gen-sc-caja"><div class="gen-sc-mapa" id="gen-sc-mapa"></div><div class="gen-sc-msg" id="gen-sc-msg"></div><div class="gen-sc-tip" id="gen-sc-tip" hidden></div></div>
        <div class="gen-leyenda" id="gen-sc-ley"></div>`,
-      "Fuente: Ministerio del Interior (resultados por mesa de las elecciones generales del 23 de julio de 2023, sumados por sección censal) e INE (cartografía de secciones censales a 1 de enero de 2023; en los municipios que cambiaron sus secciones durante 2023, la de 1 de enero de 2024). % sobre votos válidos. No incluye el voto de los residentes en el extranjero (CERA), que no se asigna a ninguna sección; por eso los totales son algo menores que los oficiales (y en Toledo y Cantabria los ficheros de mesas difieren en unas decenas de votos del resultado final). En las vistas de España y de comunidad el mapa está simplificado (unos 100 m) y Canarias aparece en el recuadro; las secciones más pequeñas se ven mejor al elegir su provincia. "+nota);
+      "Fuente: Ministerio del Interior (resultados por mesa de las elecciones generales del 23 de julio de 2023, sumados por sección censal) e INE (cartografía de secciones censales a 1 de enero de 2023; en los municipios que cambiaron sus secciones durante 2023, la de 1 de enero de 2024). % sobre votos válidos. No incluye el voto de los residentes en el extranjero (CERA), que no se asigna a ninguna sección; por eso los totales son algo menores que los oficiales (y en Toledo y Cantabria los ficheros de mesas difieren en unas decenas de votos del resultado final). En las vistas de España y de comunidad el mapa está simplificado (unos 100 m) y Canarias aparece en el recuadro; al elegir una provincia se carga su mapa detallado. "+nota);
     const st=document.createElement("style");
-    st.textContent=`.gen-sc-mapa.chart{height:640px;margin-top:6px}.gen-sc-ctrls{display:flex;flex-wrap:wrap;gap:8px 18px}
-      .gen-sc-ctrls .sel{max-width:230px}.gen-sc-ctrls .sel:disabled{opacity:.5}
-      .gen-sc-msg{display:flex;align-items:center;justify-content:center;height:100%;color:var(--subtle);font-size:13px;text-align:center;padding:0 20px}
-      @media (max-width:640px){.gen-sc-mapa.chart{height:460px}}`;
+    st.textContent=`.gen-sc-ctrls{display:flex;flex-wrap:wrap;gap:8px 18px}.gen-sc-ctrls .sel{max-width:230px}.gen-sc-ctrls .sel:disabled{opacity:.5}
+      .gen-sc-caja{position:relative;height:640px;margin-top:6px}.gen-sc-caja .gen-sc-mapa{position:absolute;top:0;left:0;width:100%;height:100%}
+      .gen-sc-msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--subtle);font-size:13px;text-align:center;padding:0 20px;background:#fff;z-index:2}
+      .gen-sc-msg:empty{display:none}
+      .gen-sc-tip{position:absolute;z-index:3;pointer-events:none;background:#fff;border:1px solid var(--grid);border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,.12);padding:7px 10px;font:12px var(--font-sans);color:var(--sm-tinta);max-width:300px;white-space:normal}
+      .gen-sc-caja .maplibregl-ctrl-attrib{font-size:10.5px}
+      @media (max-width:640px){.gen-sc-caja{height:460px}}`;
     document.head.appendChild(st);
     subt("gen-sc","Partido más votado (o % de un partido) en cada sección censal. Rueda del ratón o pellizco para acercar; arrastra para moverte. Filtra por comunidad, provincia o municipio para verlo de cerca");
-    const el=document.getElementById("gen-sc-mapa"), selC=document.getElementById("gen-sc-ccaa"), selP=document.getElementById("gen-sc-prov"), selM=document.getElementById("gen-sc-mun");
+    const el=document.getElementById("gen-sc-mapa"), msgEl=document.getElementById("gen-sc-msg"), tipEl=document.getElementById("gen-sc-tip");
+    const selC=document.getElementById("gen-sc-ccaa"), selP=document.getElementById("gen-sc-prov"), selM=document.getElementById("gen-sc-mun");
     const nombreProv=k=>P[String(+k)]?P[String(+k)].n:k, pad=k=>String(+k).padStart(2,"0");
-    const cache={}; let f={ccaa:"",prov:"",mun:""}, D=null, modo="ganador", ch=null, visto=false, pide=0;
-    const msg=t=>{if(ch){ch.dispose();ch=null;} el.innerHTML=`<div class="gen-sc-msg">${t}</div>`;};
-    /* TopoJSON (cuantizado, arcos en deltas) → GeoJSON. Admite el formato estándar (provincias) y el compacto g=[[código, arcos]] (nacional) */
+    const tactil=window.matchMedia&&matchMedia("(pointer: coarse)").matches;
+    const cache={}; let f={ccaa:"",prov:"",mun:""}, D=null, modo="ganador", map=null, visto=false, pide=0, enProv=null, hover=null;
+    const msg=t=>{msgEl.innerHTML=t||"";};
+
+    /* MapLibre GL, solo cuando hace falta */
+    let mlP=null;
+    const cargaML=()=>mlP||(mlP=new Promise((ok,ko)=>{
+      if(window.maplibregl)return ok();
+      const l=document.createElement("link");l.rel="stylesheet";l.href=`https://cdn.jsdelivr.net/npm/maplibre-gl@${ML_VER}/dist/maplibre-gl.css`;document.head.appendChild(l);
+      const s=document.createElement("script");s.src=`https://cdn.jsdelivr.net/npm/maplibre-gl@${ML_VER}/dist/maplibre-gl.js`;s.onload=()=>ok();s.onerror=ko;document.head.appendChild(s);}));
+
+    /* TopoJSON (cuantizado, arcos en deltas) → GeoJSON. Formato estándar (provincias) y compacto g=[[código, arcos]] (nacional) */
     function aGeo(t){
       const sc=t.transform.scale, tr=t.transform.translate;
       const arcs=t.arcs.map(a=>{let x=0,y=0;return a.map(p=>{x+=p[0];y+=p[1];return [x*sc[0]+tr[0],y*sc[1]+tr[1]];});});
@@ -1346,95 +1359,137 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       const anillo=ix=>{const r=[];ix.forEach((i,k)=>{const a=arco(i);r.push(...(k?a.slice(1):a));});return r;};
       const geom=a=>typeof a[0][0]==="number"?{type:"Polygon",coordinates:a.map(anillo)}:{type:"MultiPolygon",coordinates:a.map(p=>p.map(anillo))};
       const lista=t.g?t.g.map(([c,a])=>({c,a})):t.objects.secciones.geometries.filter(g=>g.arcs).map(g=>({c:g.properties.c,a:g.arcs}));
-      return lista.map(({c,a})=>({type:"Feature",properties:{name:c},geometry:geom(a)}));
+      return lista.map(({c,a})=>({type:"Feature",properties:{c,p:c.slice(0,2),m:c.slice(0,5)},geometry:geom(a)}));
     }
     function cargar(clave){            // clave: "es" o código de provincia (2 cifras)
       if(cache[clave])return Promise.resolve(cache[clave]);
       return fetch(BASE+clave+".json").then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}).then(d=>{
-        d.feats=aGeo(d.topo); delete d.topo; d.porGrupo={};
-        d.feats.forEach(ft=>{const c=ft.properties.name, g=clave==="es"?c.slice(0,2):c.slice(0,5);(d.porGrupo[g]=d.porGrupo[g]||[]).push(ft);});
+        d.clave=clave; d.feats=aGeo(d.topo); delete d.topo; d.porGrupo={};
+        d.feats.forEach(ft=>{const g=clave==="es"?ft.properties.p:ft.properties.m;(d.porGrupo[g]=d.porGrupo[g]||[]).push(ft);});
         return cache[clave]=d;});
+    }
+    /* Mapa: dos fuentes (nacional y provincia detallada), cada una con relleno, bordes y resaltado */
+    function capas(src){
+      const col=["coalesce",["feature-state","col"],"#EEEBE3"];
+      map.addLayer({id:src+"-f",type:"fill",source:src,paint:{"fill-color":col,"fill-outline-color":col}});   // borde del mismo color: tapa las costuras entre polígonos
+      map.addLayer({id:src+"-l",type:"line",source:src,paint:{"line-color":"#fff","line-width":["interpolate",["linear"],["zoom"],6,0,9,.35,13,1],"line-opacity":.7}});
+      map.addLayer({id:src+"-h",type:"line",source:src,paint:{"line-color":SM.c.tinta,"line-width":1.6,"line-opacity":["case",["boolean",["feature-state","hover"],false],1,0]}});
+      map.on("mousemove",src+"-f",e=>{const ft=e.features&&e.features[0]; if(!ft)return; marca(src,ft.properties.c); muestraTip(ft.properties.c,e.point);});
+      map.on("mouseleave",src+"-f",()=>{marca(null,null); tipEl.hidden=true; map.getCanvas().style.cursor="";});
+      map.on("click",src+"-f",e=>{const ft=e.features&&e.features[0]; if(ft){marca(src,ft.properties.c); muestraTip(ft.properties.c,e.point);}});
+    }
+    function marca(src,c){
+      if(hover)map.setFeatureState(hover,{hover:false});
+      hover=src&&c?{source:src,id:c}:null; if(hover){map.setFeatureState(hover,{hover:true}); map.getCanvas().style.cursor="pointer";}
+    }
+    const hayWebGL=()=>{try{const c=document.createElement("canvas");return !!(window.WebGLRenderingContext&&(c.getContext("webgl2")||c.getContext("webgl")));}catch(e){return false;}};
+    function creaMapa(){
+      if(!hayWebGL())return Promise.reject(new Error("sin WebGL"));
+      map=new maplibregl.Map({container:el,style:{version:8,sources:{},layers:[{id:"fondo",type:"background",paint:{"background-color":"#fff"}}]},
+        bounds:[[-11.6,32.8],[4.6,44.0]],fitBoundsOptions:{padding:16},renderWorldCopies:false,dragRotate:false,pitchWithRotate:false,
+        cooperativeGestures:tactil,attributionControl:false,maxZoom:16,minZoom:3});
+      map.touchZoomRotate.disableRotation();
+      map.addControl(new maplibregl.NavigationControl({showCompass:false}),"top-right");
+      map.addControl(new maplibregl.AttributionControl({compact:true,customAttribution:"Ministerio del Interior, INE"}),"bottom-right");
+      return new Promise(ok=>map.on("load",()=>{
+        map.addSource("nac",{type:"geojson",data:{type:"FeatureCollection",features:[]},promoteId:"c",tolerance:.05});   // sin la simplificación de MapLibre: con la de serie desaparecen las secciones urbanas al alejar
+        map.addSource("prv",{type:"geojson",data:{type:"FeatureCollection",features:[]},promoteId:"c",tolerance:.05});
+        map.addSource("marco",{type:"geojson",data:{type:"FeatureCollection",features:[]}});
+        capas("nac"); capas("prv");
+        map.addLayer({id:"marco",type:"line",source:"marco",paint:{"line-color":"#B9B5A8","line-width":1}});
+        ok();}));
     }
     /* Selectores */
     const provsDe=cc=>(cc?CC.find(c=>c.n===cc).provs.map(String):COD).slice().sort((a,b)=>nombreProv(a).localeCompare(nombreProv(b),"es"));
     function selectores(){
       selC.innerHTML=`<option value="">Toda España</option>`+CC.map(c=>`<option value="${esc(c.n)}"${c.n===f.ccaa?" selected":""}>${esc(c.n)}</option>`).join("");
-      selP.innerHTML=`<option value="">${f.ccaa?"Todas las de la comunidad":"Todas"}</option>`+provsDe(f.ccaa).map(k=>`<option value="${k}"${String(+k)===String(+f.prov||"")&&f.prov?" selected":""}>${esc(nombreProv(k))}</option>`).join("");
-      if(f.prov&&D&&D.munis&&D.clave!=="es"){const ms=Object.keys(D.porGrupo).sort((a,b)=>D.munis[a].localeCompare(D.munis[b],"es"));
+      selP.innerHTML=`<option value="">${f.ccaa?"Todas las de la comunidad":"Todas"}</option>`+provsDe(f.ccaa).map(k=>`<option value="${k}"${f.prov&&String(+k)===String(+f.prov)?" selected":""}>${esc(nombreProv(k))}</option>`).join("");
+      if(f.prov&&D&&D.clave!=="es"){const ms=Object.keys(D.porGrupo).sort((a,b)=>D.munis[a].localeCompare(D.munis[b],"es"));
         selM.innerHTML=`<option value="">Todos (${ms.length})</option>`+ms.map(m=>`<option value="${m}"${m===f.mun?" selected":""}>${esc(D.munis[m])} (${D.porGrupo[m].length})</option>`).join(""); selM.disabled=false;}
       else{selM.innerHTML=`<option value="">${f.prov?"Cargando…":"Elige una provincia"}</option>`; selM.disabled=true;}
     }
     selC.addEventListener("change",()=>{f={ccaa:selC.value,prov:"",mun:""};mostrar();});
     selP.addEventListener("change",()=>{f.prov=selP.value;f.mun="";if(f.prov&&!f.ccaa)f.ccaa=ccaaDe[String(+f.prov)];mostrar();});
-    selM.addEventListener("change",()=>{f.mun=selM.value;pinta();});
+    selM.addEventListener("change",()=>{f.mun=selM.value;vista(true);});
     function mostrar(){
       const clave=f.prov?pad(f.prov):"es", n=++pide;
-      selectores();
-      if(!cache[clave])msg(clave==="es"?"Cargando las secciones de toda España…":`Cargando las secciones de ${esc(nombreProv(f.prov))}…`);
-      cargar(clave).then(d=>{if(n!==pide)return; D=d; D.clave=clave; selectores(); pinta();})
-        .catch(()=>{if(n===pide)msg("No se han podido cargar los resultados por sección. (Si abres la web desde un archivo local, este mapa solo funciona en la versión publicada.)");});
+      selectores(); tipEl.hidden=true;
+      if(!cache[clave]||!map)msg(clave==="es"?"Cargando las secciones de toda España…":`Cargando las secciones de ${esc(nombreProv(f.prov))}…`);
+      Promise.all([cargaML().then(()=>map?null:creaMapa()),cargar(clave)]).then(([,d])=>{
+        if(n!==pide)return; D=d;
+        if(clave==="es"){ if(!map.getSource("nac")._datoEs){map.getSource("nac").setData({type:"FeatureCollection",features:d.feats}); map.getSource("nac")._datoEs=true;
+            const [a,b,c,e]=d.marco; map.getSource("marco").setData({type:"Feature",geometry:{type:"Polygon",coordinates:[[[a,b],[c,b],[c,e],[a,e],[a,b]]]}});} }
+        else if(enProv!==clave){map.getSource("prv").setData({type:"FeatureCollection",features:d.feats}); enProv=clave;}
+        msg(""); selectores(); vista(true);
+      }).catch(e=>{if(n!==pide)return;
+        msg(e&&e.message==="sin WebGL"?"Este navegador no puede dibujar el mapa (necesita WebGL). Prueba con otro navegador o actualízalo.":"No se han podido cargar los resultados por sección. (Si abres la web desde un archivo local, este mapa solo funciona en la versión publicada.)");});
     }
-    /* Qué secciones se ven */
+    /* Qué secciones se ven, a qué encuadre ir y de qué color pintarlas */
     function visibles(){
       if(D.clave==="es"){if(!f.ccaa)return D.feats; return CC.find(c=>c.n===f.ccaa).provs.flatMap(k=>D.porGrupo[pad(k)]||[]);}
       return f.mun?D.porGrupo[f.mun]:D.feats;
     }
     const sitio=()=>f.mun?D.munis[f.mun]:f.prov?nombreProv(f.prov):f.ccaa||"España";
+    const cajas={};
+    function caja(feats,clave){
+      if(cajas[clave])return cajas[clave];
+      let x0=180,y0=90,x1=-180,y1=-90; const v=c=>{if(c[0]<x0)x0=c[0];if(c[0]>x1)x1=c[0];if(c[1]<y0)y0=c[1];if(c[1]>y1)y1=c[1];};
+      feats.forEach(ft=>{const g=ft.geometry; (g.type==="Polygon"?[g.coordinates]:g.coordinates).forEach(p=>p[0].forEach(v));});
+      return cajas[clave]=[[x0,y0],[x1,y1]];
+    }
+    function vista(encuadra){
+      if(!D||!map)return;
+      const nac=D.clave==="es", feats=visibles();
+      ["f","l","h"].forEach(s=>{map.setLayoutProperty("nac-"+s,"visibility",nac?"visible":"none"); map.setLayoutProperty("prv-"+s,"visibility",nac?"none":"visible");});
+      map.setLayoutProperty("marco","visibility",nac&&!f.ccaa?"visible":"none");
+      const filtro=nac?(f.ccaa?["in",["get","p"],["literal",CC.find(c=>c.n===f.ccaa).provs.map(pad)]]:null):(f.mun?["==",["get","m"],f.mun]:null);
+      ["f","l","h"].forEach(s=>map.setFilter((nac?"nac-":"prv-")+s,filtro));
+      if(encuadra){const k=nac?"es_"+(f.ccaa||"todo"):D.clave+"_"+(f.mun||"todo"); map.fitBounds(caja(feats,k),{padding:24,duration:enProv||f.ccaa?700:0,maxZoom:14});}
+      pinta(feats);
+    }
     const mezcla=(hex,t)=>{const c=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));return "#"+c.map(v=>Math.round(255-(255-v)*t).toString(16).padStart(2,"0")).join("");};
     const oscuro=(hex,t)=>"#"+[1,3,5].map(i=>Math.round(parseInt(hex.slice(i,i+2),16)*(1-t)).toString(16).padStart(2,"0")).join("");
     const rampa=(hex,x)=>x<.6?mezcla(hex,.12+.88*x/.6):oscuro(hex,.45*(x-.6)/.4);   // claro → color del partido → más oscuro
     const pct=(r,k)=>r[2]?100*r[3+k]/r[2]:null;
     const ganador=r=>{let b=-1;D.lineas.forEach((l,j)=>{if(l!=="Otros"&&(b<0||r[3+j]>r[3+b]))b=j;});return b;};
     function chipsModo(feats){
-      const tot=D.lineas.map((l,k)=>({l,v:feats.reduce((a,ft)=>{const r=D.s[ft.properties.name];return a+(r?r[3+k]:0);},0)})).filter(x=>x.l!=="Otros"&&x.v>0).sort((a,b)=>b.v-a.v).slice(0,9);
+      const tot=D.lineas.map((l,k)=>({l,v:feats.reduce((a,ft)=>{const r=D.s[ft.properties.c];return a+(r?r[3+k]:0);},0)})).filter(x=>x.l!=="Otros"&&x.v>0).sort((a,b)=>b.v-a.v).slice(0,9);
       if(modo!=="ganador"&&!tot.some(x=>x.l===modo))modo="ganador";
       document.getElementById("gen-sc-modo").innerHTML=`<button type="button" class="pchip" data-m="ganador" aria-pressed="${modo==="ganador"}"><span class="sw" style="background:linear-gradient(90deg,${COL.PSOE} 0 50%,${COL.PP} 50% 100%)"></span>Más votado</button>`+
         tot.map(x=>`<button type="button" class="pchip" data-m="${esc(x.l)}" aria-pressed="${modo===x.l}"><span class="sw" style="background:${COL[x.l]}"></span>${esc(x.l)}</button>`).join("");
     }
-    document.getElementById("gen-sc-modo").addEventListener("click",ev=>{const b=ev.target.closest(".pchip");if(!b||!D)return;modo=b.dataset.m;pinta();});
-    const nombreSec=c=>`${esc(D.munis[c.slice(0,5)]||"")}, distrito ${+c.slice(5,7)}, sección ${+c.slice(7)}`;
-    function tip(c){const r=D.s[c]; if(!r)return "";
-      const ls=D.lineas.map((l,k)=>({l,v:r[3+k],p:pct(r,k)})).filter(z=>z.v>0).sort((a,b)=>b.v-a.v).slice(0,6);
-      return `<b>${nombreSec(c)}</b><div style="color:${SM.c.subtle};font-size:11.5px">${esc(nombreProv(c.slice(0,2)))}, censo ${ni(r[0])}, participación ${nf(r[0]?100*r[1]/r[0]:null)} %</div>`+
-        ls.map(z=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${COL[z.l]}">●</span> ${esc(z.l)}</span><span><b>${nf(z.p)} %</b> (${ni(z.v)} votos)</span></div>`).join("");}
-    function pinta(){
-      if(!D)return;
-      const feats=visibles(); chipsModo(feats);
-      const nombre=`sec_${D.clave}_${D.clave==="es"?(f.ccaa||"todo"):(f.mun||"todo")}`;
-      if(!echarts.getMap(nombre))echarts.registerMap(nombre,{type:"FeatureCollection",features:feats});
-      if(!ch){el.innerHTML="";ch=echarts.init(el,null,{renderer:"canvas"});}
-      const k=modo==="ganador"?-1:D.lineas.indexOf(modo), regs=new Array(feats.length), cuenta={}, vals=[];
-      feats.forEach((ft,j)=>{const r=D.s[ft.properties.name]; ft._p=null; let color="#EEEBE3";
-        if(r&&r[2]){ if(k<0){const b=ganador(r), l=D.lineas[b]; cuenta[l]=(cuenta[l]||0)+1; color=mezcla(COL[l],Math.min(1,Math.max(.35,(pct(r,b)-15)/40)));}
-                     else{ft._p=pct(r,k); vals.push(ft._p);} }
-        regs[j]={name:ft.properties.name,itemStyle:{areaColor:color}};});
+    document.getElementById("gen-sc-modo").addEventListener("click",ev=>{const b=ev.target.closest(".pchip");if(!b||!D)return;modo=b.dataset.m;pinta(visibles());});
+    function pinta(feats){
+      chipsModo(feats);
+      const src=D.clave==="es"?"nac":"prv", k=modo==="ganador"?-1:D.lineas.indexOf(modo), cuenta={}, vals=[];
       let mx=1;
-      if(k>=0){vals.sort((a,b)=>a-b); mx=Math.max(1,vals[Math.floor(.97*(vals.length-1))]||1);
-        feats.forEach((ft,j)=>{const p=ft._p; if(p!=null)regs[j].itemStyle.areaColor=p>0?rampa(COL[modo],Math.min(1,p/mx)):"#EEEBE3";});}
-      /* Con muchas secciones, las costuras del suavizado entre polígonos diminutos dejan ver el fondo y las ciudades salen blancas:
-         se dibuja el borde de cada sección con su propio color para taparlas */
-      const muchas=feats.length>2500, o=smBaseOption(); o.grid=undefined;
-      if(muchas)regs.forEach(g=>{g.itemStyle.borderColor=g.itemStyle.areaColor;g.itemStyle.borderWidth=.6;});
-      o.tooltip={...tt,trigger:"item",formatter:q=>tip(q.name)};
-      o.geo={map:nombre,roam:true,scaleLimit:{min:.8,max:D.clave==="es"?40:(f.mun?30:60)},aspectScale:D.aspect,layoutCenter:["50%","50%"],layoutSize:"96%",
-        itemStyle:{areaColor:"#EEEBE3",borderColor:muchas?"#EEEBE3":"rgba(255,255,255,.45)",borderWidth:muchas?.6:.2},label:{show:false},select:{disabled:true},
-        tooltip:{...tt,show:true,trigger:"item",formatter:q=>tip(q.name)},
-        emphasis:{label:{show:false},itemStyle:{borderColor:SM.c.tinta,borderWidth:1.2}},
-        regions:regs.map(g=>({...g,emphasis:{itemStyle:{areaColor:g.itemStyle.areaColor,borderColor:SM.c.tinta,borderWidth:1.2}}}))};
-      o.series=[]; o.animation=false;
-      ch.setOption(o,true);
+      if(k>=0){feats.forEach(ft=>{const r=D.s[ft.properties.c]; if(r&&r[2])vals.push(pct(r,k));}); vals.sort((a,b)=>a-b); mx=Math.max(1,vals[Math.floor(.97*(vals.length-1))]||1);}
+      feats.forEach(ft=>{const c=ft.properties.c, r=D.s[c]; let col="#EEEBE3";
+        if(r&&r[2]){ if(k<0){const b=ganador(r), l=D.lineas[b]; cuenta[l]=(cuenta[l]||0)+1; col=mezcla(COL[l],Math.min(1,Math.max(.35,(pct(r,b)-15)/40)));}
+                     else{const p=pct(r,k); col=p>0?rampa(COL[modo],Math.min(1,p/mx)):"#EEEBE3";} }
+        map.setFeatureState({source:src,id:c},{col});});
       const ley=document.getElementById("gen-sc-ley"), n=feats.length;
       if(k<0)ley.innerHTML=Object.entries(cuenta).sort((a,b)=>b[1]-a[1]).map(([l,c])=>`<span><i style="background:${COL[l]}"></i>${esc(l)} <b>${ni(c)}</b></span>`).join("")+`<span class="gen-nota">${esc(sitio())}, ${ni(n)} secciones, color más intenso = mayor % del ganador</span>`;
       else ley.innerHTML=`<span>0 %</span><i class="gen-grad" style="background:linear-gradient(90deg,${mezcla(COL[modo],.12)},${COL[modo]} 60%,${oscuro(COL[modo],.45)})"></i><span>${nf(mx,0)} % o más</span><span class="gen-nota">% de ${esc(modo)} sobre votos válidos, ${esc(sitio())}, ${ni(n)} secciones</span>`;
     }
+    /* Ventana con los resultados de la sección */
+    const nombreSec=c=>`${esc(D.munis[c.slice(0,5)]||"")}, distrito ${+c.slice(5,7)}, sección ${+c.slice(7)}`;
+    function muestraTip(c,pt){
+      const r=D&&D.s[c]; if(!r){tipEl.hidden=true;return;}
+      const ls=D.lineas.map((l,k)=>({l,v:r[3+k],p:pct(r,k)})).filter(z=>z.v>0).sort((a,b)=>b.v-a.v).slice(0,6);
+      tipEl.innerHTML=`<b>${nombreSec(c)}</b><div style="color:${SM.c.subtle};font-size:11.5px">${esc(nombreProv(c.slice(0,2)))}, censo ${ni(r[0])}, participación ${nf(r[0]?100*r[1]/r[0]:null)} %</div>`+
+        ls.map(z=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${COL[z.l]}">●</span> ${esc(z.l)}</span><span><b>${nf(z.p)} %</b> (${ni(z.v)} votos)</span></div>`).join("");
+      tipEl.hidden=false;
+      const W=el.clientWidth, H=el.clientHeight, w=tipEl.offsetWidth, h=tipEl.offsetHeight;
+      tipEl.style.left=Math.max(4,Math.min(W-w-4,pt.x+14))+"px"; tipEl.style.top=Math.max(4,Math.min(H-h-4,pt.y+14))+"px";
+    }
     /* Carga perezosa: solo cuando la tarjeta entra en pantalla. Arranca con el territorio del filtro de la pestaña (por defecto, toda España) */
     const desdeFiltro=()=>{f={ccaa:terr.ccaa||"",prov:terr.prov||"",mun:""};};
-    const io=("IntersectionObserver" in window)?new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)&&!visto){visto=true;io.disconnect();desdeFiltro();mostrar();}},{rootMargin:"300px"}):null;
-    selectores();
-    if(io){io.observe(el);msg("El mapa se carga al llegar aquí.");} else {visto=true;desdeFiltro();mostrar();}
+    selectores(); msg("El mapa se carga al llegar aquí.");
+    const empieza=()=>{if(visto)return; visto=true; desdeFiltro(); mostrar();};
+    if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();empieza();}},{rootMargin:"300px"}); io.observe(el);} else empieza();
     /* Sigue al filtro de territorio de la pestaña */
     repinta.push(()=>{if(!visto)return; if((terr.ccaa||"")===f.ccaa&&(terr.prov||"")===String(f.prov?+f.prov:""))return; desdeFiltro(); mostrar();});
-    window.addEventListener("resize",()=>{if(ch)ch.resize();});
   })();
   pintaFiltro(); repinta.forEach(f=>f());
 })();
