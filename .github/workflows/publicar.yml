@@ -17,22 +17,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  publicar:
+  preparar:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Preparar la web (solo lo público)
         run: |
           mkdir _site
           cp index.html _site/
           for f in app.js data.json promedio.json; do [ -f "$f" ] && cp "$f" _site/ || true; done
-                    # Resultados por sección censal (un JSON por provincia; los copia aquí el robot de agenda-social-datos)
+          # Resultados por sección censal (los copia aquí el robot de agenda-social-datos)
           [ -d secciones ] && cp -r secciones _site/ || true
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with: { path: _site }
+
+  publicar:
+    needs: preparar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
       - id: deploy
         uses: actions/deploy-pages@v4
