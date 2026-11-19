@@ -3302,6 +3302,8 @@ function histPartidos(C){
 (function(){
   const raiz=document.getElementById("nar-raiz"); if(!raiz)return;
   const BASE="secciones/2023/", ML_VER="4.7.1";
+  /* Versión independiente (herramientas/exportar_narrativas_html.py): datos y enlace vienen en window.NAR_EXPORT */
+  const EXT=window.NAR_EXPORT||null;
   const nf=(v,d=1)=>v==null?"–":v.toLocaleString("es-ES",{minimumFractionDigits:d,maximumFractionDigits:d});
   const ni=v=>v==null?"–":v.toLocaleString("es-ES");
   const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -3366,7 +3368,7 @@ function histPartidos(C){
     {capa:"mun",pinta:"gan:3",foco:[],
      h:"Un mapa sin dueño",
      t:`<p>En siete años, Euskadi ha pasado de los ganadores claros a un empate a tres. El <b>PSE-EE</b> gana en las tres capitales y en la mayoría de las grandes ciudades; <b>EH Bildu</b>, en buena parte de los pueblos, sobre todo en Gipuzkoa (77 de sus 88 municipios), y el <b>PNV</b> resiste en Bizkaia, donde sigue siendo el primero en 55 municipios.</p>
-        <p>¿Y en tu barrio? <a href="#generales" class="nar-ir">Busca tu sección en el mapa de Elecciones generales</a>.</p>`}
+        <p>¿Y en tu barrio? <a href="${EXT?EXT.enlace:"#generales"}" class="nar-ir"${EXT?' target="_blank" rel="noopener"':""}>Busca tu sección en el mapa de Elecciones generales</a>.</p>`}
   ];
 
   /* ------------------------------------------------------------------------------------------------------------------------ */
@@ -3509,7 +3511,7 @@ function histPartidos(C){
   let empezado=false;
   function empieza(){
     if(empezado)return; empezado=true; ajustaTop();
-    Promise.all([cargaML(),fetch(BASE+"narrativas_euskadi.json").then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})]).then(([,d])=>{
+    Promise.all([cargaML(),(EXT&&EXT.datos?Promise.resolve(EXT.datos):fetch(BASE+"narrativas_euskadi.json").then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}))]).then(([,d])=>{
       D=d; D.mfeats=aGeo(d.mtopo,"municipios"); D.sfeats=aGeo(d.stopo,"secciones");
       map=new maplibregl.Map({container:elMapa,style:{version:8,sources:{},layers:[{id:"fondo",type:"background",paint:{"background-color":"#fff"}}]},
         bounds:caja(D.mfeats),fitBoundsOptions:{padding:40},attributionControl:false,dragRotate:false,pitchWithRotate:false,
@@ -3536,7 +3538,7 @@ function histPartidos(C){
   }
   const vis=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){vis.disconnect();empieza();}}); vis.observe(raiz);
   /* Enlace del cierre: ir a la pestaña de Elecciones generales */
-  raiz.addEventListener("click",ev=>{const a=ev.target.closest("a.nar-ir"); if(!a)return; ev.preventDefault(); const b=document.getElementById("tb-gen"); if(b){b.click(); scrollTo({top:0});} });
+  raiz.addEventListener("click",ev=>{const a=ev.target.closest("a.nar-ir"); const b=document.getElementById("tb-gen"); if(!a||!b)return; ev.preventDefault(); b.click(); scrollTo({top:0}); });
 })();
 
 /* Notas metodológicas plegadas en «Cómo lo calculamos» (revisión de 09/11/2026). Se pliegan las largas y las que el gráfico reescribe al cambiar un control
