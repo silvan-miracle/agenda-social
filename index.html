@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Matiz · El monitor de la opinión pública · Silván &amp; Miracle</title>
+<title>Matiz, el monitor de la opinión pública de Silván &amp; Miracle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif&display=swap">
@@ -198,10 +198,10 @@ footer.page{border-top:1px solid var(--grid);padding-block:20px 40px;display:fle
   </header>
   <div class="bar">
     <nav class="main-tabs" role="tablist" aria-label="Fuente">
-      <button type="button" role="tab" id="tb-enc" data-tab="enc" aria-selected="true" aria-controls="tab-enc" title="España · elecciones generales"><span class="t">Promedio de encuestas</span></button>
-      <button type="button" role="tab" id="tb-gen" data-tab="gen" aria-selected="false" aria-controls="tab-gen" title="España · 1977-2023"><span class="t">Elecciones generales</span></button>
-      <button type="button" role="tab" id="tb-cis" data-tab="cis" aria-selected="false" aria-controls="tab-cis" title="España · mensual"><span class="t">Barómetro del CIS</span></button>
-      <button type="button" role="tab" id="tb-soc" data-tab="soc" aria-selected="false" aria-controls="tab-soc" title="Euskadi · Gobierno Vasco"><span class="t">Sociómetro Vasco</span></button>
+      <button type="button" role="tab" id="tb-enc" data-tab="enc" aria-selected="true" aria-controls="tab-enc" title="España, elecciones generales"><span class="t">Promedio de encuestas</span></button>
+      <button type="button" role="tab" id="tb-gen" data-tab="gen" aria-selected="false" aria-controls="tab-gen" title="España, 1977-2023"><span class="t">Elecciones generales</span></button>
+      <button type="button" role="tab" id="tb-cis" data-tab="cis" aria-selected="false" aria-controls="tab-cis" title="España, mensual"><span class="t">Barómetro del CIS</span></button>
+      <button type="button" role="tab" id="tb-soc" data-tab="soc" aria-selected="false" aria-controls="tab-soc" title="Euskadi, Gobierno Vasco"><span class="t">Sociómetro Vasco</span></button>
     </nav>
   </div>
 
@@ -532,7 +532,7 @@ function montarProblemas(cfg){
   const prevIdx=i=>{const a=AV[st.bloque],k=a.indexOf(i);return k>0?a[k-1]:null;};
   const esMovil=()=>window.innerWidth<640;
   const MED={total:"% que lo cita entre sus tres respuestas",primero:"% que lo cita en primer lugar"};
-  const etqEstudio=i=>P.estudios?`${labL(P.fechas[i])} · ${P.estudios[i]}`:labL(P.fechas[i]);
+  const etqEstudio=i=>P.estudios?`${labL(P.fechas[i])} (estudio ${P.estudios[i]})`:labL(P.fechas[i]);
   const tt={backgroundColor:"#fff",borderColor:SM.c.grid,borderWidth:1,textStyle:{color:SM.c.tinta,fontFamily:SM.sans,fontSize:12},extraCssText:"box-shadow:0 2px 8px rgba(0,0,0,.12);border-radius:3px"};
 
   function ranking(i){const s=S(),a=prevIdx(i);
@@ -561,7 +561,7 @@ function montarProblemas(cfg){
 
   function pintaBarras(){
     const i=st.i, a=prevIdx(i), r=ranking(i).slice(0,10), mov=esMovil();
-    $("top10-subt").textContent=`${cfg.TXT[st.bloque]} · ${MED[st.medida]} · ${labL(P.fechas[i])}`;
+    $("top10-subt").textContent=`${cfg.TXT[st.bloque]}, ${MED[st.medida]}, ${labL(P.fechas[i])}`;
     $("top10-export").dataset.name=`${pre}_top10_${st.bloque}_${st.medida}_${P.fechas[i]}`;
     const o=smBaseOption();
     o.grid={left:8,right:mov?12:24,top:6,bottom:28,containLabel:true};
@@ -604,7 +604,7 @@ function montarProblemas(cfg){
   }
   function pintaEvol(){
     const b=st.bloque, sel=st.sel[b], col=st.col[b], mov=esMovil(), ix=AV[b], pocos=ix.length<=8;
-    $("evo-subt").textContent=`${cfg.TXT[b]} · ${MED[st.medida]} · ${labL(P.fechas[ix[0]])} – ${labL(P.fechas[ix[ix.length-1]])}`;
+    $("evo-subt").textContent=`${cfg.TXT[b]}, ${MED[st.medida]}, ${labL(P.fechas[ix[0]])} – ${labL(P.fechas[ix[ix.length-1]])}`;
     $("evo-export").dataset.name=`${pre}_problemas_${b}_${st.medida}`;
     chips();
     const o=smBaseOption();
@@ -612,7 +612,7 @@ function montarProblemas(cfg){
     o.tooltip={...tt,trigger:"axis",axisPointer:{type:"line",lineStyle:{color:SM.c.subtle,width:1}},
       formatter:ps=>{const i=ix[ps[0].dataIndex];const rows=ps.filter(p=>p.value!=null).sort((a,c)=>c.value-a.value)
         .map(p=>`<div style="display:flex;gap:8px;align-items:center;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:3px;border-radius:2px;background:${p.color};margin-right:6px;vertical-align:middle"></span>${p.seriesName}</span><b>${nf(p.value)} %</b></div>`).join("");
-        return `<div style="font-weight:600;margin-bottom:4px">${etqEstudio(i)} · N=${P.base_n[i].toLocaleString("es-ES")}</div>${rows}`;}};
+        return `<div style="font-weight:600;margin-bottom:4px">${etqEstudio(i)}, N=${P.base_n[i].toLocaleString("es-ES")}</div>${rows}`;}};
     o.xAxis={type:"category",data:ix.map(i=>xl(P.fechas[i])),boundaryGap:pocos,axisLine:{lineStyle:{color:SM.c.grid}},
       ...(pocos?{axisTick:{show:false},axisLabel:{color:SM.c.subtle,fontSize:11,interval:0,hideOverlap:true}}:ejeFechas(ix.map(i=>P.fechas[i]),mov))};
     o.yAxis={type:"value",min:0,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:v=>v+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
@@ -645,7 +645,7 @@ function montarProblemas(cfg){
     const tops=ranking(i).slice(0,5).map(d=>d.c), D=(PF.datos[st.bloque]?.[st.medida]?.[i])||{}, N=PF.n[i][v.id];
     const G=v.grupos.slice(1), NG=N.slice(1), sinDato=NG.every(n=>n==null);
     const elec=v.id==="voto"&&PF.eleccion&&PF.eleccion[i]?PF.eleccion[i]:null;
-    $("mapa-subt").textContent=`${cfg.TXT[st.bloque]} · ${MED[st.medida]} en cada grupo · ${labL(P.fechas[i])}`+(elec?` · voto en ${elec}`:"");
+    $("mapa-subt").textContent=`${cfg.TXT[st.bloque]}, ${MED[st.medida]} en cada grupo, ${labL(P.fechas[i])}`+(elec?`, voto en ${elec}`:"");
     $("mapa-export").dataset.name=`${pre}_perfiles_${v.id}_${st.bloque}_${st.medida}_${P.fechas[i]}`;
     const peq=NG.map(n=>n!=null&&n<100);
     const val=(c,x)=>{const z=D[c]?.[v.id]?.[x]; return z==null?null:z;};      // x = 0 es el total; 1… son los grupos
@@ -661,7 +661,7 @@ function montarProblemas(cfg){
       return `<div style="font-weight:600;max-width:280px;white-space:normal;margin-bottom:4px">${c}</div>`+
         [["Total",GRIS,tot,null]].concat(G.map((g,k)=>[g,colorGrupo(v.id,g,k,G.length),val(c,k+1),NG[k]])).map(([g,col,z,n])=>
           `<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${col};margin-right:6px"></span>${g}${n!=null&&n<100?"*":""}</span><b>${z==null?"Sin dato":nf(z)+" %"}</b></div>`).join("")+
-        `<div style="color:${SM.c.subtle};margin-top:3px">${v.nombre}${peq.some(Boolean)?" · * menos de 100 entrevistas":""}</div>`;}};
+        `<div style="color:${SM.c.subtle};margin-top:3px">${v.nombre}${peq.some(Boolean)?", * menos de 100 entrevistas":""}</div>`;}};
     o.xAxis={type:"category",data:tops.map((_,k)=>String(k)),axisTick:{show:false},axisLine:{lineStyle:{color:SM.c.grid}},
       axisLabel:{interval:0,margin:10,color:SM.c.tinta,fontSize:mov?10.5:12,lineHeight:15,formatter:k=>ajusta(corta(tops[+k]),mov?16:24).join("\n")}};
     o.yAxis={type:"value",min:0,max:mx,interval:paso,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:z=>z+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
@@ -701,7 +701,7 @@ function montarProblemas(cfg){
     if(!evol){
       const f=claves.map(c=>({c,a:val(SA,c,i),b:val(SB,c,i)})).filter(d=>(d.a||0)>0||(d.b||0)>0)
         .sort((x,y)=>Math.max(y.a||0,y.b||0)-Math.max(x.a||0,x.b||0)).slice(0,10);
-      $("cmp-subt").textContent=`${MED[st.medida]} · ${labL(P.fechas[i])} · los 10 problemas más citados en cualquiera de las dos preguntas`;
+      $("cmp-subt").textContent=`${MED[st.medida]}, ${labL(P.fechas[i])}, los 10 problemas más citados en cualquiera de las dos preguntas`;
       $("cmp-export").dataset.name=`${pre}_comparacion_${P.fechas[i]}`;
       o.legend={top:0,left:0,itemGap:mov?10:18,itemWidth:14,itemHeight:8,orient:mov?"vertical":"horizontal",textStyle:{color:SM.c.tinta,fontSize:12,fontFamily:SM.sans},data:[{name:K.a,icon:"roundRect"},{name:K.b,icon:"roundRect"}]};
       o.grid={left:8,right:mov?40:56,top:mov?64:36,bottom:30,containLabel:true};
@@ -720,7 +720,7 @@ function montarProblemas(cfg){
       if(!opts.includes(st.cmpProb))st.cmpProb=opts[0];
       const sel=$("cmp-prob"); sel.innerHTML=opts.map(c=>`<option value="${encodeURIComponent(c)}">${corta(c)}</option>`).join(""); sel.value=encodeURIComponent(st.cmpProb);
       const c=st.cmpProb, k0=ix.indexOf(i), pocos=ix.length<=8;
-      $("cmp-subt").textContent=`${corta(c)} · ${MED[st.medida]} · ${labL(P.fechas[ix[0]])} – ${labL(P.fechas[ix[ix.length-1]])}`;
+      $("cmp-subt").textContent=`${corta(c)}, ${MED[st.medida]}, ${labL(P.fechas[ix[0]])} – ${labL(P.fechas[ix[ix.length-1]])}`;
       $("cmp-export").dataset.name=`${pre}_comparacion_${c}`.replace(/[^\wáéíóúñ-]+/gi,"_");
       o.grid={left:8,right:mov?16:150,top:16,bottom:34,containLabel:true};
       o.tooltip={...tt,trigger:"axis",axisPointer:{type:"line",lineStyle:{color:SM.c.subtle,width:1}},formatter:ps=>{const k=ix[ps[0].dataIndex], a=val(SA,c,k), b=val(SB,c,k), dif=a!=null&&b!=null?a-b:null;
@@ -873,18 +873,18 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       });
       const umbral=Math.max(10,(new Date(x1)-new Date(x0))/864e5*(mov?.05:.02));   // hitos más próximos que esto (2 % del periodo, mín. 10 días) se rotulan juntos
       const hit=[]; if(verH)E.hitos.filter(h=>h.fecha>=x0&&h.fecha<=x1).forEach(h=>{
-        const u=hit[hit.length-1]; if(u&&(new Date(h.fecha)-new Date(u.fecha))/864e5<umbral){u.evento+=" · "+h.evento;u.fechas.push(h.fecha);} else hit.push({fecha:h.fecha,evento:h.evento,fechas:[h.fecha]});});
+        const u=hit[hit.length-1]; if(u&&(new Date(h.fecha)-new Date(u.fecha))/864e5<umbral){u.evento+=", "+h.evento;u.fechas.push(h.fecha);} else hit.push({fecha:h.fecha,evento:h.evento,fechas:[h.fecha]});});
       S.push({name:"hitos",type:"line",data:[],silent:true,markLine:{symbol:"none",silent:false,animation:false,lineStyle:{type:"dotted",color:"#5A6B6C",width:1},
         label:{show:!mov,position:"insideEndTop",formatter:q=>q.data.ev,color:SM.c.subtle,fontSize:10.5},
-        tooltip:{show:true,formatter:q=>`<b>${esc(q.data.ev)}</b><br>${q.data.fs.map(fl).join(" · ")}`},
+        tooltip:{show:true,formatter:q=>`<b>${esc(q.data.ev)}</b><br>${q.data.fs.map(fl).join(", ")}`},
         data:hit.map(h=>({xAxis:h.fecha,ev:h.evento,fs:h.fechas}))}});
       const o=smBaseOption();
       o.grid={left:8,right:mov?14:118,top:16,bottom:28,containLabel:true};
       o.tooltip={...tt,trigger:"item",formatter:q=>{
-        if(q.seriesType==="line"){const v=q.value;return `<b style="color:${q.color}">${esc(q.seriesName)}</b> · promedio<br>${fl(v[0])}: <b>${nf(v[1])} %</b>${v[2]!=null?`<br><span style="color:${SM.c.subtle}">Margen de incertidumbre: ${nf(v[2])}–${nf(v[3])} %</span>`:""}`;}
-        const r=q.data.res; if(r)return `<b>${esc(r.nombre)}</b> · resultado<br>${esc(q.seriesName)}: <b>${nf(q.value[1])} %</b>`;
+        if(q.seriesType==="line"){const v=q.value;return `<b style="color:${q.color}">${esc(q.seriesName)}</b>, promedio<br>${fl(v[0])}: <b>${nf(v[1])} %</b>${v[2]!=null?`<br><span style="color:${SM.c.subtle}">Margen de incertidumbre: ${nf(v[2])}–${nf(v[3])} %</span>`:""}`;}
+        const r=q.data.res; if(r)return `<b>${esc(r.nombre)}</b>, resultado<br>${esc(q.seriesName)}: <b>${nf(q.value[1])} %</b>`;
         const e=q.data.q; if(!e)return "";
-        if(q.data.bloque){const b=q.data.bloque;return `<b>${esc(e.q)}</b><br><span style="color:${SM.c.subtle}">${fechaEnc(e)}</span><br>Bloque ${b.toLowerCase()}: <b>${nf(q.value[1])} %</b><div style="margin-top:3px;font-size:11.5px;color:${SM.c.subtle}">${BQ.partidos[b].filter(x=>e.v[x]!=null).map(x=>`${esc(x)} ${nf(e.v[x])}`).join(" · ")}</div>`;}
+        if(q.data.bloque){const b=q.data.bloque;return `<b>${esc(e.q)}</b><br><span style="color:${SM.c.subtle}">${fechaEnc(e)}</span><br>Bloque ${b.toLowerCase()}: <b>${nf(q.value[1])} %</b><div style="margin-top:3px;font-size:11.5px;color:${SM.c.subtle}">${BQ.partidos[b].filter(x=>e.v[x]!=null).map(x=>`${esc(x)} ${nf(e.v[x])}`).join(", ")}</div>`;}
         /* Etiqueta simplificada (Mikel, 05/10/2026): solo la encuestadora y el % de las cuatro principales fuerzas */
         return `<b>${esc(e.q)}</b><br><span style="color:${SM.c.subtle}">${fechaEnc(e)}</span>`+["PP","PSOE","Vox","Sumar"].map(p=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${col(p)}">●</span> ${p}</span><b>${nf(e.v[p])} %</b></div>`).join("");}};
       o.xAxis={type:"time",min:x0,max:x1,axisLine:{lineStyle:{color:SM.c.grid}},axisTick:{show:false},splitLine:{show:false},
@@ -921,8 +921,8 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       const o=smBaseOption();
       o.grid={left:10,right:10,top:mov?34:38,bottom:mov?62:44,containLabel:false};
       o.tooltip={...tt,trigger:"item",formatter:q=>{const x=fil[q.dataIndex]; if(!x)return "";
-        if(q.seriesName==="ant")return `<b>${esc(x.p)}</b> · elecciones generales de 2023<br>Resultado: <b>${nf(x.r)} %</b>`;
-        return `<b>${esc(x.p)}</b>: ${nf(x.v)} %${x.li!=null?` <span style="color:${SM.c.subtle}">(margen ${nf(x.li)}–${nf(x.ls)})</span>`:""}<br>Frente a las generales de 2023 (${x.r==null?"sin resultado propio":nf(x.r)+" %"}): <b>${x.r==null?"–":sg(x.v-x.r)}</b>${x.otros?`<br><span style="color:${SM.c.subtle}">${esc(x.otros.map(z=>`${z.p} ${nf(z.v)}`).join(" · "))}</span>`:""}`;}};
+        if(q.seriesName==="ant")return `<b>${esc(x.p)}</b>, elecciones generales de 2023<br>Resultado: <b>${nf(x.r)} %</b>`;
+        return `<b>${esc(x.p)}</b>: ${nf(x.v)} %${x.li!=null?` <span style="color:${SM.c.subtle}">(margen ${nf(x.li)}–${nf(x.ls)})</span>`:""}<br>Frente a las generales de 2023 (${x.r==null?"sin resultado propio":nf(x.r)+" %"}): <b>${x.r==null?"–":sg(x.v-x.r)}</b>${x.otros?`<br><span style="color:${SM.c.subtle}">${esc(x.otros.map(z=>`${z.p} ${nf(z.v)}`).join(", "))}</span>`:""}`;}};
       const corto={"Adelante Andalucía":"Adelante And.","Aliança Catalana":"Aliança Cat."};
       o.xAxis=[{type:"category",data:fil.map(x=>x.p),axisTick:{show:false},axisLine:{lineStyle:{color:SM.c.grid}},axisLabel:{color:SM.c.tinta,fontSize:mov?10:11.5,interval:0,rotate:mov?50:0,formatter:v=>corto[v]||v}},
         {type:"value",min:-.5,max:fil.length-.5,show:false}];
@@ -996,7 +996,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   function detalle(){
     const d=X.provincias[sel]; if(!d)return;
     const f=Object.entries(d.r).sort((a,b)=>b[1][0]-a[1][0]||b[1][1]-a[1][1]);
-    document.getElementById("esc-prov").innerHTML=`<h4>${esc(sel)} · ${d.m} escaños</h4>
+    document.getElementById("esc-prov").innerHTML=`<h4>${esc(sel)}, ${d.m} escaños</h4>
       <p class="subt" style="margin:2px 0 6px">Reparto más probable (sale en el ${pc(d.pr)} de las simulaciones; en provincias grandes hay muchas combinaciones posibles, por eso es baja). La probabilidad de cada partido se refiere a su número de escaños.</p>
       <div style="overflow-x:auto"><table class="esc-tabla"><thead><tr><th>Partido</th><th>% voto proyectado</th><th>Escaños más probables</th><th>Probabilidad</th><th>Rango 90 %</th><th>Prob. de al menos 1</th></tr></thead><tbody>${
       f.map(([p,[e,v,pe,lo,hi,p1]])=>`<tr><td><span class="pn" style="background:${col(p)}"></span>${esc(p)}</td><td>${nf(v)} %</td><td class="eb">${e}</td><td>${pc(pe)}</td><td>${lo===hi?lo:lo+"–"+hi}</td><td>${pc(p1)}</td></tr>`).join("")}</tbody></table></div>`;
@@ -1059,7 +1059,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     return {v,label:`Encuestas (${MESL[+mh-1].slice(0,3)} ${yh.slice(2)})`,hasta:f(hasta)};})();
   const hayFiltro=()=>!!(terr.ccaa||terr.prov);
   const terrNombre=()=>terr.prov?P[terr.prov].n:terr.ccaa||"España";
-  const sufijo=()=>hayFiltro()?` · ${esc(terrNombre())}`:"";
+  const sufijo=()=>hayFiltro()?` en ${esc(terrNombre())}`:"";
   const umbral=i=>Math.floor(A.juego[i]/2)+1;             // mayoría absoluta del territorio (176 en el Congreso)
   const repinta=[];                                        // funciones que redibujan cada tarjeta al cambiar el filtro
 
@@ -1119,7 +1119,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     selP.innerHTML=`<option value="">${terr.ccaa?"Todas las de la comunidad":"Todas"}</option>`+provsPosibles().map(k=>`<option value="${k}"${k===terr.prov?" selected":""}>${esc(P[k].n)}</option>`).join("");
     document.getElementById("gen-f-reset").hidden=!hayFiltro();
     const n=codsSel().length;
-    document.getElementById("gen-f-txt").innerHTML=hayFiltro()?`Mostrando <b>${esc(terrNombre())}</b> · ${n} provincia${n>1?"s":""} · ${A.juego[NE-1]} escaños en 2023`:`Mostrando <b>toda España</b> · 52 circunscripciones · 350 escaños`;
+    document.getElementById("gen-f-txt").innerHTML=hayFiltro()?`Mostrando <b>${esc(terrNombre())}</b>, ${n} provincia${n>1?"s":""}, ${A.juego[NE-1]} escaños en 2023`:`Mostrando <b>toda España</b>, 52 circunscripciones, 350 escaños`;
   }
   function refrescar(){A=agrega(codsSel());pintaFiltro();repinta.forEach(f=>f());}
   selC.addEventListener("change",()=>{terr.ccaa=selC.value;terr.prov="";refrescar();});
@@ -1171,7 +1171,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       subt("gen-e",hayFiltro()?`Reparto de los escaños en juego${sufijo()} entre los partidos. La línea marca la mitad más uno (${umbral(NE-1)} de ${jn} en 2023)`:`Reparto de los 350 escaños del Congreso entre los partidos. La línea marca la mayoría absoluta (176)`);
       o.tooltip={...tt,trigger:"axis",axisPointer:{type:"shadow"},formatter:q=>{const i=q[0].dataIndex,f=E[i];
         const filas=ARCO.map(p=>({p,v:A.esc[p][i]})).filter(z=>z.v>0).sort((a,b)=>b.v-a.v).map(z=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${COL[z.p]}">●</span> ${esc(z.p)}</span><b>${z.v}</b></div>`).join("");
-        return `<b>Elecciones del ${fl(f.fecha)}</b><div style="color:${SM.c.subtle};font-size:11.5px">${esc(terrNombre())} · ${A.juego[i]} escaños</div>${filas}`;}};
+        return `<b>Elecciones del ${fl(f.fecha)}</b><div style="color:${SM.c.subtle};font-size:11.5px">${esc(terrNombre())}, ${A.juego[i]} escaños</div>${filas}`;}};
       o.xAxis=ejeX(); o.yAxis=ejeY({min:0,max:Math.max(...A.juego)});
       o.series=ARCO.map((p,k)=>({name:p,type:"bar",stack:"esc",data:A.esc[p],barMaxWidth:44,itemStyle:{color:COL[p],borderColor:"#fff",borderWidth:.6},emphasis:{focus:"none"},
         label:{show:!mov,formatter:q=>q.value>=Math.max(1,.04*Math.max(...A.juego))?q.value:"",color:["Otros","Coalición Canaria","UCD","CDS","Cs","HB / Amaiur / EH Bildu","CiU / Junts"].includes(p)?SM.c.tinta:"#fff",fontSize:10,fontWeight:600},
@@ -1200,7 +1200,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       if(fil)return;
       if(estabaOculto)ch.resize();
       const mov=esMovil(), o=smBaseOption(); o.grid={left:8,right:mov?14:24,top:24,bottom:mov?44:28,containLabel:true};
-      o.tooltip={...tt,trigger:"item",formatter:q=>{const x=gan[q.dataIndex];return `<b>${esc(E[q.dataIndex].label)} · ${esc(x.g.p)}</b><br>${x.g.esc} de ${A.juego[q.dataIndex]} escaños (${nf(x.g.pct)} % del voto)<br>${x.g.esc>=x.u?"Mayoría absoluta":`Le faltaron <b>${x.u-x.g.esc}</b> para los ${x.u}`}<br><span style="color:${SM.c.subtle}">Segundo: ${esc(x.s.p)}, ${x.s.esc}</span>`;}};
+      o.tooltip={...tt,trigger:"item",formatter:q=>{const x=gan[q.dataIndex];return `<b>${esc(E[q.dataIndex].label)}, ${esc(x.g.p)}</b><br>${x.g.esc} de ${A.juego[q.dataIndex]} escaños (${nf(x.g.pct)} % del voto)<br>${x.g.esc>=x.u?"Mayoría absoluta":`Le faltaron <b>${x.u-x.g.esc}</b> para los ${x.u}`}<br><span style="color:${SM.c.subtle}">Segundo: ${esc(x.s.p)}, ${x.s.esc}</span>`;}};
       o.xAxis=ejeX(); o.yAxis=ejeY({min:0,max:Math.max(...A.juego)*(hayFiltro()?1:.72)});
       o.series=[{type:"bar",barMaxWidth:36,data:gan.map(x=>({value:x.g.esc,itemStyle:{color:COL[x.g.p]},label:{color:x.g.p==="UCD"?SM.c.tinta:"#fff"}})),label:{show:true,position:"insideBottom",color:"#fff",fontSize:11,fontWeight:600},   /* base de la barra: no choca con la línea de la mayoría */
         markLine:{symbol:"none",silent:true,animation:false,lineStyle:{type:"dashed",color:SM.c.tinta,width:1.2},label:{formatter:(hayFiltro()?"Mitad más uno: ":"Mayoría absoluta: ")+umbral(NE-1),position:"insideEndTop",color:SM.c.tinta,fontSize:11,fontWeight:600},data:[{yAxis:umbral(NE-1)}]}}];
@@ -1219,7 +1219,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       const ext=E.map((e,i)=>{const z=cods.map(k=>({n:P[k].n,v:100*P[k].votantes[i]/P[k].censo[i]})).sort((a,b)=>a.v-b.v);return {min:z[0],max:z[z.length-1]};});
       const vs=A.part, lo=Math.max(0,Math.floor(Math.min(...vs)/5)*5-5), hi=Math.min(100,Math.ceil(Math.max(...vs)/5)*5+5);
       const o=smBaseOption(); o.grid={left:8,right:mov?14:24,top:24,bottom:mov?44:28,containLabel:true};
-      o.tooltip={...tt,trigger:"axis",formatter:q=>{const i=q[0].dataIndex,x=E[i],y=ext[i];return `<b>Elecciones del ${fl(x.fecha)}</b><div style="color:${SM.c.subtle};font-size:11.5px">${esc(terrNombre())}</div>Participación: <b>${nf(A.part[i])} %</b> (${ni(A.votantes[i])} de ${ni(A.censo[i])} electores)<br>Abstención: ${nf(100-A.part[i])} %${cods.length>1?`<div style="margin-top:3px;font-size:11.5px;color:${SM.c.subtle}">Mayor: ${esc(y.max.n)} ${nf(y.max.v)} % · Menor: ${esc(y.min.n)} ${nf(y.min.v)} %</div>`:""}`;}};
+      o.tooltip={...tt,trigger:"axis",formatter:q=>{const i=q[0].dataIndex,x=E[i],y=ext[i];return `<b>Elecciones del ${fl(x.fecha)}</b><div style="color:${SM.c.subtle};font-size:11.5px">${esc(terrNombre())}</div>Participación: <b>${nf(A.part[i])} %</b> (${ni(A.votantes[i])} de ${ni(A.censo[i])} electores)<br>Abstención: ${nf(100-A.part[i])} %${cods.length>1?`<div style="margin-top:3px;font-size:11.5px;color:${SM.c.subtle}">Mayor: ${esc(y.max.n)} ${nf(y.max.v)} %, Menor: ${esc(y.min.n)} ${nf(y.min.v)} %</div>`:""}`;}};
       o.xAxis=ejeX(); o.yAxis=ejeY({min:lo,max:hi,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:v=>v+" %"}});
       o.series=[{type:"line",smooth:false,data:vs.map(v=>+v.toFixed(2)),symbol:"circle",symbolSize:7,lineStyle:{width:3,color:SM.c.teal},itemStyle:{color:SM.c.teal},
         areaStyle:{color:SM.c.teal,opacity:.08},label:{show:!mov,position:"top",formatter:q=>nf(q.value),color:SM.c.tinta,fontSize:10.5,fontWeight:600}}];
@@ -1249,7 +1249,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     function panel(){
       const t=ID.filter(p=>NAC.pct[p][ie]!=null);
       if(par&&!t.includes(par))par=null;
-      document.getElementById("gen-m-ph").textContent=`Resultado nacional · ${labs[ie]}. Pulsa un partido para ver sus escaños por provincia`;
+      document.getElementById("gen-m-ph").textContent=`Resultado nacional en ${labs[ie]}. Pulsa un partido para ver sus escaños por provincia`;
       document.getElementById("gen-m-tab").innerHTML=`<button type="button" class="gen-fila" data-p="" aria-pressed="${par==null}"><span class="sw" style="background:linear-gradient(90deg,${COL.PSOE} 0 50%,${COL.PP} 50% 100%)"></span><span>Partido más votado de cada provincia</span><span class="n"></span><span class="p"></span></button>`+
         ARCO.filter(p=>t.includes(p)).sort((a,b)=>NAC.esc[b][ie]-NAC.esc[a][ie]||NAC.pct[b][ie]-NAC.pct[a][ie]).map(p=>`<button type="button" class="gen-fila" data-p="${esc(p)}" aria-pressed="${par===p}"><span class="sw" style="background:${COL[p]}"></span><span>${esc(p)}</span><span class="n">${NAC.esc[p][ie]}</span><span class="p">${nf(NAC.pct[p][ie])} %</span></button>`).join("");
     }
@@ -1257,12 +1257,12 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     document.getElementById("gen-m-el").addEventListener("click",ev=>{const b=ev.target.closest("button");if(!b)return;ie=+b.dataset.i;
       document.querySelectorAll("#gen-m-el button").forEach(x=>x.setAttribute("aria-pressed",x===b));panel();pinta();});
     const tip=cod=>{const d=P[cod]; if(!d)return "";const ls=lineasProv(cod).sort((a,b)=>b.pct-a.pct);
-      return `<b>${esc(d.n)}</b> · ${esc(labs[ie])}<div style="color:${SM.c.subtle};font-size:11.5px">${d.juego[ie]} escaños en juego · participación ${nf(100*d.votantes[ie]/d.censo[ie])} %</div>`+
-        ls.map(z=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${COL[z.p]}">●</span> ${esc(z.p)}</span><span><b>${z.e}</b> esc. · ${nf(z.pct)} %</span></div>`).join("")+`<div style="margin-top:3px;font-size:11px;color:${SM.c.subtle}">${terr.prov===cod?"Pulsa de nuevo para quitar el filtro":"Pulsa para filtrar los gráficos por esta provincia"}</div>`;};
+      return `<b>${esc(d.n)}</b>, ${esc(labs[ie])}<div style="color:${SM.c.subtle};font-size:11.5px">${d.juego[ie]} escaños en juego, participación ${nf(100*d.votantes[ie]/d.censo[ie])} %</div>`+
+        ls.map(z=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${COL[z.p]}">●</span> ${esc(z.p)}</span><span><b>${z.e}</b> esc. (${nf(z.pct)} %)</span></div>`).join("")+`<div style="margin-top:3px;font-size:11px;color:${SM.c.subtle}">${terr.prov===cod?"Pulsa de nuevo para quitar el filtro":"Pulsa para filtrar los gráficos por esta provincia"}</div>`;};
     function pinta(){
       const mov=esMovil(), items=[], enSel=new Set(codsSel()), filtrado=hayFiltro(); let max=1;
       const fb=document.getElementById("gen-m-fil"); fb.classList.toggle("vacia",!filtrado);   // siempre ocupa su sitio: el mapa no se mueve al filtrar
-      fb.innerHTML=!filtrado?`<span>Pulsa una provincia para filtrar todos los gráficos de la pestaña</span>`:`<span>Filtrando los gráficos por <b>${esc(terrNombre())}</b></span><button type="button" class="gen-m-x" id="gen-m-x" aria-label="Quitar filtro y volver a toda España">✕ Quitar filtro</button><span class="gen-m-ayuda">o pulsa fuera del mapa · Esc</span>`;
+      fb.innerHTML=!filtrado?`<span>Pulsa una provincia para filtrar todos los gráficos de la pestaña</span>`:`<span>Filtrando los gráficos por <b>${esc(terrNombre())}</b></span><button type="button" class="gen-m-x" id="gen-m-x" aria-label="Quitar filtro y volver a toda España">✕ Quitar filtro</button><span class="gen-m-ayuda">o pulsa fuera del mapa o la tecla Esc</span>`;
       if(par)COD.forEach(c=>{max=Math.max(max,P[c].lin[par]?.e[ie]||0);});
       COD.forEach(cod=>{
         let color,txt="",val=0;
@@ -1307,110 +1307,133 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   })();
 
   /* 6 · Mapa por sección censal (generales de 2023) ---------------------------------------------------------------
-     Datos: dashboard/secciones/2023/<prov>.json (herramientas/preparar_mapa_secciones.py, a partir de los ficheros de mesas del
-     Ministerio del Interior y del seccionado del INE). La web pública los sirve en secciones/2023/ y se cargan provincia a
-     provincia, solo cuando la tarjeta se ve (Madrid pesa ~1,3 MB; ~0,3 MB comprimido). El mapa viene en TopoJSON y se pasa
-     a GeoJSON en el navegador. Sigue a la provincia del filtro de arriba; también tiene su propio selector de provincia y de municipio. */
+     Datos: dashboard/secciones/2023/ (herramientas/preparar_mapa_secciones.py, a partir de los ficheros de mesas del Ministerio
+     del Interior y del seccionado del INE). La web pública los sirve en secciones/2023/ y se cargan solo cuando la tarjeta se ve:
+     - es.json: todas las secciones, geometría simplificada (~100 m) y proyectada como el mapa de provincias (Canarias en recuadro).
+       Para «Toda España» y para una comunidad autónoma (~9 MB; ~2,7 MB comprimido).
+     - <prov>.json: una provincia con la geometría detallada (~10 m). Para una provincia y sus municipios.
+     El mapa viene en TopoJSON y se pasa a GeoJSON en el navegador. Filtros propios (comunidad, provincia, municipio) que además
+     siguen al filtro de territorio de la pestaña. */
   (function(){
     if(typeof echarts==="undefined")return;
     const BASE="secciones/2023/";
-    const provs=COD.slice().sort((a,b)=>P[a].n.localeCompare(P[b].n,"es"));
-    tarjeta("gen-sc","Resultados por sección censal · generales 2023",
+    tarjeta("gen-sc","Resultados por sección censal en las generales de 2023",
       `<div class="ctrls gen-sc-ctrls">
-         <label class="sel-lab">Provincia <select id="gen-sc-prov" class="sel">${provs.map(k=>`<option value="${k}">${esc(P[k].n)}</option>`).join("")}</select></label>
-         <label class="sel-lab">Municipio <select id="gen-sc-mun" class="sel"><option value="">Todos</option></select></label>
+         <label class="sel-lab">Comunidad <select id="gen-sc-ccaa" class="sel"></select></label>
+         <label class="sel-lab">Provincia <select id="gen-sc-prov" class="sel"></select></label>
+         <label class="sel-lab">Municipio <select id="gen-sc-mun" class="sel" disabled></select></label>
        </div>
        <div class="pchips" id="gen-sc-modo" role="group" aria-label="Qué mostrar"></div>
        <div class="chart gen-sc-mapa" id="gen-sc-mapa"></div>
        <div class="gen-leyenda" id="gen-sc-ley"></div>`,
-      "Fuente: Ministerio del Interior (resultados por mesa de las elecciones generales del 23 de julio de 2023, sumados por sección censal) e INE (cartografía de secciones censales a 1 de enero de 2023; en los municipios que cambiaron sus secciones durante 2023, la de 1 de enero de 2024). % sobre votos válidos. No incluye el voto de los residentes en el extranjero (CERA), que no se asigna a ninguna sección; por eso los totales de la provincia son algo menores que los oficiales (y en Toledo y Cantabria los ficheros de mesas difieren en unas decenas de votos del resultado final). "+nota);
+      "Fuente: Ministerio del Interior (resultados por mesa de las elecciones generales del 23 de julio de 2023, sumados por sección censal) e INE (cartografía de secciones censales a 1 de enero de 2023; en los municipios que cambiaron sus secciones durante 2023, la de 1 de enero de 2024). % sobre votos válidos. No incluye el voto de los residentes en el extranjero (CERA), que no se asigna a ninguna sección; por eso los totales son algo menores que los oficiales (y en Toledo y Cantabria los ficheros de mesas difieren en unas decenas de votos del resultado final). En las vistas de España y de comunidad el mapa está simplificado (unos 100 m) y Canarias aparece en el recuadro; las secciones más pequeñas se ven mejor al elegir su provincia. "+nota);
     const st=document.createElement("style");
-    st.textContent=`.gen-sc-mapa.chart{height:620px;margin-top:6px}.gen-sc-ctrls{display:flex;flex-wrap:wrap;gap:8px 18px}
-      .gen-sc-ctrls .sel{max-width:240px}.gen-sc-msg{display:flex;align-items:center;justify-content:center;height:100%;color:var(--subtle);font-size:13px;text-align:center;padding:0 20px}
+    st.textContent=`.gen-sc-mapa.chart{height:640px;margin-top:6px}.gen-sc-ctrls{display:flex;flex-wrap:wrap;gap:8px 18px}
+      .gen-sc-ctrls .sel{max-width:230px}.gen-sc-ctrls .sel:disabled{opacity:.5}
+      .gen-sc-msg{display:flex;align-items:center;justify-content:center;height:100%;color:var(--subtle);font-size:13px;text-align:center;padding:0 20px}
       @media (max-width:640px){.gen-sc-mapa.chart{height:460px}}`;
     document.head.appendChild(st);
-    subt("gen-sc","Partido más votado (o % de un partido) en cada sección censal. Rueda del ratón o pellizco para acercar; arrastra para moverte. Elige un municipio para verlo de cerca");
-    const el=document.getElementById("gen-sc-mapa"), selP=document.getElementById("gen-sc-prov"), selM=document.getElementById("gen-sc-mun");
-    const cache={}; let prov=null, D=null, mun="", modo=null, ch=null, visto=false;
+    subt("gen-sc","Partido más votado (o % de un partido) en cada sección censal. Rueda del ratón o pellizco para acercar; arrastra para moverte. Filtra por comunidad, provincia o municipio para verlo de cerca");
+    const el=document.getElementById("gen-sc-mapa"), selC=document.getElementById("gen-sc-ccaa"), selP=document.getElementById("gen-sc-prov"), selM=document.getElementById("gen-sc-mun");
+    const nombreProv=k=>P[String(+k)]?P[String(+k)].n:k, pad=k=>String(+k).padStart(2,"0");
+    const cache={}; let f={ccaa:"",prov:"",mun:""}, D=null, modo="ganador", ch=null, visto=false, pide=0;
     const msg=t=>{if(ch){ch.dispose();ch=null;} el.innerHTML=`<div class="gen-sc-msg">${t}</div>`;};
-    /* TopoJSON (cuantizado y con arcos en deltas) → GeoJSON */
+    /* TopoJSON (cuantizado, arcos en deltas) → GeoJSON. Admite el formato estándar (provincias) y el compacto g=[[código, arcos]] (nacional) */
     function aGeo(t){
       const sc=t.transform.scale, tr=t.transform.translate;
       const arcs=t.arcs.map(a=>{let x=0,y=0;return a.map(p=>{x+=p[0];y+=p[1];return [x*sc[0]+tr[0],y*sc[1]+tr[1]];});});
       const arco=i=>i>=0?arcs[i]:arcs[~i].slice().reverse();
       const anillo=ix=>{const r=[];ix.forEach((i,k)=>{const a=arco(i);r.push(...(k?a.slice(1):a));});return r;};
-      return {type:"FeatureCollection",features:t.objects.secciones.geometries.filter(g=>g.arcs).map(g=>({type:"Feature",properties:{name:g.properties.c},
-        geometry:g.type==="Polygon"?{type:"Polygon",coordinates:g.arcs.map(anillo)}:{type:"MultiPolygon",coordinates:g.arcs.map(p=>p.map(anillo))}}))};
+      const geom=a=>typeof a[0][0]==="number"?{type:"Polygon",coordinates:a.map(anillo)}:{type:"MultiPolygon",coordinates:a.map(p=>p.map(anillo))};
+      const lista=t.g?t.g.map(([c,a])=>({c,a})):t.objects.secciones.geometries.filter(g=>g.arcs).map(g=>({c:g.properties.c,a:g.arcs}));
+      return lista.map(({c,a})=>({type:"Feature",properties:{name:c},geometry:geom(a)}));
     }
+    function cargar(clave){            // clave: "es" o código de provincia (2 cifras)
+      if(cache[clave])return Promise.resolve(cache[clave]);
+      return fetch(BASE+clave+".json").then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}).then(d=>{
+        d.feats=aGeo(d.topo); delete d.topo; d.porGrupo={};
+        d.feats.forEach(ft=>{const c=ft.properties.name, g=clave==="es"?c.slice(0,2):c.slice(0,5);(d.porGrupo[g]=d.porGrupo[g]||[]).push(ft);});
+        return cache[clave]=d;});
+    }
+    /* Selectores */
+    const provsDe=cc=>(cc?CC.find(c=>c.n===cc).provs.map(String):COD).slice().sort((a,b)=>nombreProv(a).localeCompare(nombreProv(b),"es"));
+    function selectores(){
+      selC.innerHTML=`<option value="">Toda España</option>`+CC.map(c=>`<option value="${esc(c.n)}"${c.n===f.ccaa?" selected":""}>${esc(c.n)}</option>`).join("");
+      selP.innerHTML=`<option value="">${f.ccaa?"Todas las de la comunidad":"Todas"}</option>`+provsDe(f.ccaa).map(k=>`<option value="${k}"${String(+k)===String(+f.prov||"")&&f.prov?" selected":""}>${esc(nombreProv(k))}</option>`).join("");
+      if(f.prov&&D&&D.munis&&D.clave!=="es"){const ms=Object.keys(D.porGrupo).sort((a,b)=>D.munis[a].localeCompare(D.munis[b],"es"));
+        selM.innerHTML=`<option value="">Todos (${ms.length})</option>`+ms.map(m=>`<option value="${m}"${m===f.mun?" selected":""}>${esc(D.munis[m])} (${D.porGrupo[m].length})</option>`).join(""); selM.disabled=false;}
+      else{selM.innerHTML=`<option value="">${f.prov?"Cargando…":"Elige una provincia"}</option>`; selM.disabled=true;}
+    }
+    selC.addEventListener("change",()=>{f={ccaa:selC.value,prov:"",mun:""};mostrar();});
+    selP.addEventListener("change",()=>{f.prov=selP.value;f.mun="";if(f.prov&&!f.ccaa)f.ccaa=ccaaDe[String(+f.prov)];mostrar();});
+    selM.addEventListener("change",()=>{f.mun=selM.value;pinta();});
+    function mostrar(){
+      const clave=f.prov?pad(f.prov):"es", n=++pide;
+      selectores();
+      if(!cache[clave])msg(clave==="es"?"Cargando las secciones de toda España…":`Cargando las secciones de ${esc(nombreProv(f.prov))}…`);
+      cargar(clave).then(d=>{if(n!==pide)return; D=d; D.clave=clave; selectores(); pinta();})
+        .catch(()=>{if(n===pide)msg("No se han podido cargar los resultados por sección. (Si abres la web desde un archivo local, este mapa solo funciona en la versión publicada.)");});
+    }
+    /* Qué secciones se ven */
+    function visibles(){
+      if(D.clave==="es"){if(!f.ccaa)return D.feats; return CC.find(c=>c.n===f.ccaa).provs.flatMap(k=>D.porGrupo[pad(k)]||[]);}
+      return f.mun?D.porGrupo[f.mun]:D.feats;
+    }
+    const sitio=()=>f.mun?D.munis[f.mun]:f.prov?nombreProv(f.prov):f.ccaa||"España";
+    const mezcla=(hex,t)=>{const c=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));return "#"+c.map(v=>Math.round(255-(255-v)*t).toString(16).padStart(2,"0")).join("");};
     const oscuro=(hex,t)=>"#"+[1,3,5].map(i=>Math.round(parseInt(hex.slice(i,i+2),16)*(1-t)).toString(16).padStart(2,"0")).join("");
     const rampa=(hex,x)=>x<.6?mezcla(hex,.12+.88*x/.6):oscuro(hex,.45*(x-.6)/.4);   // claro → color del partido → más oscuro
-    const mezcla=(hex,t)=>{const c=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));return "#"+c.map(v=>Math.round(255-(255-v)*t).toString(16).padStart(2,"0")).join("");};
     const pct=(r,k)=>r[2]?100*r[3+k]/r[2]:null;
-    function cargar(p){
-      prov=p; mun=""; selP.value=p;
-      if(cache[p]){D=cache[p];preparar();return;}
-      msg(`Cargando las secciones de ${esc(P[p].n)}…`);
-      fetch(BASE+String(p).padStart(2,"0")+".json").then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}).then(d=>{
-        d.geo=aGeo(d.topo); delete d.topo; d.porMun={};
-        d.geo.features.forEach(f=>{const m=f.properties.name.slice(0,5);(d.porMun[m]=d.porMun[m]||[]).push(f);});
-        cache[p]=d; if(prov===p){D=d;preparar();}
-      }).catch(()=>{if(prov===p)msg("No se han podido cargar los resultados por sección de esta provincia. (Si abres la web desde un archivo local, este mapa solo funciona en la versión publicada.)");});
-    }
-    function preparar(){
-      const ms=Object.keys(D.porMun).sort((a,b)=>D.munis[a].localeCompare(D.munis[b],"es"));
-      selM.innerHTML=`<option value="">Todos (${ms.length})</option>`+ms.map(m=>`<option value="${m}">${esc(D.munis[m])} (${D.porMun[m].length})</option>`).join("");
-      if(modo&&modo!=="ganador"&&!D.lineas.includes(modo))modo=null;
-      if(!modo)modo="ganador";
-      chipsModo(); pinta();
-    }
-    function chipsModo(){
-      const tot=D.lineas.map((l,k)=>({l,v:Object.values(D.s).reduce((a,r)=>a+r[3+k],0)}));
+    const ganador=r=>{let b=-1;D.lineas.forEach((l,j)=>{if(l!=="Otros"&&(b<0||r[3+j]>r[3+b]))b=j;});return b;};
+    function chipsModo(feats){
+      const tot=D.lineas.map((l,k)=>({l,v:feats.reduce((a,ft)=>{const r=D.s[ft.properties.name];return a+(r?r[3+k]:0);},0)})).filter(x=>x.l!=="Otros"&&x.v>0).sort((a,b)=>b.v-a.v).slice(0,9);
+      if(modo!=="ganador"&&!tot.some(x=>x.l===modo))modo="ganador";
       document.getElementById("gen-sc-modo").innerHTML=`<button type="button" class="pchip" data-m="ganador" aria-pressed="${modo==="ganador"}"><span class="sw" style="background:linear-gradient(90deg,${COL.PSOE} 0 50%,${COL.PP} 50% 100%)"></span>Más votado</button>`+
-        tot.filter(x=>x.l!=="Otros").map(x=>`<button type="button" class="pchip" data-m="${esc(x.l)}" aria-pressed="${modo===x.l}"><span class="sw" style="background:${COL[x.l]}"></span>${esc(x.l)}</button>`).join("");
+        tot.map(x=>`<button type="button" class="pchip" data-m="${esc(x.l)}" aria-pressed="${modo===x.l}"><span class="sw" style="background:${COL[x.l]}"></span>${esc(x.l)}</button>`).join("");
     }
-    document.getElementById("gen-sc-modo").addEventListener("click",ev=>{const b=ev.target.closest(".pchip");if(!b||!D)return;modo=b.dataset.m;chipsModo();pinta();});
-    selP.addEventListener("change",()=>cargar(selP.value));
-    selM.addEventListener("change",()=>{mun=selM.value;pinta();});
-    const nombreSec=c=>`${esc(D.munis[c.slice(0,5)]||"")} · distrito ${+c.slice(5,7)}, sección ${+c.slice(7)}`;
+    document.getElementById("gen-sc-modo").addEventListener("click",ev=>{const b=ev.target.closest(".pchip");if(!b||!D)return;modo=b.dataset.m;pinta();});
+    const nombreSec=c=>`${esc(D.munis[c.slice(0,5)]||"")}, distrito ${+c.slice(5,7)}, sección ${+c.slice(7)}`;
     function tip(c){const r=D.s[c]; if(!r)return "";
       const ls=D.lineas.map((l,k)=>({l,v:r[3+k],p:pct(r,k)})).filter(z=>z.v>0).sort((a,b)=>b.v-a.v).slice(0,6);
-      return `<b>${nombreSec(c)}</b><div style="color:${SM.c.subtle};font-size:11.5px">Censo ${ni(r[0])} · participación ${nf(r[0]?100*r[1]/r[0]:null)} %</div>`+
-        ls.map(z=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${COL[z.l]}">●</span> ${esc(z.l)}</span><span><b>${nf(z.p)} %</b> · ${ni(z.v)}</span></div>`).join("");}
+      return `<b>${nombreSec(c)}</b><div style="color:${SM.c.subtle};font-size:11.5px">${esc(nombreProv(c.slice(0,2)))}, censo ${ni(r[0])}, participación ${nf(r[0]?100*r[1]/r[0]:null)} %</div>`+
+        ls.map(z=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${COL[z.l]}">●</span> ${esc(z.l)}</span><span><b>${nf(z.p)} %</b> (${ni(z.v)} votos)</span></div>`).join("");}
     function pinta(){
       if(!D)return;
-      const feats=mun?D.porMun[mun]:D.geo.features, nombre=`sec_${D.prov}_${mun||"todo"}`;
+      const feats=visibles(); chipsModo(feats);
+      const nombre=`sec_${D.clave}_${D.clave==="es"?(f.ccaa||"todo"):(f.mun||"todo")}`;
       if(!echarts.getMap(nombre))echarts.registerMap(nombre,{type:"FeatureCollection",features:feats});
       if(!ch){el.innerHTML="";ch=echarts.init(el,null,{renderer:"canvas"});}
-      const k=modo==="ganador"?-1:D.lineas.indexOf(modo), regs=[], vals=[];
-      feats.forEach(f=>{const c=f.properties.name, r=D.s[c]; let color="#EEEBE3"; f._p=null;
-        if(r&&r[2]){
-          if(k<0){let b=0;D.lineas.forEach((l,j)=>{if(l!=="Otros"&&r[3+j]>r[3+b])b=j;}); const p=pct(r,b); color=mezcla(COL[D.lineas[b]],Math.min(1,Math.max(.35,(p-15)/40)));}
-          else{const p=pct(r,k); vals.push(p); f._p=p;}
-        }
-        regs.push({name:c,itemStyle:{areaColor:color}});});
+      const k=modo==="ganador"?-1:D.lineas.indexOf(modo), regs=new Array(feats.length), cuenta={}, vals=[];
+      feats.forEach((ft,j)=>{const r=D.s[ft.properties.name]; ft._p=null; let color="#EEEBE3";
+        if(r&&r[2]){ if(k<0){const b=ganador(r), l=D.lineas[b]; cuenta[l]=(cuenta[l]||0)+1; color=mezcla(COL[l],Math.min(1,Math.max(.35,(pct(r,b)-15)/40)));}
+                     else{ft._p=pct(r,k); vals.push(ft._p);} }
+        regs[j]={name:ft.properties.name,itemStyle:{areaColor:color}};});
       let mx=1;
-      if(k>=0){const o=vals.slice().sort((a,b)=>a-b); mx=Math.max(1,o[Math.floor(.97*(o.length-1))]||1);
-        regs.forEach((g,j)=>{const p=feats[j]._p; if(p!=null)g.itemStyle.areaColor=p>0?rampa(COL[modo],Math.min(1,p/mx)):"#EEEBE3";});}
-      const o=smBaseOption(); o.grid=undefined;
+      if(k>=0){vals.sort((a,b)=>a-b); mx=Math.max(1,vals[Math.floor(.97*(vals.length-1))]||1);
+        feats.forEach((ft,j)=>{const p=ft._p; if(p!=null)regs[j].itemStyle.areaColor=p>0?rampa(COL[modo],Math.min(1,p/mx)):"#EEEBE3";});}
+      /* Con muchas secciones, las costuras del suavizado entre polígonos diminutos dejan ver el fondo y las ciudades salen blancas:
+         se dibuja el borde de cada sección con su propio color para taparlas */
+      const muchas=feats.length>2500, o=smBaseOption(); o.grid=undefined;
+      if(muchas)regs.forEach(g=>{g.itemStyle.borderColor=g.itemStyle.areaColor;g.itemStyle.borderWidth=.6;});
       o.tooltip={...tt,trigger:"item",formatter:q=>tip(q.name)};
-      o.geo={map:nombre,roam:true,scaleLimit:{min:.8,max:mun?30:60},aspectScale:D.aspect,layoutCenter:["50%","50%"],layoutSize:"96%",
-        itemStyle:{areaColor:"#EEEBE3",borderColor:"rgba(255,255,255,.45)",borderWidth:.2},label:{show:false},select:{disabled:true},tooltip:{...tt,show:true,trigger:"item",formatter:q=>tip(q.name)},
+      o.geo={map:nombre,roam:true,scaleLimit:{min:.8,max:D.clave==="es"?40:(f.mun?30:60)},aspectScale:D.aspect,layoutCenter:["50%","50%"],layoutSize:"96%",
+        itemStyle:{areaColor:"#EEEBE3",borderColor:muchas?"#EEEBE3":"rgba(255,255,255,.45)",borderWidth:muchas?.6:.2},label:{show:false},select:{disabled:true},
+        tooltip:{...tt,show:true,trigger:"item",formatter:q=>tip(q.name)},
         emphasis:{label:{show:false},itemStyle:{borderColor:SM.c.tinta,borderWidth:1.2}},
         regions:regs.map(g=>({...g,emphasis:{itemStyle:{areaColor:g.itemStyle.areaColor,borderColor:SM.c.tinta,borderWidth:1.2}}}))};
-      o.series=[];
+      o.series=[]; o.animation=false;
       ch.setOption(o,true);
-      const ley=document.getElementById("gen-sc-ley"), n=feats.length, sitio=mun?D.munis[mun]:P[String(+D.prov)].n;
-      if(k<0){const g={};feats.forEach(f=>{const r=D.s[f.properties.name];if(!r||!r[2])return;let b=0;D.lineas.forEach((l,j)=>{if(l!=="Otros"&&r[3+j]>r[3+b])b=j;});g[D.lineas[b]]=(g[D.lineas[b]]||0)+1;});
-        ley.innerHTML=Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([l,c])=>`<span><i style="background:${COL[l]}"></i>${esc(l)} <b>${ni(c)}</b></span>`).join("")+`<span class="gen-nota">${esc(sitio)} · ${ni(n)} secciones · color más intenso = mayor % del ganador</span>`;}
-      else ley.innerHTML=`<span>0 %</span><i class="gen-grad" style="background:linear-gradient(90deg,${mezcla(COL[modo],.12)},${COL[modo]} 60%,${oscuro(COL[modo],.45)})"></i><span>${nf(mx,0)} % o más</span><span class="gen-nota">% de ${esc(modo)} sobre votos válidos · ${esc(sitio)} · ${ni(n)} secciones</span>`;
+      const ley=document.getElementById("gen-sc-ley"), n=feats.length;
+      if(k<0)ley.innerHTML=Object.entries(cuenta).sort((a,b)=>b[1]-a[1]).map(([l,c])=>`<span><i style="background:${COL[l]}"></i>${esc(l)} <b>${ni(c)}</b></span>`).join("")+`<span class="gen-nota">${esc(sitio())}, ${ni(n)} secciones, color más intenso = mayor % del ganador</span>`;
+      else ley.innerHTML=`<span>0 %</span><i class="gen-grad" style="background:linear-gradient(90deg,${mezcla(COL[modo],.12)},${COL[modo]} 60%,${oscuro(COL[modo],.45)})"></i><span>${nf(mx,0)} % o más</span><span class="gen-nota">% de ${esc(modo)} sobre votos válidos, ${esc(sitio())}, ${ni(n)} secciones</span>`;
     }
-    const inicial=()=>terr.prov||(terr.ccaa?CC.find(c=>c.n===terr.ccaa).provs.map(String).sort()[0]:"28");
-    /* Carga perezosa: solo cuando la tarjeta entra en pantalla */
-    const io=("IntersectionObserver" in window)?new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)&&!visto){visto=true;io.disconnect();cargar(inicial());}},{rootMargin:"300px"}):null;
-    if(io)io.observe(el); else {visto=true;cargar(inicial());}
-    if(!visto)msg("El mapa se carga al llegar aquí.");
-    /* Sigue al filtro de arriba cuando se elige una provincia (o una comunidad que no incluye la provincia del mapa) */
-    repinta.push(()=>{if(!visto)return; const p=terr.prov||(terr.ccaa&&prov&&ccaaDe[prov]!==terr.ccaa?inicial():null); if(p&&p!==prov)cargar(p);});
+    /* Carga perezosa: solo cuando la tarjeta entra en pantalla. Arranca con el territorio del filtro de la pestaña (por defecto, toda España) */
+    const desdeFiltro=()=>{f={ccaa:terr.ccaa||"",prov:terr.prov||"",mun:""};};
+    const io=("IntersectionObserver" in window)?new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)&&!visto){visto=true;io.disconnect();desdeFiltro();mostrar();}},{rootMargin:"300px"}):null;
+    selectores();
+    if(io){io.observe(el);msg("El mapa se carga al llegar aquí.");} else {visto=true;desdeFiltro();mostrar();}
+    /* Sigue al filtro de territorio de la pestaña */
+    repinta.push(()=>{if(!visto)return; if((terr.ccaa||"")===f.ccaa&&(terr.prov||"")===String(f.prov?+f.prov:""))return; desdeFiltro(); mostrar();});
     window.addEventListener("resize",()=>{if(ch)ch.resize();});
   })();
   pintaFiltro(); repinta.forEach(f=>f());
@@ -1447,7 +1470,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   bar.addEventListener("click",ev=>{const b=ev.target.closest(".pchip");if(!b)return;const g=b.dataset.p;if(sel.has(g)){if(sel.size>1)sel.delete(g);}else sel.add(g);marca();pinta();});
   function pinta(){
     if(!ch)return; const mov=esMovil(), F=MV.fechas, u=F.length-1;
-    document.getElementById("pv-subt").textContent=`% de cada grupo ideológico que se sitúa entre 8 y 10 en la escala de probabilidad de ir a votar (0-10) · ${labL(F[0])} – ${labL(F[u])}`;
+    document.getElementById("pv-subt").textContent=`% de cada grupo ideológico que se sitúa entre 8 y 10 en la escala de probabilidad de ir a votar (0-10), ${labL(F[0])} – ${labL(F[u])}`;
     const o=smBaseOption();
     o.grid={left:8,right:mov?14:150,top:16,bottom:28,containLabel:true};
     o.tooltip={...tt,trigger:"axis",formatter:ps=>{const k=ps[0].dataIndex;return `<div style="font-weight:600;margin-bottom:4px">${labL(F[k])} (estudio ${MV.estudios[k]})</div>`+
@@ -1515,7 +1538,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     if(!ch)return;
     const D=VP.datos[v][g], mov=esMovil(), nom=VP.vars.find(x=>x.id===v).nombre;
     const peq=D.n.map(n=>n!=null&&n<100), hayPeq=peq.some(Boolean);
-    document.getElementById("vp-subt").textContent=`Voto + simpatía entre: ${nom.toLowerCase()} · ${g} · % sobre el total del grupo · ${labL(VP.fechas[0])} – ${labL(VP.fechas[last])} · último barómetro: n = ${D.n[last].toLocaleString("es-ES")}`;
+    document.getElementById("vp-subt").textContent=`Voto + simpatía entre: ${nom.toLowerCase()}, ${g}, % sobre el total del grupo, ${labL(VP.fechas[0])} – ${labL(VP.fechas[last])}, último barómetro: n = ${D.n[last].toLocaleString("es-ES")}`;
     document.getElementById("vp-export").dataset.name=`cis_votosim_${v}_${g.replace(/[^\wáéíóúñ]+/gi,"_")}`;
     chips(D);
     const o=smBaseOption();
@@ -1523,7 +1546,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     o.tooltip={...tt,trigger:"axis",axisPointer:{type:"line",lineStyle:{color:SM.c.subtle,width:1}},
       formatter:ps=>{const i=ps[0].dataIndex;const rows=ps.filter(p=>p.value!=null).sort((a,c)=>c.value-a.value)
         .map(p=>`<div style="display:flex;gap:8px;align-items:center;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:3px;border-radius:2px;background:${p.color};margin-right:6px;vertical-align:middle"></span>${p.seriesName}</span><b>${nf(p.value)} %</b></div>`).join("");
-        return `<div style="font-weight:600;margin-bottom:4px">${labL(VP.fechas[i])} · ${g} · n=${D.n[i]==null?"–":D.n[i].toLocaleString("es-ES")}${peq[i]?" (menos de 100: cautela)":""}</div>${rows}`;}};
+        return `<div style="font-weight:600;margin-bottom:4px">${labL(VP.fechas[i])}, ${g}, n=${D.n[i]==null?"–":D.n[i].toLocaleString("es-ES")}${peq[i]?" (menos de 100: cautela)":""}</div>${rows}`;}};
     o.xAxis={type:"category",data:VP.fechas.map(xl),boundaryGap:false,axisLine:{lineStyle:{color:SM.c.grid}},...ejeFechas(VP.fechas,mov)};
     o.yAxis={type:"value",min:0,max:YMAX,interval:YMAX>50?10:5,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:x=>x+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
     o.series=sel.map(p=>({name:p,type:"line",data:D.series[p].map((val,i)=>peq[i]&&val!=null?{value:val,symbol:"emptyCircle",symbolSize:7}:val),
@@ -1591,8 +1614,8 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     if(!ch)return;
     const V=VP.vars.find(x=>x.id===v), G=V.grupos, D=VP.datos[v], mov=esMovil();
     const peq=G.map(g=>D[g].n[i]!=null&&D[g].n[i]<100);
-    document.getElementById("vb-oleada").textContent=`${labL(VP.fechas[i])} · estudio ${VP.estudios[i]}${i===last?" (último)":""}`;
-    document.getElementById("vb-subt").textContent=`${labL(VP.fechas[i])} (estudio ${VP.estudios[i]}) · voto + simpatía por ${V.nombre.toLowerCase()} · % sobre el total de cada grupo`;
+    document.getElementById("vb-oleada").textContent=`${labL(VP.fechas[i])}, estudio ${VP.estudios[i]}${i===last?" (último)":""}`;
+    document.getElementById("vb-subt").textContent=`${labL(VP.fechas[i])} (estudio ${VP.estudios[i]}), voto + simpatía por ${V.nombre.toLowerCase()}, % sobre el total de cada grupo`;
     document.getElementById("vb-export").dataset.name=`cis_votosim_${v}_${VP.fechas[i]}`;
     chips();
     const o=smBaseOption();
@@ -1600,7 +1623,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     o.legend={top:0,left:0,itemWidth:12,itemHeight:8,icon:"roundRect",textStyle:{color:SM.c.tinta,fontSize:11.5,fontFamily:SM.sans}};
     o.tooltip={backgroundColor:"#fff",borderColor:SM.c.grid,borderWidth:1,textStyle:{color:SM.c.tinta,fontFamily:SM.sans,fontSize:12},extraCssText:"box-shadow:0 2px 8px rgba(0,0,0,.12);border-radius:3px",
       trigger:"axis",axisPointer:{type:"shadow",shadowStyle:{color:"rgba(1,69,80,.06)"}},
-      formatter:ps=>{const k=ps[0].dataIndex, g=G[k];return `<div style="font-weight:600;margin-bottom:4px">${g} · n=${D[g].n[i].toLocaleString("es-ES")}${peq[k]?" (menos de 100: cautela)":""}</div>`+
+      formatter:ps=>{const k=ps[0].dataIndex, g=G[k];return `<div style="font-weight:600;margin-bottom:4px">${g}, n=${D[g].n[i].toLocaleString("es-ES")}${peq[k]?" (menos de 100: cautela)":""}</div>`+
         ps.map(p=>`<div style="display:flex;gap:8px;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:8px;border-radius:2px;background:${p.color};margin-right:6px"></span>${p.seriesName}</span><b>${nf(p.value)} %</b></div>`).join("");}};
     o.xAxis={type:"category",data:G.map((g,k)=>g+(peq[k]?"*":"")),axisTick:{show:false},axisLine:{lineStyle:{color:SM.c.grid}},
       axisLabel:{color:SM.c.tinta,fontSize:mov?10:11.5,interval:0,width:mov?70:110,overflow:"break",lineHeight:13}};
@@ -1646,7 +1669,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   const tt={backgroundColor:"#fff",borderColor:SM.c.grid,borderWidth:1,textStyle:{color:SM.c.tinta,fontFamily:SM.sans,fontSize:12},extraCssText:"box-shadow:0 2px 8px rgba(0,0,0,.12);border-radius:3px"};
   function pinta(){
     if(!ch)return; const mov=esMovil();
-    document.getElementById("ie-subt").textContent=`% de entrevistados que responden «No sabe» a la pregunta de voto, sobre el total · ${labL(F[0])} – ${labL(F[u])} · último barómetro (${labL(F[u])}): ${nf(A[u])} %`;
+    document.getElementById("ie-subt").textContent=`% de entrevistados que responden «No sabe» a la pregunta de voto, sobre el total, ${labL(F[0])} – ${labL(F[u])}, último barómetro (${labL(F[u])}): ${nf(A[u])} %`;
     const o=smBaseOption();
     o.grid={left:8,right:mov?14:110,top:16,bottom:34,containLabel:true};
     o.tooltip={...tt,trigger:"axis",axisPointer:{type:"line",lineStyle:{color:SM.c.subtle,width:1}},formatter:ps=>{const k=ps[0].dataIndex;
@@ -1702,9 +1725,9 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   const G=TODOS.filter(f=>f.n>=100&&f.ni>=50).sort((a,b)=>b.tasa-a.tasa);
   function pinta(){
     if(!ch)return; const mov=esMovil(), V=P.vars.find(x=>x.id===v), GR=V.grupos;
-    document.getElementById("ip-subt").textContent=`Quién es la persona que no sabe a quién votar · ${labL(P.fecha)} (estudio ${P.estudio}) · ${nf(P.tasa)} % de los entrevistados (n = ${P.n_ind.toLocaleString("es-ES")} de ${P.n.toLocaleString("es-ES")}) · bajo cada grupo, su tasa de indecisión`;
+    document.getElementById("ip-subt").textContent=`Quién es la persona que no sabe a quién votar, ${labL(P.fecha)} (estudio ${P.estudio}), ${nf(P.tasa)} % de los entrevistados (n = ${P.n_ind.toLocaleString("es-ES")} de ${P.n.toLocaleString("es-ES")}), bajo cada grupo, su tasa de indecisión`;
     document.getElementById("ip-export").dataset.name=`cis_indecisos_perfil_${v}_${P.fecha}`;
-    document.getElementById("ip-claves").innerHTML=`<b>Más indecisión dentro del grupo:</b> ${G.slice(0,3).map(txt).join(" · ")}. <b>Menos:</b> ${G.slice(-3).reverse().map(txt).join(" · ")}.`;
+    document.getElementById("ip-claves").innerHTML=`<b>Más indecisión dentro del grupo:</b> ${G.slice(0,3).map(txt).join(", ")}. <b>Menos:</b> ${G.slice(-3).reverse().map(txt).join(", ")}.`;
     const o=smBaseOption();
     const mx=Math.ceil((Math.max(...GR.flatMap(f=>[f.pi,f.pm]))+5)/10)*10;   /* +5: hueco para la cifra sobre la columna más alta */
     o.grid={left:8,right:12,top:44,bottom:22,containLabel:true};
@@ -1712,7 +1735,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       {name:"Indecisos",icon:"roundRect",itemStyle:{color:SM.c.teal}},{name:"Total de entrevistados",icon:"roundRect",itemStyle:{color:"#C9C5B8"}}]};
     o.tooltip={...tt,trigger:"axis",axisPointer:{type:"shadow",shadowStyle:{color:"rgba(1,69,80,.06)"}},formatter:ps=>{
       const f=GR[ps[0].dataIndex], dif=f.pi-f.pm;
-      return `<div style="font-weight:600;margin-bottom:4px">${f.g} <span style="font-weight:400;color:${SM.c.subtle}">· ${V.nombre}</span></div>`+
+      return `<div style="font-weight:600;margin-bottom:4px">${f.g} <span style="font-weight:400;color:${SM.c.subtle}">(${V.nombre})</span></div>`+
         `<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${SM.c.teal}">●</span> Entre los indecisos</span><b>${nf(f.pi)} %</b></div>`+
         `<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:#C9C5B8">●</span> En el total de entrevistados</span><b>${nf(f.pm)} %</b></div>`+
         `<div style="display:flex;justify-content:space-between;gap:14px"><span>Diferencia</span><b>${dif>0?"+":""}${nf(dif)} pts</b></div>`+
@@ -1772,7 +1795,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   function pinta(){
     if(!ch)return;
     const D=T.datos[i], mov=esMovil();
-    document.getElementById("tr-subt").textContent=`Izquierda: recuerdo de voto en las generales de 2023 · derecha: voto + simpatía hoy · último barómetro: ${labL(T.fechas[i])} (estudio ${T.estudios[i]}) · grosor = % del total de entrevistados`;
+    document.getElementById("tr-subt").textContent=`Izquierda: recuerdo de voto en las generales de 2023, derecha: voto + simpatía hoy, último barómetro: ${labL(T.fechas[i])} (estudio ${T.estudios[i]}), grosor = % del total de entrevistados`;
     document.getElementById("tr-export").dataset.name=`cis_transferencia_${T.fechas[i]}`;
     const totO={}, totD={};
     D.flujos.forEach(([o,d,p])=>{totO[o]=(totO[o]||0)+p; totD[d]=(totD[d]||0)+p;});
@@ -1787,7 +1810,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
           /* Formato pedido por Mikel (06/10/2026): «PP (2023) → PP (hoy). Fidelidad: 74,5»; entre grupos distintos, «Transferencia» */
           return `<b>${a}</b> (2023) → <b>${b}</b> (hoy). ${a===b?"Fidelidad":`Transferencia a ${b}`}: <b>${nf(p.data._po)}</b>`;}
         const nm=p.name.replace(/ · (2023|hoy)$/,""), izq=p.name.endsWith("2023");
-        return `<b>${nm}</b> · ${izq?"recuerdo 2023":"voto + simpatía hoy"}<br>${nf(p.data._t)} % del total${izq&&p.data._n?` · n=${p.data._n.toLocaleString("es-ES")}`:""}`;}};
+        return `<b>${nm}</b>, ${izq?"recuerdo 2023":"voto + simpatía hoy"}<br>${nf(p.data._t)} % del total${izq&&p.data._n?`, n=${p.data._n.toLocaleString("es-ES")}`:""}`;}};
     o.series=[{type:"sankey",left:mov?120:150,right:mov?150:170,top:10,bottom:10,nodeWidth:14,nodeGap:mov?6:9,layoutIterations:0,draggable:false,
       emphasis:{focus:"adjacency"},data:nodes,links,
       label:{color:SM.c.tinta,fontFamily:SM.sans,fontSize:mov?10:12,formatter:p=>`${p.name.replace(/ · (2023|hoy)$/,"")}  ${nf(p.data._t)}`},
@@ -1908,7 +1931,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
         for(const s of [bul,-bul]){const x=s>0?hi+4:lo-4; if((s>0&&x+wn<W-10)||(s<0&&x-wn>10)){T(x,yc+4,nm,12,rw.total?600:400,INK,s>0?"start":"end");puesto=true;break;}}
         if(!puesto)T(padL,yc+4,nm,12,400,INK);
       }
-      const tit=`${rw.nombre} · margen izquierda − derecha (puntos)\n`+rw.vals.map((a,j)=>`${L[j]}: ${a==null?"sin dato":lab(a)}${rw.n[j]?` (n=${rw.n[j].toLocaleString("es-ES")})`:""}`).join("\n");
+      const tit=`${rw.nombre}, margen izquierda − derecha (puntos)\n`+rw.vals.map((a,j)=>`${L[j]}: ${a==null?"sin dato":lab(a)}${rw.n[j]?` (n=${rw.n[j].toLocaleString("es-ES")})`:""}`).join("\n");
       // grupo con su <title> (tooltip nativo) y una franja que resalta la fila al pasar el ratón
       const piezas=el.splice(mark);
       el.push(`<g class="vj-fila"><title>${esc(tit)}</title><rect class="vj-hit" x="0" y="${cy}" width="${W}" height="${rowH}" fill="transparent"/>${piezas.join("")}</g>`);
@@ -1926,7 +1949,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       <circle cx="${lw*0.34}" cy="15" r="4" fill="#fff" stroke="${NAR}" stroke-width="2.2"/><text x="${lw*0.34+10}" y="19" fill="${MUT}">${esc(L[1])}</text>
       <path d="M${lw*0.66},9.5 L${lw*0.66+8.4},15 L${lw*0.66},20.5 Z" fill="${NAR}"/><text x="${lw*0.66+14}" y="19" fill="${INK}" font-weight="600">${esc(L[2])}</text></svg>`;
 
-    document.getElementById("vj-subt").textContent=`Diferencia entre el voto + simpatía de la izquierda y el de la derecha, por ${V0.nombre.toLowerCase()}, en ${L[0]}, ${L[1]} y ${L[2]} · puntos porcentuales`;
+    document.getElementById("vj-subt").textContent=`Diferencia entre el voto + simpatía de la izquierda y el de la derecha, por ${V0.nombre.toLowerCase()}, en ${L[0]}, ${L[1]} y ${L[2]}, puntos porcentuales`;
     document.getElementById("vj-export").dataset.name=`cis_viaje_${vid}_${mom.map(j=>V.fechas[j]).join("_")}`;
     const algun=F.some(r=>r.n.some(n=>n!=null&&n<250));
     document.getElementById("vj-nota").textContent="Cómo leerlo: cada perfil es un gancho; el punto, el anillo y la flecha marcan dónde estaba en cada momento (naranja = a la izquierda del eje, teal = a la derecha). "+
@@ -2007,7 +2030,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     function pinta(){
       if(!ch)return;
       const jg=el==="Juntas Generales", S=jg?SV.jg_territorio[terr]:SV.series[el], last=S.fechas.length-1, mov=esMovil();
-      document.getElementById("sv-subt").textContent=`Intención directa de voto en unas ${el==="Autonómicas"?"elecciones autonómicas (Parlamento Vasco)":"elecciones a Juntas Generales de "+terr} · % sobre el total de entrevistados${jg?" de "+terr:""} · ${S.fechas.length} oleadas, ${labL(S.fechas[0])} – ${labL(S.fechas[last])}`;
+      document.getElementById("sv-subt").textContent=`Intención directa de voto en unas ${el==="Autonómicas"?"elecciones autonómicas (Parlamento Vasco)":"elecciones a Juntas Generales de "+terr}, % sobre el total de entrevistados${jg?" de "+terr:""}, ${S.fechas.length} oleadas, ${labL(S.fechas[0])} – ${labL(S.fechas[last])}`;
       document.getElementById("sv-export").dataset.name=`soc_intencion_${el==="Autonómicas"?"autonomicas":"juntas_"+terr.toLowerCase()}`;
       chipsUI(document.getElementById("sv-chips"),sel,SV.orden,p=>S.series[p][last],s=>{sel=s;pinta();},DEF);
       const o=smBaseOption();
@@ -2015,7 +2038,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       o.tooltip={...tt,trigger:"axis",axisPointer:{type:"line",lineStyle:{color:SM.c.subtle,width:1}},
         formatter:ps=>{const i=ps[0].dataIndex;const rows=ps.filter(p=>p.value!=null).sort((a,c)=>c.value-a.value)
           .map(p=>`<div style="display:flex;gap:8px;align-items:center;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:3px;border-radius:2px;background:${p.color};margin-right:6px;vertical-align:middle"></span>${p.seriesName}</span><b>${nf(p.value)} %</b></div>`).join("");
-          return `<div style="font-weight:600;margin-bottom:4px">${labL(S.fechas[i])} · N=${S.base_n[i].toLocaleString("es-ES")}</div>${rows}`;}};
+          return `<div style="font-weight:600;margin-bottom:4px">${labL(S.fechas[i])}, N=${S.base_n[i].toLocaleString("es-ES")}</div>${rows}`;}};
       o.xAxis={type:"category",data:S.fechas.map(xl),boundaryGap:true,axisLine:{lineStyle:{color:SM.c.grid}},axisTick:{show:false},axisLabel:{color:SM.c.subtle,fontSize:11,interval:0,hideOverlap:true}};
       const YMAX=sel.every(g=>DEF.includes(g))||maxDe(sel)<=YMAX_P?YMAX_P:YMAX_T;
       o.yAxis={type:"value",min:0,max:YMAX,interval:5,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:v=>v+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
@@ -2070,15 +2093,15 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       const V=P.vars.find(x=>x.id===v), G=V.grupos, D=P.datos[v], mov=esMovil();
       const hay=G.some(g=>D[g].n[i]!=null);
       const peq=G.map(g=>D[g].n[i]!=null&&D[g].n[i]<100);
-      document.getElementById("sb-oleada").textContent=`${labL(P.fechas[i])} · ${P.eleccion[i]}${esUlt?" (última de esta elección)":""} · ${pos+1} de ${IDX[el].length}`;
-      document.getElementById("sb-subt").textContent=`${labL(P.fechas[i])} · intención directa en unas elecciones ${P.eleccion[i]==="Autonómicas"?"autonómicas":"a Juntas Generales"} por ${V.nombre.toLowerCase()} · % sobre el total de cada grupo`;
+      document.getElementById("sb-oleada").textContent=`${labL(P.fechas[i])}, ${P.eleccion[i]}${esUlt?" (última de esta elección)":""}, ${pos+1} de ${IDX[el].length}`;
+      document.getElementById("sb-subt").textContent=`${labL(P.fechas[i])}, intención directa en unas elecciones ${P.eleccion[i]==="Autonómicas"?"autonómicas":"a Juntas Generales"} por ${V.nombre.toLowerCase()}, % sobre el total de cada grupo`;
       document.getElementById("sb-export").dataset.name=`soc_intencion_${v}_${P.fechas[i]}`;
       chipsUI(document.getElementById("sb-chips"),sel,SV.orden,null,s=>{sel=s;pinta();},DEF);
       const o=smBaseOption();
       o.grid={left:8,right:12,top:40,bottom:30,containLabel:true};
       o.legend={top:0,left:0,itemWidth:12,itemHeight:8,icon:"roundRect",textStyle:{color:SM.c.tinta,fontSize:11.5,fontFamily:SM.sans}};
       o.tooltip={...tt,trigger:"axis",axisPointer:{type:"shadow",shadowStyle:{color:"rgba(1,69,80,.06)"}},
-        formatter:ps=>{const k=ps[0].dataIndex, g=G[k];return `<div style="font-weight:600;margin-bottom:4px">${g} · n=${D[g].n[i]==null?"–":D[g].n[i].toLocaleString("es-ES")}${peq[k]?" (menos de 100: cautela)":""}</div>`+
+        formatter:ps=>{const k=ps[0].dataIndex, g=G[k];return `<div style="font-weight:600;margin-bottom:4px">${g}, n=${D[g].n[i]==null?"–":D[g].n[i].toLocaleString("es-ES")}${peq[k]?" (menos de 100: cautela)":""}</div>`+
           ps.map(p=>`<div style="display:flex;gap:8px;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:8px;border-radius:2px;background:${p.color};margin-right:6px"></span>${p.seriesName}</span><b>${nf(p.value)} %</b></div>`).join("");}};
       o.xAxis={type:"category",data:G.map((g,k)=>g+(peq[k]?"*":"")),axisTick:{show:false},axisLine:{lineStyle:{color:SM.c.grid}},
         axisLabel:{color:SM.c.tinta,fontSize:mov?10:11.5,interval:0,width:mov?70:110,overflow:"break",lineHeight:13}};
@@ -2113,7 +2136,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     const FUERA=new Set(["En blanco o nulo","N.S. / N.C."]);
     function pinta(){
       if(!ch)return; const mov=esMovil(), T=TT[el];
-      document.getElementById("st-subt").textContent=`Izquierda: recuerdo de voto en las ${T.recuerdo.replace("Autonómicas","autonómicas de").replace("Juntas Generales","Juntas Generales de")} · derecha: intención directa en unas elecciones ${T.eleccion==="Autonómicas"?"autonómicas":"a Juntas Generales"} · ${labL(T.fecha)} (última oleada que preguntó por las autonómicas) · grosor = % del total de entrevistados`;
+      document.getElementById("st-subt").textContent=`Izquierda: recuerdo de voto en las ${T.recuerdo.replace("Autonómicas","autonómicas de").replace("Juntas Generales","Juntas Generales de")}, derecha: intención directa en unas elecciones ${T.eleccion==="Autonómicas"?"autonómicas":"a Juntas Generales"}, ${labL(T.fecha)} (última oleada que preguntó por las autonómicas), grosor = % del total de entrevistados`;
       document.getElementById("st-export").dataset.name=`soc_transferencia_${el==="Autonómicas"?"autonomicas":"juntas"}_${T.fecha}`;
       const totO={}, totD={}; T.flujos.forEach(([o,d,p])=>{totO[o]=(totO[o]||0)+p; totD[d]=(totD[d]||0)+p;});
       const nodes=[...T.origenes.map((o,k)=>totO[k]&&!FUERA.has(o)?{name:ON(o),depth:0,value:totO[k],itemStyle:{color:COLOR[o],borderColor:"#fff"},_t:totO[k],_n:T.n[o]}:null),
@@ -2125,7 +2148,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
           /* Formato pedido por Mikel (06/10/2026): «PNV (2024) → PNV (hoy). Fidelidad: 74,5»; entre grupos distintos, «Transferencia» */
           return `<b>${a}</b> (${(T.recuerdo.match(/\d{4}/)||["recuerdo"])[0]}) → <b>${b}</b> (hoy). ${a===b?"Fidelidad":`Transferencia a ${b}`}: <b>${nf(p.data._po)}</b>`;}
         const nm=p.name.replace(/ · (recuerdo|hoy)$/,""), izq=p.name.endsWith("recuerdo");
-        return `<b>${nm}</b> · ${izq?"recuerdo":"intención hoy"}<br>${nf(p.data._t)} % del total${izq&&p.data._n?` · n=${p.data._n.toLocaleString("es-ES")}`:""}`;}};
+        return `<b>${nm}</b>, ${izq?"recuerdo":"intención hoy"}<br>${nf(p.data._t)} % del total${izq&&p.data._n?`, n=${p.data._n.toLocaleString("es-ES")}`:""}`;}};
       o.series=[{type:"sankey",left:mov?120:150,right:mov?150:170,top:10,bottom:10,nodeWidth:14,nodeGap:mov?6:9,layoutIterations:0,draggable:false,
         emphasis:{focus:"adjacency"},data:nodes,links,
         label:{color:SM.c.tinta,fontFamily:SM.sans,fontSize:mov?10:12,formatter:p=>`${p.name.replace(/ · (recuerdo|hoy)$/,"")}  ${nf(p.data._t)}`},
@@ -2197,7 +2220,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     function pinta(){
       if(!ch)return;
       const S=P.series[base], mov=esMovil(), vis=sel.filter(o=>disponibles().includes(o));
-      document.getElementById("pp-subt").textContent=`Preferencia personal como presidente/a del Gobierno · ${base==="total"?"% sobre el total de entrevistados":"% sobre quienes citan a un líder (sin «ninguno», N.S. ni N.C.)"} · ${labL(P.fechas[0])} – ${labL(P.fechas[last])}`;
+      document.getElementById("pp-subt").textContent=`Preferencia personal como presidente/a del Gobierno, ${base==="total"?"% sobre el total de entrevistados":"% sobre quienes citan a un líder (sin «ninguno», N.S. ni N.C.)"}, ${labL(P.fechas[0])} – ${labL(P.fechas[last])}`;
       document.getElementById("pp-export").dataset.name=`cis_preferencia_presidente_${base}`;
       chips();
       const o=smBaseOption();
@@ -2205,7 +2228,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       o.tooltip={...tt,trigger:"axis",axisPointer:{type:"line",lineStyle:{color:SM.c.subtle,width:1}},
         formatter:ps=>{const i=ps[0].dataIndex;const rows=ps.filter(p=>p.value!=null).sort((a,c)=>c.value-a.value)
           .map(p=>`<div style="display:flex;gap:8px;align-items:center;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:3px;border-radius:2px;background:${p.color};margin-right:6px;vertical-align:middle"></span>${p.seriesName}</span><b>${nf(p.value)} %</b></div>`).join("");
-          return `<div style="font-weight:600;margin-bottom:4px">${labL(P.fechas[i])} · estudio ${P.estudios[i]} · N=${P.base_n[i].toLocaleString("es-ES")}</div>${rows}`;}};
+          return `<div style="font-weight:600;margin-bottom:4px">${labL(P.fechas[i])}, estudio ${P.estudios[i]}, N=${P.base_n[i].toLocaleString("es-ES")}</div>${rows}`;}};
       o.xAxis={type:"category",data:P.fechas.map(xl),boundaryGap:false,axisLine:{lineStyle:{color:SM.c.grid}},...ejeFechas(P.fechas,mov)};
       o.yAxis={type:"value",min:0,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:v=>v+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
       o.series=vis.map(n=>({name:corto(n),type:"line",data:S[n],connectNulls:false,showSymbol:false,symbolSize:8,
@@ -2227,7 +2250,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     const A=DATA.cis_aprobacion; if(!A)return;
     const card=document.createElement("div"); card.className="card";
     card.innerHTML=`<div class="card-head"><div><h3>Aprobación de los líderes</h3>
-        <p class="subt">% de quienes conocen al líder que le ponen un 5 o más (de 5 a 10) en la escala de valoración de 1 a 10 · ${labL(A.fecha)} (estudio ${A.estudio})</p></div></div>
+        <p class="subt">% de quienes conocen al líder que le ponen un 5 o más (de 5 a 10) en la escala de valoración de 1 a 10, ${labL(A.fecha)} (estudio ${A.estudio})</p></div></div>
       <div class="aprob-grid">${A.lideres.map(L=>{
         const dif=L.aprob-L.aprob_ant, cls=Math.abs(dif)<0.05?"eq":dif>0?"up":"down", fl=cls==="up"?"▲":cls==="down"?"▼":"=";
         const col=COLOR[L.lider];
@@ -2236,7 +2259,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
           <div class="aprob-fila"><span class="aprob-v">${nf(L.aprob)}<small> %</small></span>
             <span class="kpi-d ${cls}" title="Frente a ${labL(L.fecha_ant||A.fecha_ant)}">${fl} ${dif>0?"+":""}${nf(dif)} pp</span></div>
           <div class="aprob-barra" role="img" aria-label="${nf(L.aprob)} % de aprobación"><span style="width:${Math.min(100,L.aprob)}%;background:${col}"></span></div>
-          <div class="aprob-pie">Valoración media: <b>${nf(L.media)}</b> · ${labL(L.fecha_ant||A.fecha_ant)}: ${nf(L.aprob_ant)} %</div>${L.fecha?`<div class="aprob-pie">Último dato: ${labL(L.fecha)}; no figura en el estudio ${A.estudio}</div>`:""}
+          <div class="aprob-pie">Valoración media: <b>${nf(L.media)}</b>, ${labL(L.fecha_ant||A.fecha_ant)}: ${nf(L.aprob_ant)} %</div>${L.fecha?`<div class="aprob-pie">Último dato: ${labL(L.fecha)}; no figura en el estudio ${A.estudio}</div>`:""}
         </div>`;}).join("")}</div>
       <p class="foot-note">Fuente: Barómetro del CIS (microdatos), valoración de líderes (VALORALIDERES), ponderada con PESO. Aprobación: nota de 5 a 10. Base: quienes conocen al líder (N.S. y N.C. de la valoración cuentan en la base, como hace el CIS). Variación en puntos porcentuales frente al barómetro anterior (${labL(A.fecha_ant)}). Coincide con la suma de 5 a 10 del avance del CIS (diferencias de hasta 0,3 puntos en mayo y junio de 2026).</p>`;
     grid.appendChild(card);
@@ -2285,14 +2308,14 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       else {const gs=V.vars.find(x=>x.id===v).grupos;
         lineas=gs.map((x,k)=>({nombre:x,color:GCOL[k],m:V.datos[v][x][lider].m,n:V.datos[v][x][lider].n}));}
       const titulo=v==="total"?"Total de quienes conocen a cada líder":(modo==="lideres"?`${nomV}: ${g}`:`${lider} por ${nomV.toLowerCase()}`);
-      document.getElementById("vl-subt").textContent=`% de quienes conocen al líder que le ponen de 5 a 10 en la escala de valoración de 1 a 10 · ${titulo} · ${labL(V.fechas[0])} – ${labL(V.fechas[last])}`;
+      document.getElementById("vl-subt").textContent=`% de quienes conocen al líder que le ponen de 5 a 10 en la escala de valoración de 1 a 10, ${titulo}, ${labL(V.fechas[0])} – ${labL(V.fechas[last])}`;
       document.getElementById("vl-export").dataset.name=`cis_aprobacion_${v}_${modo==="lideres"?g:lider}`.replace(/[^\wáéíóúñ-]+/gi,"_");
       const o=smBaseOption();
       o.grid={left:8,right:mov?16:150,top:16,bottom:34,containLabel:true};
       o.tooltip={...tt,trigger:"axis",axisPointer:{type:"line",lineStyle:{color:SM.c.subtle,width:1}},
         formatter:ps=>{const i=ps[0].dataIndex;const rows=ps.filter(p=>p.value!=null).sort((a,c)=>c.value-a.value)
           .map(p=>`<div style="display:flex;gap:8px;align-items:center;justify-content:space-between"><span><span style="display:inline-block;width:10px;height:3px;border-radius:2px;background:${p.color};margin-right:6px;vertical-align:middle"></span>${p.seriesName}</span><b>${nf(p.value)} %</b></div>`).join("");
-          return `<div style="font-weight:600;margin-bottom:4px">${labL(V.fechas[i])} · estudio ${V.estudios[i]}</div>${rows}`;}};
+          return `<div style="font-weight:600;margin-bottom:4px">${labL(V.fechas[i])}, estudio ${V.estudios[i]}</div>${rows}`;}};
       o.xAxis={type:"category",data:V.fechas.map(xl),boundaryGap:false,axisLine:{lineStyle:{color:SM.c.grid}},...ejeFechas(V.fechas,mov)};
       o.yAxis={type:"value",min:0,max:YMAX,interval:10,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:x=>x+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
       o.series=lineas.map(L=>({name:L.nombre,type:"line",data:L.m,connectNulls:false,showSymbol:false,symbolSize:8,
@@ -2361,11 +2384,11 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
     }
     function pinta(){
       if(!ch)return; const mov=esMovil();
-      document.getElementById("sl-c-subt").textContent=`% de entrevistados que dicen conocer a cada líder · ${labL(S.fechas[0])} – ${labL(S.fechas[last])}`;
+      document.getElementById("sl-c-subt").textContent=`% de entrevistados que dicen conocer a cada líder, ${labL(S.fechas[0])} – ${labL(S.fechas[last])}`;
       chips();
       const o=smBaseOption();
       o.grid={left:8,right:mov?16:160,top:16,bottom:34,containLabel:true};
-      o.tooltip=ttAxis(v=>nf(v)+" %",i=>`${labL(S.fechas[i])} · N=${S.base_n[i].toLocaleString("es-ES")}`);
+      o.tooltip=ttAxis(v=>nf(v)+" %",i=>`${labL(S.fechas[i])}, N=${S.base_n[i].toLocaleString("es-ES")}`);
       o.xAxis=ejeX();
       o.yAxis={type:"value",min:0,max:100,axisLabel:{color:SM.c.subtle,fontSize:11,formatter:v=>v+" %"},splitLine:{lineStyle:{color:"#EEEBE3"}}};
       o.series=sel.map(l=>baseLinea(l,S.conoc[l],l,COLOR[l],actual(l)?(v=>nf(v)):null));
@@ -2384,7 +2407,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
   (function(){
     const card=document.createElement("div"); card.className="card";
     card.innerHTML=`<div class="card-head"><div><h3>Aprobación de los líderes</h3>
-        <p class="subt">% de quienes conocen al líder que le ponen un 5 o más (de 5 a 10) en la escala de valoración de 0 a 10 · ${labL(S.fecha)}</p></div></div>
+        <p class="subt">% de quienes conocen al líder que le ponen un 5 o más (de 5 a 10) en la escala de valoración de 0 a 10, ${labL(S.fecha)}</p></div></div>
       <div class="aprob-grid">${S.aprob.map(L=>{
         const dif=L.aprob_ant==null?null:L.aprob-L.aprob_ant, cls=dif==null?"eq":Math.abs(dif)<0.05?"eq":dif>0?"up":"down", fl=cls==="up"?"▲":cls==="down"?"▼":"=";
         const col=COLOR[L.lider];
@@ -2393,7 +2416,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
           <div class="aprob-fila"><span class="aprob-v">${nf(L.aprob)}<small> %</small></span>
             ${dif==null?"":`<span class="kpi-d ${cls}" title="Frente a ${labL(S.fecha_ant)}">${fl} ${dif>0?"+":""}${nf(dif)} pp</span>`}</div>
           <div class="aprob-barra" role="img" aria-label="${nf(L.aprob)} % de aprobación"><span style="width:${Math.min(100,L.aprob)}%;background:${col}"></span></div>
-          <div class="aprob-pie">Valoración media: <b>${nf(L.media)}</b> · Le conoce: ${nf(L.conoc)} % · ${labL(S.fecha_ant)}: ${nf(L.aprob_ant)} %</div>
+          <div class="aprob-pie">Valoración media: <b>${nf(L.media)}</b>, Le conoce: ${nf(L.conoc)} %, ${labL(S.fecha_ant)}: ${nf(L.aprob_ant)} %</div>
         </div>`;}).join("")}</div>
       <p class="foot-note">Fuente: Sociómetro Vasco (microdatos), pregunta «¿Cómo valora a…?» (escala de 0 a 10), ponderada (wt). Aprobación: nota de 5 a 10 (el 5 es el punto medio de la escala). Base: quienes conocen al líder; quienes lo conocen pero no saben o no contestan cuentan en la base. Variación en puntos porcentuales frente a la oleada anterior (${labL(S.fecha_ant)}). Ojo: la escala del Sociómetro va de 0 a 10 y la del CIS de 1 a 10, así que, aunque en las dos la aprobación es de 5 a 10, las fuentes no son comparables.</p>`;
     grid.appendChild(card);
@@ -2441,7 +2464,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       else {const gs=S.vars.find(x=>x.id===v).grupos;
         lineas=gs.map((x,k)=>({id:lider,nombre:x,color:GCOL[k],m:S.datos[v][x][lider].m,n:S.datos[v][x][lider].n,dash:false,etq:true}));}
       const titulo=v==="total"?"Total de quienes conocen a cada líder":(modo==="lideres"?`${nomV}: ${g}`:`${lider} por ${nomV.toLowerCase()}`);
-      document.getElementById("sl-v-subt").textContent=`% de quienes conocen al líder que le ponen de 5 a 10 en la escala de valoración de 0 a 10 · ${titulo} · ${labL(S.fechas[0])} – ${labL(S.fechas[last])}`;
+      document.getElementById("sl-v-subt").textContent=`% de quienes conocen al líder que le ponen de 5 a 10 en la escala de valoración de 0 a 10, ${titulo}, ${labL(S.fechas[0])} – ${labL(S.fechas[last])}`;
       document.getElementById("sl-v-export").dataset.name=`sociometro_aprobacion_${v}_${modo==="lideres"?g:lider}`.replace(/[^\wáéíóúñ-]+/gi,"_");
       const o=smBaseOption();
       o.grid={left:8,right:mov?16:160,top:16,bottom:34,containLabel:true};
@@ -2518,7 +2541,7 @@ function montarIdeologia(C){
   const vistaF=()=>modo==="trim"?qFechas.map(xlQ):I.fechas.map(xl);
   const cabV=(i,vv)=>{ if(modo!=="trim")return C.cab(i,vv);
     const fs=I.fechas.filter((_,k)=>qIdx[k]===i), q=qFechas[i];
-    return `T${q.slice(-1)} ${q.slice(0,4)} · ${fs.length} barómetro${fs.length>1?"s":""} (${fs.map(x=>MES3[+x.slice(5)-1]).join(", ")})`;};
+    return `T${q.slice(-1)} ${q.slice(0,4)}, ${fs.length} barómetro${fs.length>1?"s":""} (${fs.map(x=>MES3[+x.slice(5)-1]).join(", ")})`;};
   /* «Generación y sexo» (C.multi): una gráfica pequeña por generación, de mayores a jóvenes y con la misma escala.
      Verde = hombres, morado = mujeres, gris discontinuo = total. Se dibujan con echarts.init propio (no con mkChart) para que
      el reparto automático de botones PNG no les ponga uno a cada una; el PNG de esta vista es el de la tarjeta entera. */
@@ -2535,7 +2558,7 @@ function montarIdeologia(C){
     elLeg.innerHTML=`<span style="${tr}"><i style="display:inline-block;width:14px;height:3px;border-radius:2px;background:${IDEO_SEXCOL.Hombre}"></i>Hombres</span>`+
       `<span style="${tr}"><i style="display:inline-block;width:14px;height:3px;border-radius:2px;background:${IDEO_SEXCOL.Mujer}"></i>Mujeres</span>`+
       `<span style="${tr}"><i style="display:inline-block;width:14px;border-top:2px dashed #9A968C"></i>${C.totNom}</span>`+
-      `<span style="color:${SM.c.subtle}">← más a la izquierda · más a la derecha →</span>`;
+      `<span style="color:${SM.c.subtle}">← más a la izquierda, más a la derecha →</span>`;
     gens.forEach((g,k)=>{
       const etiq=k%nc===0, mk=(sx,col,nom)=>({name:nom,type:"line",data:Dg("gensexo",`${g} · ${sx}`).m.map((m,i)=>[m,i]),connectNulls:false,showSymbol:true,symbol:"circle",symbolSize:mov?4:5,smooth:0.35,
         lineStyle:{width:2,color:col},itemStyle:{color:col},emphasis:{focus:"series"}});
@@ -2569,8 +2592,8 @@ function montarIdeologia(C){
   function pinta(){
     if(!ch)return;
     const mov=esMovil(), VV=I.vars.find(x=>x.id===v), gs=VV.grupos, TOTv=Dg("total","Total"), FX=vistaF();
-    const lineas=gs.map((g,k)=>({nombre:v==="total"?C.totNom:g,color:v==="total"?SM.c.tinta:(v==="voto"?VCOL[g]:(v==="sexo"&&IDEO_SEXCOL[g])||(v==="gensexo"?SM.catLines[Math.floor(k/2)]:SM.catLines[k])),dash:v==="gensexo"&&k%2===1,D:Dg(v,g)}));   /* generación y sexo: un color por generación; mujeres, línea discontinua y rombo */
-    document.getElementById(P+"subt").textContent=`${C.subt} · ${v==="total"?C.totNom:VV.nombre} · ${labL(I.fechas[0])} – ${labL(I.fechas[I.fechas.length-1])}`;
+    const lineas=gs.map((g,k)=>({nombre:v==="total"?C.totNom:g.replace(" · ",", "),color:v==="total"?SM.c.tinta:(v==="voto"?VCOL[g]:(v==="sexo"&&IDEO_SEXCOL[g])||(v==="gensexo"?SM.catLines[Math.floor(k/2)]:SM.catLines[k])),dash:v==="gensexo"&&k%2===1,D:Dg(v,g)}));   /* generación y sexo: un color por generación; mujeres, línea discontinua y rombo */
+    document.getElementById(P+"subt").textContent=`${C.subt}, ${v==="total"?C.totNom:VV.nombre}, ${labL(I.fechas[0])} – ${labL(I.fechas[I.fechas.length-1])}`;
     document.getElementById(P+"export").dataset.name=`${C.exp}_${v}`;
     /* Vista «una gráfica por generación»: se oculta el gráfico principal y el PNG es el de la tarjeta */
     const multi=!!C.multi&&v==="gensexo";
@@ -2633,7 +2656,7 @@ montarIdeologia({grid:"grid-cis-ideologia",limpiar:true,pre:"id-",data:DATA.cis_
   totNom:"Total España",unidad:"Barómetro",min:1,max:10,mid:5,izq:"Izquierda",der:"Derecha",midLab:"Punto medio de la escala (5)",   /* 5 y no 5,5: decisión de Mikel (06/10/2026) */
   subt:"Media de la escala de autoubicación ideológica, de 1 (izquierda) a 10 (derecha)",
   vcol:{"PP":PARTY_COLORS["PP"],"PSOE":PARTY_COLORS["PSOE"],"VOX":PARTY_COLORS["VOX"],"Sumar":PARTY_COLORS["Sumar"],"Abstencionista":"#014550"},
-  cab:i=>`${labL(DATA.cis_ideologia.fechas[i])} · estudio ${DATA.cis_ideologia.estudios[i]}`,
+  cab:i=>`${labL(DATA.cis_ideologia.fechas[i])}, estudio ${DATA.cis_ideologia.estudios[i]}`,
   nota:v=>"Fuente: Barómetros del CIS (microdatos), «Escala de autoubicación ideológica (1-10)» (ESCIDEOL), ponderada con el peso de cada estudio. Media de quienes se ubican (sin N.S. ni N.C.; su % está en la tabla). "+
     "La línea de puntos marca el 5 como punto medio de referencia. Barómetros más recientes arriba; el CIS no hace barómetro en agosto. "+
     (v==="voto"?"Recuerdo de voto en las generales de 2023; hasta septiembre de 2023 el CIS pregunta por el voto en elecciones anteriores (2016 o 2019) y esos meses quedan fuera de este cruce. No se muestran los votantes de otros partidos (ERC, Junts, EH Bildu, EAJ-PNV, BNG…): juntos no forman un grupo con sentido ideológico y por separado son muy pocos. ":"")+
@@ -2651,7 +2674,7 @@ montarIdeologia({grid:"soc-par-escalas",limpiar:false,pre:"sid-",data:DATA.soc_i
   totNom:"Total Euskadi",unidad:"Oleada",min:0,max:10,mid:5,izq:"Extrema izquierda",der:"Extrema derecha",midLab:"Centro de la escala (5)",
   subt:"Media de la escala de autoubicación ideológica, de 0 (extrema izquierda) a 10 (extrema derecha)",
   vcol:{"PNV":PARTY_COLORS["EAJ-PNV"],"EH Bildu":PARTY_COLORS["EH Bildu"],"PSE-EE":PARTY_COLORS["PSOE"],"PP":PARTY_COLORS["PP"],"Abstencionista":"#1A1A1A"},
-  cab:(i,v)=>{const S=DATA.soc_ideologia;return `${labL(S.fechas[i])}${v==="voto"&&S.eleccion[i]?` · recuerdo: ${S.eleccion[i]}`:""}`;},
+  cab:(i,v)=>{const S=DATA.soc_ideologia;return `${labL(S.fechas[i])}${v==="voto"&&S.eleccion[i]?`, recuerdo: ${S.eleccion[i]}`:""}`;},
   nota:v=>"Fuente: Sociómetro Vasco (microdatos), pregunta de autoubicación en la escala de 0 («extrema izquierda») a 10 («extrema derecha»), con el 5 como «centro», ponderada (wt). Media de quienes se ubican (sin NS/NC; su % está en la tabla). "+
     "Oleadas más recientes arriba; no tienen una periodicidad fija. La escala va de 0 a 10 (la del CIS, de 1 a 10): las medias de las dos fuentes no son comparables. "+
     (v==="voto"?"Recuerdo de voto de la elección que pregunta cada oleada (autonómicas o Juntas Generales; se ve en el tooltip). No se muestran los votantes de otros partidos (Elkarrekin Podemos, Sumar, Vox y otras candidaturas): juntos no forman un grupo con sentido ideológico y Vox, por separado, tiene muy pocos casos. Los votantes del PP son pocos en la muestra (entre unas 50 y 100 personas por oleada): su media puede moverse bastante por azar. ":"")+
@@ -2664,7 +2687,7 @@ montarIdeologia({grid:"soc-par-escalas",limpiar:false,pre:"snac-",data:DATA.soc_
   totNom:"Total Euskadi",unidad:"Oleada",min:0,max:10,mid:5,izq:"Nada nacionalista",der:"Muy nacionalista",izqC:"Nada",derC:"Muy",midLab:"Punto medio de la escala (5)",
   subt:"Media de la escala de sentimiento nacionalista vasco o abertzale, de 0 (nada) a 10 (muy nacionalista)",
   vcol:{"PNV":PARTY_COLORS["EAJ-PNV"],"EH Bildu":PARTY_COLORS["EH Bildu"],"PSE-EE":PARTY_COLORS["PSOE"],"PP":PARTY_COLORS["PP"],"Abstencionista":"#1A1A1A"},
-  cab:(i,v)=>{const S=DATA.soc_nacionalismo;return `${labL(S.fechas[i])}${v==="voto"&&S.eleccion[i]?` · recuerdo: ${S.eleccion[i]}`:""}`;},
+  cab:(i,v)=>{const S=DATA.soc_nacionalismo;return `${labL(S.fechas[i])}${v==="voto"&&S.eleccion[i]?`, recuerdo: ${S.eleccion[i]}`:""}`;},
   nota:v=>"Fuente: Sociómetro Vasco (microdatos), pregunta sobre el sentimiento nacionalista vasco o abertzale en la escala de 0 («nada nacionalista o abertzale») a 10 («muy nacionalista o abertzale»), ponderada (wt). Media de quienes responden (sin NS/NC; su % está en la tabla). "+
     "Oleadas más recientes arriba; la pregunta no está en junio de 2022 (fila vacía). "+
     (v==="voto"?"Recuerdo de voto de la elección que pregunta cada oleada (autonómicas o Juntas Generales; se ve en el tooltip). No se muestran los votantes de otros partidos (Elkarrekin Podemos, Sumar, Vox y otras candidaturas). Los votantes del PP son pocos en la muestra (entre unas 50 y 100 personas por oleada): su media puede moverse bastante por azar. ":"")+
@@ -2732,11 +2755,11 @@ montarIdeologia({grid:"soc-par-escalas",limpiar:false,pre:"snac-",data:DATA.soc_
     document.getElementById("cq-partbar").hidden=!tray; if(!tray){parar(); part=null; document.getElementById("cq-play").hidden=true;} botonesPartido(); pinta();}));
   function pinta(){
     if(!ch)return; const mov=esMovil(), P=Q.puntos[f];
-    document.getElementById("cq-subt").textContent=`Media de la autoubicación ideológica (0 extrema izquierda – 10 extrema derecha) y del sentimiento nacionalista vasco o abertzale (0 nada – 10 muy nacionalista) · votantes según su recuerdo de voto${Q.eleccion[f]?" ("+Q.eleccion[f]+")":""} · ${labL(f)}`;
+    document.getElementById("cq-subt").textContent=`Media de la autoubicación ideológica (0 extrema izquierda – 10 extrema derecha) y del sentimiento nacionalista vasco o abertzale (0 nada – 10 muy nacionalista), votantes según su recuerdo de voto${Q.eleccion[f]?" ("+Q.eleccion[f]+")":""}, ${labL(f)}`;
     const o=smBaseOption();
     o.grid={left:mov?26:34,right:mov?18:30,top:20,bottom:44,containLabel:true};
     o.tooltip={backgroundColor:"#fff",borderColor:SM.c.grid,borderWidth:1,textStyle:{color:SM.c.tinta,fontFamily:SM.sans,fontSize:12},trigger:"item",
-      formatter:q=>{const d=q.data.d; if(!d)return ""; return `<div style="font-weight:600;margin-bottom:4px">${d.g==="Total"?"Total Euskadi":"Votantes "+d.g} · ${labL(q.data.f)}</div>${d.prev?`<div style="color:#B3541E;font-size:11px;margin-bottom:3px">Esta oleada no recoge su recuerdo de voto: dato de ${labL(d.prev)}</div>`:""}${v24(d.g)!=null&&d.g!=="Total"?`Autonómicas 2024: <b>${nf(v24(d.g),2)} %</b> de los votos<br>`:""}Ideología: <b>${nf(d.x,2)}</b><br>Sentimiento nacionalista: <b>${nf(d.y,2)}</b>${d.g!=="Total"&&Math.min(d.ni,d.nn)<POCOS?`<div style="color:#B3541E;font-size:11px;margin-top:3px">Pocos casos: posición poco fiable</div>`:""}<div style="color:${SM.c.subtle};font-size:11px;margin-top:3px">${d.ni.toLocaleString("es-ES")} se ubican en ideología · ${d.nn.toLocaleString("es-ES")} en nacionalismo</div>`;}};
+      formatter:q=>{const d=q.data.d; if(!d)return ""; return `<div style="font-weight:600;margin-bottom:4px">${d.g==="Total"?"Total Euskadi":"Votantes "+d.g}, ${labL(q.data.f)}</div>${d.prev?`<div style="color:#B3541E;font-size:11px;margin-bottom:3px">Esta oleada no recoge su recuerdo de voto: dato de ${labL(d.prev)}</div>`:""}${v24(d.g)!=null&&d.g!=="Total"?`Autonómicas 2024: <b>${nf(v24(d.g),2)} %</b> de los votos<br>`:""}Ideología: <b>${nf(d.x,2)}</b><br>Sentimiento nacionalista: <b>${nf(d.y,2)}</b>${d.g!=="Total"&&Math.min(d.ni,d.nn)<POCOS?`<div style="color:#B3541E;font-size:11px;margin-top:3px">Pocos casos: posición poco fiable</div>`:""}<div style="color:${SM.c.subtle};font-size:11px;margin-top:3px">${d.ni.toLocaleString("es-ES")} se ubican en ideología, ${d.nn.toLocaleString("es-ES")} en nacionalismo</div>`;}};
     /* zoom: con un partido elegido, los ejes se ajustan a su recorrido completo */
     let zx=[0,10], zy=[0,10];
     if(tray&&part){const S=serie(part).map(o=>o.d), xs=S.map(d=>d.x), ys=S.map(d=>d.y);
@@ -2760,7 +2783,7 @@ montarIdeologia({grid:"soc-par-escalas",limpiar:false,pre:"snac-",data:DATA.soc_
           label:{show:!!part,position:"top",distance:6,formatter:q=>(q.dataIndex===0)?xl(q.data.f):"",color:SM.c.subtle,fontSize:10.5}});   /* fecha solo en el punto de partida; el resto, en el tooltip */   /* por debajo de los círculos finales */});}
     o.series.push({type:"scatter",z:5,labelLayout:{moveOverlap:"shiftY"},data:[...P].filter(d=>!(tray&&part)||(d.g===part&&!d.prev)).sort((a,b)=>(v24(b.g)||0)-(v24(a.g)||0)).map(d=>{const poco=d.g!=="Total"&&(Math.min(d.ni,d.nn)<POCOS||!!d.prev);return {value:[d.x,d.y],d,f,symbolSize:tray?(d.g==="Total"?12:(mov?14:17)):tam(d,mov),   /* con el recorrido: todos iguales; destacan como final del recorrido */
       itemStyle:poco?{color:"rgba(255,255,255,.9)",borderColor:COL[d.g],borderWidth:tray?2.5:2,borderType:"dashed",shadowBlur:tray?8:0,shadowColor:"rgba(0,0,0,.35)"}:(tray?{color:COL[d.g],borderColor:"#fff",borderWidth:2.5,shadowBlur:8,shadowColor:"rgba(0,0,0,.45)"}:{color:COL[d.g],opacity:.88,borderColor:"#fff",borderWidth:1.5}),
-      label:{show:true,position:d.g==="Total"?"bottom":d.g==="Sumar"?(mov?"bottom":"left"):d.g==="Elkarrekin Podemos"?(mov?"top":"left"):(mov&&d.g==="Vox")?"top":"right",distance:6,formatter:(tray&&part)?`${mov&&d.g==="Elkarrekin Podemos"?"E. Podemos":d.g} · ${xl(f)}`:mov?(d.g==="Total"?"Total":d.g==="Elkarrekin Podemos"?"E. Podemos":d.g+(d.prev?" ("+xl(d.prev)+")":"")):`${d.g==="Total"?"Total Euskadi":d.g}${d.g!=="Total"&&v24(d.g)!=null?" "+nf(v24(d.g))+" %":""}${d.prev?" (dato de "+xl(d.prev)+")":""}`,color:d.g==="Total"?SM.c.tinta:COL[d.g],fontWeight:600,fontSize:mov?10.5:12.5}};})});
+      label:{show:true,position:d.g==="Total"?"bottom":d.g==="Sumar"?(mov?"bottom":"left"):d.g==="Elkarrekin Podemos"?(mov?"top":"left"):(mov&&d.g==="Vox")?"top":"right",distance:6,formatter:(tray&&part)?`${mov&&d.g==="Elkarrekin Podemos"?"E. Podemos":d.g}, ${xl(f)}`:mov?(d.g==="Total"?"Total":d.g==="Elkarrekin Podemos"?"E. Podemos":d.g+(d.prev?" ("+xl(d.prev)+")":"")):`${d.g==="Total"?"Total Euskadi":d.g}${d.g!=="Total"&&v24(d.g)!=null?" "+nf(v24(d.g))+" %":""}${d.prev?" (dato de "+xl(d.prev)+")":""}`,color:d.g==="Total"?SM.c.tinta:COL[d.g],fontWeight:600,fontSize:mov?10.5:12.5}};})});
     o.graphic=[smLogoGraphic()];
     ch.setOption(o,true);
     /* Casillas de la cuadrícula (1 × 1) que ocupa el círculo de cada partido, en su color atenuado (Mikel, 06/10/2026).
@@ -2851,7 +2874,7 @@ function histPartidos(C){
       <p class="subt">${C.subt}</p></div></div>
     <div class="hist-grid">
       ${H.partidos.map((p,k)=>`<div><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:6px 0 0">
-          <b style="color:${PCOL[p.nombre]};font-size:15px">${p.nombre}</b><span style="color:${SM.c.subtle};font-size:12px">media ${nf(p.media,1)} · ${p.n.toLocaleString("es-ES")} se ubican</span></div>
+          <b style="color:${PCOL[p.nombre]};font-size:15px">${p.nombre}</b><span style="color:${SM.c.subtle};font-size:12px">media ${nf(p.media,1)}, ${p.n.toLocaleString("es-ES")} se ubican</span></div>
         <div class="chart" id="${P}ch-${k}" style="height:250px"></div></div>`).join("")}</div>
     <p class="foot-note">${C.nota}</p>
     <details class="tabla"><summary>Ver los datos en tabla</summary><div class="tabla-wrap" id="${P}tabla"></div></details>`;
@@ -2895,12 +2918,12 @@ function histPartidos(C){
   const base={grid:"grid-cis-ideologia",data:H,pcol:PCOL,vals:[1,2,3,4,5,6,7,8,9,10],min:1,max:10,izq:"Izquierda",der:"Derecha"};
   /* Tarjeta «Distribución … y posición de los votantes de cada partido» quitada a petición de Mikel (06/10/2026); el código se conserva */
   if(false) histConjunto({...base,pre:"ihc-",exp:"cis_histograma_ideologia",
-    subt:`% de entrevistados en cada punto de la escala de 1 (izquierda) a 10 (derecha) y media de los votantes de cada partido (recuerdo de voto, generales 2023) · ${labL(H.fecha)} (estudio ${H.estudio})`,
+    subt:`% de entrevistados en cada punto de la escala de 1 (izquierda) a 10 (derecha) y media de los votantes de cada partido (recuerdo de voto, generales 2023), ${labL(H.fecha)} (estudio ${H.estudio})`,
     nota:`Fuente: Barómetro del CIS (microdatos), «Escala de autoubicación ideológica (1-10)» (ESCIDEOL), ponderada. Barras: % sobre el total de entrevistados; no se ubican (N.S. ${nf(H.total.ns)} %, N.C. ${nf(H.total.nc)} %), por eso las barras no suman 100. Marcas de arriba: media de quienes se ubican; la del total es ${nf(H.total.media,2)} (${nf(H.total.media_ant,2)} en el barómetro anterior). Votantes según su recuerdo de voto en las generales de 2023: ${H.partidos.map(p=>`${p.nombre} ${p.n.toLocaleString("es-ES")}`).join(", ")} personas que se ubican. Al pasar el ratón por una barra se ve también qué % de los votantes de cada partido se sitúa en ese punto.`});
   /* Orden de los gráficos (Mikel, 06/10/2026): arriba PSOE y PP, abajo VOX y Sumar */
   const ORD=["PSOE","PP","VOX","Sumar"], Hord={...H,partidos:[...H.partidos].sort((a,b)=>ORD.indexOf(a.nombre)-ORD.indexOf(b.nombre))};
   histPartidos({...base,data:Hord,pre:"ih-",
-    subt:`% de los votantes de cada partido (recuerdo de voto, generales 2023) en cada punto de la escala de 1 (izquierda) a 10 (derecha) · ${labL(H.fecha)} (estudio ${H.estudio})`,
+    subt:`% de los votantes de cada partido (recuerdo de voto, generales 2023) en cada punto de la escala de 1 (izquierda) a 10 (derecha), ${labL(H.fecha)} (estudio ${H.estudio})`,
     nota:`Fuente: Barómetro del CIS (microdatos), «Escala de autoubicación ideológica (1-10)» (ESCIDEOL), ponderada. Áreas: % sobre todos los votantes de cada partido según su recuerdo de voto en las generales de 2023; quienes no se ubican (N.S./N.C.: ${H.partidos.map(p=>`${p.nombre} ${nf(p.ns+p.nc)} %`).join(", ")}) no aparecen, por eso no suman 100. Área de color: votantes de cada partido; área gris con línea discontinua: total de entrevistados (% sobre el total, incluidos quienes no se ubican), para comparar las dos distribuciones. Junto al nombre de cada partido, la media de quienes se ubican (la del total es ${nf(H.total.media,1)}). Misma escala vertical en los cuatro gráficos para poder compararlos.`});
 })();
 
@@ -2912,12 +2935,12 @@ function histPartidos(C){
   const pp=H.partidos.find(p=>p.nombre==="PP");
   /* Tarjeta «Distribución … y posición de los votantes de cada partido» quitada a petición de Mikel (06/10/2026); el código se conserva */
   if(false) histConjunto({...base,pre:"sihc-",exp:"sociometro_histograma_ideologia",
-    subt:`% de entrevistados en cada punto de la escala de 0 (extrema izquierda) a 10 (extrema derecha) y media de los votantes de cada partido (recuerdo de voto, ${H.eleccion}) · ${labL(H.fecha)}`,
+    subt:`% de entrevistados en cada punto de la escala de 0 (extrema izquierda) a 10 (extrema derecha) y media de los votantes de cada partido (recuerdo de voto, ${H.eleccion}), ${labL(H.fecha)}`,
     nota:`Fuente: Sociómetro Vasco (microdatos), pregunta de autoubicación en la escala de 0 («extrema izquierda») a 10 («extrema derecha»), con el 5 como «centro», ponderada (wt). Barras: % sobre el total de entrevistados; no se ubican (NS/NC ${nf(H.total.nr[0].v)} %), por eso las barras no suman 100. Marcas de arriba: media de quienes se ubican; la del total es ${nf(H.total.media,2)} (${nf(H.total.media_ant,2)} en ${labL(H.total.fecha_ant)}). Votantes según su recuerdo de voto en las ${H.eleccion} (la elección que pregunta esta oleada): ${H.partidos.map(p=>`${p.nombre} ${p.n.toLocaleString("es-ES")}`).join(", ")} personas que se ubican; con solo ${pp?pp.n:"–"} votantes del PP, su distribución puede variar bastante por azar. No se muestran otros partidos (Elkarrekin Podemos, Sumar, Vox…) por tener muy pocos casos. Escala de 0 a 10 (la del CIS va de 1 a 10): no son comparables.`});
   /* Orden de los gráficos (Mikel, 06/10/2026): arriba PNV y EH Bildu, abajo PSE-EE y PP */
   const ORD=["PNV","EH Bildu","PSE-EE","PP"], Hord={...H,partidos:[...H.partidos].sort((a,b)=>ORD.indexOf(a.nombre)-ORD.indexOf(b.nombre))};
   histPartidos({...base,data:Hord,pre:"sih-",
-    subt:`% de los votantes de cada partido (recuerdo de voto, ${H.eleccion}) en cada punto de la escala de 0 (extrema izquierda) a 10 (extrema derecha) · ${labL(H.fecha)}`,
+    subt:`% de los votantes de cada partido (recuerdo de voto, ${H.eleccion}) en cada punto de la escala de 0 (extrema izquierda) a 10 (extrema derecha), ${labL(H.fecha)}`,
     nota:`Fuente: Sociómetro Vasco (microdatos), autoubicación de 0 a 10, ponderada (wt). Áreas: % sobre todos los votantes de cada partido según su recuerdo de voto en las ${H.eleccion}; quienes no se ubican (NS/NC: ${H.partidos.map(p=>`${p.nombre} ${nf(p.nr[0].v)} %`).join(", ")}) no aparecen, por eso no suman 100. Área de color: votantes de cada partido; área gris con línea discontinua: total de entrevistados (% sobre el total, incluidos quienes no se ubican), para comparar las dos distribuciones. Junto al nombre de cada partido, la media de quienes se ubican (la del total es ${nf(H.total.media,1)}). Misma escala vertical en los cuatro gráficos para poder compararlos. El PP tiene solo ${pp?pp.n:"–"} votantes que se ubican: su distribución es orientativa.`});
 })();
 
@@ -2948,7 +2971,7 @@ function histPartidos(C){
   /* 1 · Identidad subjetiva: barras horizontales apiladas al 100 % */
   (function(){
     const Q=S.preguntas.identidad, id="sidt";
-    tarjeta(id,"Identidad subjetiva",`¿Cuál de las siguientes frases expresa mejor sus sentimientos? · % sobre el total de cada grupo · ${labL(S.fecha)}`);
+    tarjeta(id,"Identidad subjetiva",`¿Cuál de las siguientes frases expresa mejor sus sentimientos?, % sobre el total de cada grupo, ${labL(S.fecha)}`);
     const COL=["#014550","#6FA9AC","#D9D2C3","#FBB089","#FF723C","#A9B4B2"], TXT=["#fff","#fff",SM.c.tinta,SM.c.tinta,"#fff",SM.c.tinta];
     const sel=document.getElementById(id+"-var"); sel.innerHTML=Q.vars.map(x=>`<option value="${x.id}">${x.nombre}</option>`).join("");
     const el=document.getElementById(id+"-ch"); const ch=mkChart(id+"-ch"); let v="total";
@@ -2979,7 +3002,7 @@ function histPartidos(C){
   /* 2 · Postura sobre la independencia: semicírculos (uno por grupo) */
   (function(){
     const Q=S.preguntas.independencia, id="sind";
-    tarjeta(id,"Postura sobre la independencia",`Sobre el tema de la independencia del País Vasco, Ud. personalmente… · % sobre el total de cada grupo · ${labL(S.fecha)}`);
+    tarjeta(id,"Postura sobre la independencia",`Sobre el tema de la independencia del País Vasco, Ud. personalmente…, % sobre el total de cada grupo, ${labL(S.fecha)}`);
     const COL={"De acuerdo":"#014550","Según las circunstancias":"#D9C9A3","En desacuerdo":"#FF723C","NS/NC":"#A9B4B2"}, TXT={"De acuerdo":"#fff","Según las circunstancias":SM.c.tinta,"En desacuerdo":"#fff","NS/NC":SM.c.tinta};
     const sel=document.getElementById(id+"-var"); sel.innerHTML=Q.vars.map(x=>`<option value="${x.id}">${x.nombre}</option>`).join("");
     const el=document.getElementById(id+"-ch"); const ch=mkChart(id+"-ch"); let v="total";
@@ -3032,7 +3055,7 @@ function histPartidos(C){
   (function(){
     const card=document.createElement("div"); card.className="card";
     card.innerHTML=`<div class="card-head"><div><h3>Situación económica en el último barómetro</h3>
-        <p class="subt">% de entrevistados en cada respuesta · ${labL(E.fechas[last])} (estudio ${E.estudios[last]})</p></div></div>
+        <p class="subt">% de entrevistados en cada respuesta, ${labL(E.fechas[last])} (estudio ${E.estudios[last]})</p></div></div>
       <div class="chart" id="ecu-ch" style="height:230px"></div>
       <p class="foot-note">Fuente: Barómetro del CIS (microdatos), ECOESP y ECOPER, ponderadas. % sobre el total de entrevistados; cada barra suma 100. Al pasar el ratón se ve también el dato del barómetro anterior (${labL(E.fechas[last-1])}).</p>
       <details class="tabla"><summary>Ver los datos en tabla</summary><div class="tabla-wrap" id="ecu-tabla"></div></details>`;
