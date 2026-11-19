@@ -29,6 +29,8 @@ jobs:
           mkdir _site
           cp index.html _site/
           for f in app.js data.json promedio.json; do [ -f "$f" ] && cp "$f" _site/ || true; done
+                    # Resultados por sección censal (un JSON por provincia; los copia aquí el robot de agenda-social-datos)
+          [ -d secciones ] && cp -r secciones _site/ || true
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: _site }
