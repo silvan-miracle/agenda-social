@@ -886,7 +886,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
         const e=q.data.q; if(!e)return "";
         if(q.data.bloque){const b=q.data.bloque;return `<b>${esc(e.q)}</b><br><span style="color:${SM.c.subtle}">${fechaEnc(e)}</span><br>Bloque ${b.toLowerCase()}: <b>${nf(q.value[1])} %</b><div style="margin-top:3px;font-size:11.5px;color:${SM.c.subtle}">${BQ.partidos[b].filter(x=>e.v[x]!=null).map(x=>`${esc(x)} ${nf(e.v[x])}`).join(", ")}</div>`;}
         /* Etiqueta simplificada (Mikel, 05/10/2026): solo la encuestadora y el % de las cuatro principales fuerzas */
-        return `<b>${esc(e.q)}</b><br><span style="color:${SM.c.subtle}">${fechaEnc(e)}</span>`+["PP","PSOE","Vox","Sumar"].map(p=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${col(p)}">●</span> ${p}</span><b>${nf(e.v[p])} %</b></div>`).join("");}};
+        return `<b>${esc(e.q)}</b><br><span style="color:${SM.c.subtle}">${fechaEnc(e)}</span>`+["PP","PSOE","Vox",(e.v["Frente Amplio"]!=null&&e.v["Sumar"]==null)?"Frente Amplio":"Sumar"].map(p=>`<div style="display:flex;justify-content:space-between;gap:14px"><span><span style="color:${col(p)}">●</span> ${p}</span><b>${nf(e.v[p])} %</b></div>`).join("");}};
       o.xAxis={type:"time",min:x0,max:x1,axisLine:{lineStyle:{color:SM.c.grid}},axisTick:{show:false},splitLine:{show:false},
         axisLabel:{color:SM.c.subtle,fontSize:10.5,hideOverlap:true,formatter:v=>{const d=new Date(v);return per==="1"?`${d.getDate()} ${MES3[d.getMonth()]}`:`${MES3[d.getMonth()]} ${String(d.getFullYear()).slice(2)}`;}},
         ...(per==="1"?{minInterval:(mov?10:7)*864e5,splitNumber:mov?3:5}:{})};
