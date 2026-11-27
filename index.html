@@ -2407,7 +2407,7 @@ montarProblemas({pre:"sp",grid:"grid-soc-problemas",P:DATA.soc_problemas,PF:DATA
       <details class="tabla"><summary>Ver los datos en tabla</summary><div class="tabla-wrap" id="pp-tabla"></div></details>`;
     grid.appendChild(card);
     const last=P.fechas.length-1;
-    const DEF=["Pedro Sánchez","Alberto Núñez Feijóo","Santiago Abascal","Yolanda Díaz","Gabriel Rufián","Ninguno/a de ellos/as"];
+    const DEF=["Pedro Sánchez","Alberto Núñez Feijóo","Santiago Abascal","Yolanda Díaz","Ada Colau","Gabriel Rufián","Ninguno/a de ellos/as"];
     let base="total", sel=[...DEF]; const ch=mkChart("pp-ch");
     const disponibles=()=>P.orden.filter(o=>P.series[base][o].some(v=>v!=null));
     document.querySelectorAll("#pp-base button").forEach(b=>b.addEventListener("click",()=>{base=b.dataset.v;
